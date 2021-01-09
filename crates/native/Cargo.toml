@@ -1,0 +1,16 @@
+[package]
+name = "native"
+version = "0.1.0"
+authors = ["Rahul Garg <rg@vihu.dev>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[lib]
+name = "native"
+crate-type = ["dylib"]
+
+[dependencies]
+rustler = { git = "https://github.com/rusterlium/rustler.git", branch = "master" }
+threshold_crypto = { version = "0.4", git = "https://github.com/poanetwork/threshold_crypto" }
+rand = "0.7.3"
