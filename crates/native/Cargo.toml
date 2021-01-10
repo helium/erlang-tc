@@ -12,5 +12,6 @@ crate-type = ["dylib"]
 
 [dependencies]
 rustler = { git = "https://github.com/rusterlium/rustler.git", branch = "master" }
-threshold_crypto = { version = "0.4", git = "https://github.com/poanetwork/threshold_crypto" }
+threshold_crypto = { git = "https://github.com/vihu/threshold_crypto", branch = "rg/integrate" }
 rand = "0.7.3"
+zeroize = "1.1.0"

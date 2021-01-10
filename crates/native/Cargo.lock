@@ -120,6 +120,7 @@ dependencies = [
  "rand",
  "rustler",
  "threshold_crypto",
+ "zeroize",
 ]
 
 [[package]]
@@ -321,7 +322,7 @@ dependencies = [
 [[package]]
 name = "threshold_crypto"
 version = "0.4.0"
-source = "git+https://github.com/poanetwork/threshold_crypto#a7fbfa4522835010b6037fb45388c7b04ee14194"
+source = "git+https://github.com/vihu/threshold_crypto?branch=rg/integrate#d17de6acb6368db6fddfaaefb7d4cc1996e6f10c"
 dependencies = [
  "byteorder",
  "ff",
