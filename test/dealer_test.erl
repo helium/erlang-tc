@@ -24,25 +24,13 @@ rust_dkg_test() ->
                     %% Node `m` receives its row and verifies it.
                     RowPoly = erlang_tc:row_bivar_poly(BiPoly, M),
                     RowCommit = erlang_tc:row_bivar_commitment(BiCommitment, M),
-                    ?assert(
-                        erlang_tc:cmp_commitment(
-                            erlang_tc:commitment_poly(RowPoly),
-                            RowCommit
-                        )
-                    ),
+                    ?assert(erlang_tc:verify_poly_bivar_commitment(BiCommitment, RowPoly, M)),
 
                     %% Node `s` receives the `s`-th value and verifies it.
                     lists:foreach(
                         fun(S) ->
                             Val = erlang_tc:eval_uni_poly(RowPoly, S),
-                            G1AffineOne = erlang_tc:g1_affine_one(),
-                            ValG1 = erlang_tc:g1_affine_mul(G1AffineOne, Val),
-                            ?assert(
-                                erlang_tc:cmp_g1(
-                                    erlang_tc:eval_bivar_commitment(BiCommitment, M, S),
-                                    ValG1
-                                )
-                            ),
+                            ?assert(erlang_tc:verify_point_bivar_commitment(BiCommitment, RowPoly, S, M)),
                             %% The node can't verify this directly, but it should have the correct value:
                             ?assert(erlang_tc:cmp_fr(erlang_tc:eval_bivar_poly(BiPoly, M, S), Val))
                         end,
