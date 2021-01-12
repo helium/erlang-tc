@@ -73,12 +73,10 @@
     eval_bivar_commitment/3,
     row_bivar_commitment/2,
     cmp_bivar_commitment/2,
-    reveal_bivar_commitment/1,
-    verify_poly_bivar_commitment/3,
-    verify_point_bivar_commitment/4
+    reveal_bivar_commitment/1
 ]).
 
--type coeff_vec() :: [integer()].
+-type coeffs() :: [integer()].
 -type uni_samples() :: [{integer(), integer()}, ...].
 -type uni_fr_samples() :: [{reference(), reference()}, ...].
 
@@ -161,7 +159,7 @@ g1_affine_mul(_G1Affine, _Fr) ->
 %% UniVariate Polynomial
 %% ==================================================================
 
--spec poly_from_coeffs(CoeffVec :: coeff_vec()) -> reference().
+-spec poly_from_coeffs(CoeffVec :: coeffs()) -> reference().
 poly_from_coeffs(_CoeffVec) ->
     not_loaded(?LINE).
 
@@ -331,27 +329,6 @@ cmp_bivar_commitment(_C1, _C2) ->
 -spec reveal_bivar_commitment(C :: reference()) -> string().
 reveal_bivar_commitment(_C) ->
     not_loaded(?LINE).
-
--spec verify_poly_bivar_commitment(
-    BiCommitment :: reference(),
-    RowPoly :: reference(),
-    VerifierID :: non_neg_integer()
-) -> boolean().
-verify_poly_bivar_commitment(BiCommitment, RowPoly, VerifierID) ->
-    RowCommit = erlang_tc:row_bivar_commitment(BiCommitment, VerifierID),
-    erlang_tc:cmp_commitment(erlang_tc:commitment_poly(RowPoly), RowCommit).
-
--spec verify_point_bivar_commitment(
-    BiCommitment :: reference(),
-    RowPoly :: reference(),
-    SenderID :: non_neg_integer(),
-    VerifierID :: non_neg_integer()
-) -> boolean().
-verify_point_bivar_commitment(BiCommitment, RowPoly, SenderID, VerifierID) ->
-    Val = erlang_tc:eval_uni_poly(RowPoly, SenderID),
-    G1AffineOne = erlang_tc:g1_affine_one(),
-    ValG1 = erlang_tc:g1_affine_mul(G1AffineOne, Val),
-    erlang_tc:cmp_g1(erlang_tc:eval_bivar_commitment(BiCommitment, VerifierID, SenderID), ValG1).
 
 %% ==================================================================
 %% NIF
