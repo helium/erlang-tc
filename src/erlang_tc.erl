@@ -5,6 +5,16 @@
 -on_load(load/0).
 
 -export([
+    %% pk API
+    pk_reveal/1,
+    pk_to_bytes/1,
+
+    %% sk API
+    sk_random/0,
+    sk_from_fr/1,
+    sk_public_key/1,
+    sk_reveal/1,
+
     %% field API
     into_fr/1,
     cmp_fr/2,
@@ -71,6 +81,37 @@
 -type coeff_vec() :: [integer()].
 -type uni_samples() :: [{integer(), integer()}, ...].
 -type uni_fr_samples() :: [{reference(), reference()}, ...].
+
+%% ==================================================================
+%% PK
+%% ==================================================================
+-spec pk_reveal(PK :: reference()) -> reference().
+pk_reveal(_PK) ->
+    not_loaded(?LINE).
+
+-spec pk_to_bytes(PK :: reference()) -> binary().
+pk_to_bytes(_PK) ->
+    not_loaded(?LINE).
+
+%% ==================================================================
+%% SK
+%% ==================================================================
+
+-spec sk_random() -> reference().
+sk_random() ->
+    not_loaded(?LINE).
+
+-spec sk_from_fr(Fr :: reference()) -> reference().
+sk_from_fr(_Fr) ->
+    not_loaded(?LINE).
+
+-spec sk_public_key(SK :: reference()) -> reference().
+sk_public_key(_SK) ->
+    not_loaded(?LINE).
+
+-spec sk_reveal(SK :: reference()) -> string().
+sk_reveal(_SK) ->
+    not_loaded(?LINE).
 
 %% ==================================================================
 %% Field

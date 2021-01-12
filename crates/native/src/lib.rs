@@ -10,7 +10,10 @@ mod commitment;
 mod fr;
 mod g1;
 mod g1_affine;
+mod lazy_binary;
+mod pk;
 mod poly;
+mod sk;
 
 fn load(env: Env, _: Term) -> bool {
     poly::load(env);
@@ -20,6 +23,8 @@ fn load(env: Env, _: Term) -> bool {
     fr::load(env);
     g1::load(env);
     g1_affine::load(env);
+    pk::load(env);
+    sk::load(env);
 
     true
 }
@@ -49,6 +54,14 @@ rustler::init!(
         poly::degree_poly,
         poly::reveal_poly,
         poly::commitment_poly,
+        // PK API
+        pk::pk_reveal,
+        pk::pk_to_bytes,
+        // SK API
+        sk::sk_random,
+        sk::sk_from_fr,
+        sk::sk_public_key,
+        sk::sk_reveal,
         // Fr API
         fr::into_fr,
         fr::cmp_fr,
