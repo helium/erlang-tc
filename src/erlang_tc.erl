@@ -20,6 +20,13 @@
     sig_to_bytes/1,
     sig_parity/1,
 
+    %% PublicKeySet API
+    pk_set_from_commitment/1,
+    pk_set_public_key/1,
+
+    %% PublicKeyShare API
+    share_from_pk/1,
+
     %% field API
     into_fr/1,
     cmp_fr/2,
@@ -131,6 +138,27 @@ sig_to_bytes(_Sig) ->
 -spec sig_parity(Sig :: reference()) -> boolean().
 sig_parity(_Sig) ->
     not_loaded(?LINE).
+
+%% ==================================================================
+%% PublicKeyShare
+%% ==================================================================
+
+-spec pk_set_from_commitment(Commitment :: reference()) -> reference().
+pk_set_from_commitment(_Commitment) ->
+    not_loaded(?LINE).
+
+-spec pk_set_public_key(PKSet :: reference()) -> reference().
+pk_set_public_key(_PKSet) ->
+    not_loaded(?LINE).
+
+%% ==================================================================
+%% PublicKeyShare
+%% ==================================================================
+
+-spec share_from_pk(PK :: reference()) -> reference().
+share_from_pk(_PK) ->
+    not_loaded(?LINE).
+
 
 %% ==================================================================
 %% Field

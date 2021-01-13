@@ -12,6 +12,8 @@ mod g1;
 mod g1_affine;
 mod lazy_binary;
 mod pk;
+mod pk_set;
+mod pk_share;
 mod poly;
 mod sk;
 mod sig;
@@ -25,6 +27,8 @@ fn load(env: Env, _: Term) -> bool {
     g1::load(env);
     g1_affine::load(env);
     pk::load(env);
+    pk_set::load(env);
+    pk_share::load(env);
     sk::load(env);
     sig::load(env);
 
@@ -59,6 +63,9 @@ rustler::init!(
         // PK API
         pk::pk_reveal,
         pk::pk_to_bytes,
+        // PublicKeySet API
+        pk_set::pk_set_from_commitment,
+        pk_set::pk_set_public_key,
         // SK API
         sk::sk_random,
         sk::sk_from_fr,

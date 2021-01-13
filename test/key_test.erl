@@ -13,3 +13,10 @@ signature_test() ->
     %% Parity = erlang_tc_sig:parity(Signature),
     %% ?debugFmt("Parity: ~p~n", [Parity]),
     ?assertEqual(96, byte_size(erlang_tc_sig:to_bytes(Signature))).
+
+pk_set_test() ->
+    RandomPoly = erlang_tc_poly:random(5),
+    Commitment = erlang_tc_poly:commitment(RandomPoly),
+    PKSet = erlang_tc_pk_set:from_commitment(Commitment),
+    PK = erlang_tc_pk_set:public_key(PKSet),
+    ?assertEqual(48, byte_size(erlang_tc_pk:to_bytes(PK))).
