@@ -1,6 +1,8 @@
 use rustler::{Binary, Env, OwnedBinary, ResourceArc};
 use std::io::Write as _;
 use threshold_crypto::PublicKey;
+use crate::sig::SigArc;
+use crate::lazy_binary::LazyBinary;
 
 /// Struct to hold PublicKey
 pub struct PkRes {
@@ -26,4 +28,11 @@ fn pk_to_bytes<'a>(env: Env<'a>, pk_arc: PkArc) -> Binary<'a> {
     let mut binary = OwnedBinary::new(bin_vec.len()).unwrap();
     binary.as_mut_slice().write_all(&bin_vec).unwrap();
     Binary::from_owned(binary, env)
+}
+
+#[rustler::nif(name = "pk_verify")]
+fn pk_verify<'a>(pk_arc: PkArc, sig_arc: SigArc, msg: LazyBinary<'a>) -> bool {
+    let pk = pk_arc.pk;
+    let sig = sig_arc.sig.clone();
+    pk.verify(&sig, msg)
 }

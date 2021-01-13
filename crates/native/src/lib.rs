@@ -67,6 +67,7 @@ rustler::init!(
         // PK API
         pk::pk_reveal,
         pk::pk_to_bytes,
+        pk::pk_verify,
         // PublicKeySet API
         pk_set::pk_set_from_commitment,
         pk_set::pk_set_public_key,

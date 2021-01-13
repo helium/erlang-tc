@@ -8,6 +8,7 @@
     %% pk API
     pk_reveal/1,
     pk_to_bytes/1,
+    pk_verify/3,
 
     %% sk API
     sk_random/0,
@@ -110,6 +111,10 @@ pk_reveal(_PK) ->
 
 -spec pk_to_bytes(PK :: reference()) -> binary().
 pk_to_bytes(_PK) ->
+    not_loaded(?LINE).
+
+-spec pk_verify(PK :: reference(), Sig :: reference(), Msg :: binary()) -> binary().
+pk_verify(_PK, _Sig, _Msg) ->
     not_loaded(?LINE).
 
 %% ==================================================================
