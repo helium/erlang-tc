@@ -8,7 +8,7 @@ use std::io::Write as _;
 /// binary, constructing `LazyBinary` is essentially
 /// zero-cost. However, if the term is any other Erlang type, it is
 /// converted to an `OwnedBinary`, which requires a heap allocation.
-enum LazyBinary<'a> {
+pub enum LazyBinary<'a> {
     Owned(OwnedBinary),
     Borrowed(Binary<'a>),
 }
@@ -37,6 +37,15 @@ impl<'a> Decoder<'a> for LazyBinary<'a> {
             Ok(Self::Borrowed(Binary::from_term(term)?))
         } else {
             Ok(Self::Owned(term.to_binary()))
+        }
+    }
+}
+
+impl<'a> AsRef<[u8]> for LazyBinary<'a> {
+    fn as_ref(&self) -> &[u8] {
+        match self {
+            Self::Owned(owned) => owned.as_ref(),
+            Self::Borrowed(borrowed) => borrowed.as_ref(),
         }
     }
 }

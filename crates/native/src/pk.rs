@@ -22,8 +22,7 @@ fn pk_reveal(pk_arc: PkArc) -> String {
 
 #[rustler::nif(name = "pk_to_bytes")]
 fn pk_to_bytes<'a>(env: Env<'a>, pk_arc: PkArc) -> Binary<'a> {
-    let pk = pk_arc.pk;
-    let bin_vec = pk.to_bytes();
+    let bin_vec = pk_arc.pk.to_bytes();
     let mut binary = OwnedBinary::new(bin_vec.len()).unwrap();
     binary.as_mut_slice().write_all(&bin_vec).unwrap();
     Binary::from_owned(binary, env)

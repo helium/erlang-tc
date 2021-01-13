@@ -14,6 +14,7 @@ mod lazy_binary;
 mod pk;
 mod poly;
 mod sk;
+mod sig;
 
 fn load(env: Env, _: Term) -> bool {
     poly::load(env);
@@ -25,6 +26,7 @@ fn load(env: Env, _: Term) -> bool {
     g1_affine::load(env);
     pk::load(env);
     sk::load(env);
+    sig::load(env);
 
     true
 }
@@ -62,6 +64,10 @@ rustler::init!(
         sk::sk_from_fr,
         sk::sk_public_key,
         sk::sk_reveal,
+        sk::sk_sign,
+        // Signature API
+        sig::sig_to_bytes,
+        sig::sig_parity,
         // Fr API
         fr::into_fr,
         fr::cmp_fr,

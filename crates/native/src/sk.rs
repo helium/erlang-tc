@@ -1,5 +1,7 @@
 use crate::fr::FrArc;
 use crate::pk::{PkArc, PkRes};
+use crate::lazy_binary::LazyBinary;
+use crate::sig::{SigArc, SigRes};
 use rustler::{Env, ResourceArc};
 use threshold_crypto::SecretKey;
 
@@ -44,4 +46,10 @@ fn sk_public_key(sk_arc: SkArc) -> PkArc {
 fn sk_reveal(sk_arc: SkArc) -> String {
     let sk = sk_arc.sk.clone();
     sk.reveal()
+}
+
+#[rustler::nif(name = "sk_sign")]
+fn sk_sign<'a>(sk_arc: SkArc, msg: LazyBinary<'a>) -> SigArc {
+    let sk = sk_arc.sk.clone();
+    ResourceArc::new(SigRes { sig: sk.sign(msg) })
 }

@@ -14,6 +14,11 @@
     sk_from_fr/1,
     sk_public_key/1,
     sk_reveal/1,
+    sk_sign/2,
+
+    %% signature API
+    sig_to_bytes/1,
+    sig_parity/1,
 
     %% field API
     into_fr/1,
@@ -109,6 +114,22 @@ sk_public_key(_SK) ->
 
 -spec sk_reveal(SK :: reference()) -> string().
 sk_reveal(_SK) ->
+    not_loaded(?LINE).
+
+-spec sk_sign(SK :: reference(), Msg :: binary()) -> reference().
+sk_sign(_SK, _Msg) ->
+    not_loaded(?LINE).
+
+%% ==================================================================
+%% Signature
+%% ==================================================================
+
+-spec sig_to_bytes(Sig :: reference()) -> binary().
+sig_to_bytes(_Sig) ->
+    not_loaded(?LINE).
+
+-spec sig_parity(Sig :: reference()) -> boolean().
+sig_parity(_Sig) ->
     not_loaded(?LINE).
 
 %% ==================================================================
