@@ -23,6 +23,7 @@
     %% PublicKeySet API
     pk_set_from_commitment/1,
     pk_set_public_key/1,
+    pk_set_threshold/1,
 
     %% PublicKeyShare API
     share_from_pk/1,
@@ -149,6 +150,10 @@ pk_set_from_commitment(_Commitment) ->
 
 -spec pk_set_public_key(PKSet :: reference()) -> reference().
 pk_set_public_key(_PKSet) ->
+    not_loaded(?LINE).
+
+-spec pk_set_threshold(PKSet :: reference()) -> non_neg_integer().
+pk_set_threshold(_PKSet) ->
     not_loaded(?LINE).
 
 %% ==================================================================

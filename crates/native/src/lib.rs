@@ -66,6 +66,7 @@ rustler::init!(
         // PublicKeySet API
         pk_set::pk_set_from_commitment,
         pk_set::pk_set_public_key,
+        pk_set::pk_set_threshold,
         // SK API
         sk::sk_random,
         sk::sk_from_fr,

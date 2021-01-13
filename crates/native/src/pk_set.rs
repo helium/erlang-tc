@@ -28,3 +28,8 @@ fn pk_set_public_key(pk_set_arc: PKSetArc) -> PkArc {
         pk: pk_set_arc.pk_set.public_key()
     })
 }
+
+#[rustler::nif(name = "pk_set_threshold")]
+fn pk_set_threshold(pk_set_arc: PKSetArc) -> usize {
+    pk_set_arc.pk_set.threshold()
+}
