@@ -16,6 +16,8 @@ mod pk_set;
 mod pk_share;
 mod poly;
 mod sk;
+mod sk_set;
+mod sk_share;
 mod sig;
 
 fn load(env: Env, _: Term) -> bool {
@@ -30,6 +32,8 @@ fn load(env: Env, _: Term) -> bool {
     pk_set::load(env);
     pk_share::load(env);
     sk::load(env);
+    sk_set::load(env);
+    sk_share::load(env);
     sig::load(env);
 
     true
@@ -67,12 +71,18 @@ rustler::init!(
         pk_set::pk_set_from_commitment,
         pk_set::pk_set_public_key,
         pk_set::pk_set_threshold,
+        pk_set::pk_set_public_key_share,
         // SK API
         sk::sk_random,
         sk::sk_from_fr,
         sk::sk_public_key,
         sk::sk_reveal,
         sk::sk_sign,
+        // SecretKeySet API
+        sk_set::sk_set_from_poly,
+        sk_set::sk_set_threshold,
+        sk_set::sk_set_public_keys,
+        sk_set::sk_set_secret_key_share,
         // Signature API
         sig::sig_to_bytes,
         sig::sig_parity,

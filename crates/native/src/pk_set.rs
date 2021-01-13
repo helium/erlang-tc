@@ -1,6 +1,7 @@
 use rustler::{Env, ResourceArc};
 use crate::pk::{PkRes, PkArc};
 use crate::commitment::CommitmentArc;
+use crate::pk_share::{PKShareRes, PKShareArc};
 use threshold_crypto::PublicKeySet;
 
 /// Struct to hold PublicKey
@@ -32,4 +33,11 @@ fn pk_set_public_key(pk_set_arc: PKSetArc) -> PkArc {
 #[rustler::nif(name = "pk_set_threshold")]
 fn pk_set_threshold(pk_set_arc: PKSetArc) -> usize {
     pk_set_arc.pk_set.threshold()
+}
+
+#[rustler::nif(name = "pk_set_public_key_share")]
+fn pk_set_public_key_share(pk_set_arc: PKSetArc, i: i64) -> PKShareArc {
+    ResourceArc::new(PKShareRes {
+        share: pk_set_arc.pk_set.public_key_share(i)
+    })
 }

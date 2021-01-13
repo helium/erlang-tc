@@ -24,6 +24,13 @@
     pk_set_from_commitment/1,
     pk_set_public_key/1,
     pk_set_threshold/1,
+    pk_set_public_key_share/2,
+
+    %% SecretKeySet API
+    sk_set_from_poly/1,
+    sk_set_threshold/1,
+    sk_set_public_keys/1,
+    sk_set_secret_key_share/2,
 
     %% PublicKeyShare API
     share_from_pk/1,
@@ -129,6 +136,26 @@ sk_sign(_SK, _Msg) ->
     not_loaded(?LINE).
 
 %% ==================================================================
+%% SecretKeySet
+%% ==================================================================
+
+-spec sk_set_from_poly(Poly :: reference()) -> reference().
+sk_set_from_poly(_Poly) ->
+    not_loaded(?LINE).
+
+-spec sk_set_threshold(SKSet :: reference()) -> non_neg_integer().
+sk_set_threshold(_SKSet) ->
+    not_loaded(?LINE).
+
+-spec sk_set_public_keys(SKSet :: reference()) -> reference().
+sk_set_public_keys(_SKSet) ->
+    not_loaded(?LINE).
+
+-spec sk_set_secret_key_share(SKSet :: reference(), I :: non_neg_integer()) -> reference().
+sk_set_secret_key_share(_SKSet, _I) ->
+    not_loaded(?LINE).
+
+%% ==================================================================
 %% Signature
 %% ==================================================================
 
@@ -154,6 +181,10 @@ pk_set_public_key(_PKSet) ->
 
 -spec pk_set_threshold(PKSet :: reference()) -> non_neg_integer().
 pk_set_threshold(_PKSet) ->
+    not_loaded(?LINE).
+
+-spec pk_set_public_key_share(PKSet :: reference(), I :: non_neg_integer()) -> reference().
+pk_set_public_key_share(_PKSet, _I) ->
     not_loaded(?LINE).
 
 %% ==================================================================
