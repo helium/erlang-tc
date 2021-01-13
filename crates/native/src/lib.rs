@@ -83,6 +83,7 @@ rustler::init!(
         sk_set::sk_set_threshold,
         sk_set::sk_set_public_keys,
         sk_set::sk_set_secret_key_share,
+        sk_set::sk_set_random,
         // Signature API
         sig::sig_to_bytes,
         sig::sig_parity,

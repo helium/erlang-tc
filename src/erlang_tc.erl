@@ -31,6 +31,7 @@
     sk_set_threshold/1,
     sk_set_public_keys/1,
     sk_set_secret_key_share/2,
+    sk_set_random/1,
 
     %% PublicKeyShare API
     share_from_pk/1,
@@ -153,6 +154,10 @@ sk_set_public_keys(_SKSet) ->
 
 -spec sk_set_secret_key_share(SKSet :: reference(), I :: non_neg_integer()) -> reference().
 sk_set_secret_key_share(_SKSet, _I) ->
+    not_loaded(?LINE).
+
+-spec sk_set_random(Threshold :: non_neg_integer()) -> reference().
+sk_set_random(_Threshold) ->
     not_loaded(?LINE).
 
 %% ==================================================================

@@ -39,3 +39,16 @@ sk_set_test() ->
     ?assertEqual(?PK_SIZE, byte_size(erlang_tc_pk:to_bytes(PK))),
 
     ?assertEqual(?DEGREE, erlang_tc_sk_set:threshold(SKSet)).
+
+random_sk_set_test() ->
+    SKSet = erlang_tc_sk_set:random(?DEGREE),
+
+    PKSet = erlang_tc_sk_set:public_keys(SKSet),
+
+    %% ?debugFmt("SKShare: ~p~n", [erlang_tc_sk_set:secret_key_share(SKSet, 1)]),
+    %% ?debugFmt("PKSet: ~p~n", [PKSet]),
+
+    PK = erlang_tc_pk_set:public_key(PKSet),
+    ?assertEqual(?PK_SIZE, byte_size(erlang_tc_pk:to_bytes(PK))),
+
+    ?assertEqual(?DEGREE, erlang_tc_sk_set:threshold(SKSet)).

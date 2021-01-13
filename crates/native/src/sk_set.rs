@@ -41,3 +41,11 @@ fn sk_set_secret_key_share(sk_set_arc: SKSetArc, i: i64) -> SKShareArc {
         share: sk_set_arc.sk_set.secret_key_share(i)
     })
 }
+
+#[rustler::nif(name = "sk_set_random")]
+fn sk_set_random(threshold: usize) -> SKSetArc {
+    let mut rng = &mut rand::thread_rng();
+    ResourceArc::new(SKSetRes {
+        sk_set: SecretKeySet::random(threshold, &mut rng)
+    })
+}
