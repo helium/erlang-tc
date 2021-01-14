@@ -5,19 +5,23 @@
 -on_load(load/0).
 
 -export([
-    %% pk API
+    %% Ciphertext API
+    ciphertext_verify/1,
+
+    %% PublicKey API
     pk_reveal/1,
     pk_to_bytes/1,
     pk_verify/3,
+    pk_encrypt/2,
 
-    %% sk API
+    %% SecretKey API
     sk_random/0,
     sk_from_fr/1,
     sk_public_key/1,
     sk_reveal/1,
     sk_sign/2,
 
-    %% signature API
+    %% Signature API
     sig_to_bytes/1,
     sig_parity/1,
 
@@ -26,6 +30,7 @@
     pk_set_public_key/1,
     pk_set_threshold/1,
     pk_set_public_key_share/2,
+    pk_set_encrypt/2,
 
     %% SecretKeySet API
     sk_set_from_poly/1,
@@ -37,7 +42,7 @@
     %% PublicKeyShare API
     share_from_pk/1,
 
-    %% field API
+    %% Field Representation API
     into_fr/1,
     cmp_fr/2,
     zero_fr/0,
@@ -51,7 +56,7 @@
     g1_affine_one/0,
     g1_affine_mul/2,
 
-    %% polynomial API
+    %% Polynomial API
     poly_from_coeffs/1,
     eval_uni_poly/2,
     eval_uni_poly_from_fr/2,
@@ -74,14 +79,14 @@
     reveal_poly/1,
     commitment_poly/1,
 
-    %% commitment API
+    %% Commitment API
     degree_commitment/1,
     eval_commitment/2,
     cmp_commitment/2,
     reveal_commitment/1,
     add_commitment/2,
 
-    %% bivariate polynomial API
+    %% Bivariate Polynomial API
     random_bivar_poly/1,
     degree_bivar_poly/1,
     reveal_bivar_poly/1,
@@ -90,7 +95,7 @@
     commitment_bivar_poly/1,
     zeroize_bivar_poly/1,
 
-    %% bivariate commitment API
+    %% Bivariate Commitment API
     degree_bivar_commitment/1,
     eval_bivar_commitment/3,
     row_bivar_commitment/2,
@@ -101,6 +106,13 @@
 -type coeffs() :: [integer()].
 -type uni_samples() :: [{integer(), integer()}, ...].
 -type uni_fr_samples() :: [{reference(), reference()}, ...].
+
+%% ==================================================================
+%% Ciphertext
+%% ==================================================================
+-spec ciphertext_verify(Ciphertext :: reference()) -> boolean().
+ciphertext_verify(_Ciphertext) ->
+    not_loaded(?LINE).
 
 %% ==================================================================
 %% PK
@@ -115,6 +127,10 @@ pk_to_bytes(_PK) ->
 
 -spec pk_verify(PK :: reference(), Sig :: reference(), Msg :: binary()) -> binary().
 pk_verify(_PK, _Sig, _Msg) ->
+    not_loaded(?LINE).
+
+-spec pk_encrypt(PK :: reference(), Msg :: binary()) -> reference().
+pk_encrypt(_PK, _Msg) ->
     not_loaded(?LINE).
 
 %% ==================================================================
@@ -195,6 +211,10 @@ pk_set_threshold(_PKSet) ->
 
 -spec pk_set_public_key_share(PKSet :: reference(), I :: non_neg_integer()) -> reference().
 pk_set_public_key_share(_PKSet, _I) ->
+    not_loaded(?LINE).
+
+-spec pk_set_encrypt(PKSet :: reference(), Msg :: binary()) -> reference().
+pk_set_encrypt(_PKSet, _Msg) ->
     not_loaded(?LINE).
 
 %% ==================================================================

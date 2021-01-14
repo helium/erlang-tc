@@ -1,8 +1,9 @@
+use crate::ciphertext::{CiphertextArc, CiphertextRes};
+use crate::lazy_binary::LazyBinary;
+use crate::sig::SigArc;
 use rustler::{Binary, Env, OwnedBinary, ResourceArc};
 use std::io::Write as _;
 use threshold_crypto::PublicKey;
-use crate::sig::SigArc;
-use crate::lazy_binary::LazyBinary;
 
 /// Struct to hold PublicKey
 pub struct PkRes {
@@ -35,4 +36,12 @@ fn pk_verify<'a>(pk_arc: PkArc, sig_arc: SigArc, msg: LazyBinary<'a>) -> bool {
     let pk = pk_arc.pk;
     let sig = sig_arc.sig.clone();
     pk.verify(&sig, msg)
+}
+
+#[rustler::nif(name = "pk_encrypt")]
+fn pk_encrypt<'a>(pk_arc: PkArc, msg: LazyBinary<'a>) -> CiphertextArc {
+    let pk = pk_arc.pk;
+    ResourceArc::new(CiphertextRes {
+        cipher: pk.encrypt(&msg),
+    })
 }

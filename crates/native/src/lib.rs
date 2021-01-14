@@ -19,6 +19,7 @@ mod sk;
 mod sk_set;
 mod sk_share;
 mod sig;
+mod ciphertext;
 
 fn load(env: Env, _: Term) -> bool {
     poly::load(env);
@@ -35,6 +36,7 @@ fn load(env: Env, _: Term) -> bool {
     sk_set::load(env);
     sk_share::load(env);
     sig::load(env);
+    ciphertext::load(env);
 
     true
 }
@@ -42,6 +44,8 @@ fn load(env: Env, _: Term) -> bool {
 rustler::init!(
     "erlang_tc",
     [
+        // Ciphertext API
+        ciphertext::ciphertext_verify,
         // Polynomial API
         poly::poly_from_coeffs,
         poly::gen_monomial,
@@ -68,11 +72,13 @@ rustler::init!(
         pk::pk_reveal,
         pk::pk_to_bytes,
         pk::pk_verify,
+        pk::pk_encrypt,
         // PublicKeySet API
         pk_set::pk_set_from_commitment,
         pk_set::pk_set_public_key,
         pk_set::pk_set_threshold,
         pk_set::pk_set_public_key_share,
+        pk_set::pk_set_encrypt,
         // SK API
         sk::sk_random,
         sk::sk_from_fr,

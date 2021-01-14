@@ -5,7 +5,8 @@
     from_commitment/1,
     public_key/1,
     threshold/1,
-    public_key_share/2
+    public_key_share/2,
+    encrypt/2
 ]).
 
 -spec from_commitment(Commitment :: reference()) -> reference().
@@ -23,3 +24,7 @@ threshold(PKSet) ->
 -spec public_key_share(PKSet :: reference(), I :: non_neg_integer()) -> reference().
 public_key_share(PKSet, I) ->
     erlang_tc:pk_set_public_key_share(PKSet, I).
+
+-spec encrypt(PKSet :: reference(), Msg :: binary()) -> reference().
+encrypt(PKSet, Msg) ->
+    erlang_tc:pk_set_encrypt(PKSet, Msg).

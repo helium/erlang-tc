@@ -49,3 +49,11 @@ verify_sig_test() ->
     Sig = erlang_tc_sk:sign(SK, Msg),
     PK = erlang_tc_sk:public_key(SK),
     ?assert(erlang_tc_pk:verify(PK, Sig, Msg)).
+
+verify_ciphertext_test() ->
+    SK = erlang_tc_sk:random(),
+    Msg = <<"his name is Robert Paulson">>,
+    PK = erlang_tc_sk:public_key(SK),
+
+    Cipher = erlang_tc_pk:encrypt(PK, Msg),
+    ?assert(erlang_tc_ciphertext:verify(Cipher)).
