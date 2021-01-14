@@ -20,6 +20,7 @@ mod sk_set;
 mod sk_share;
 mod sig;
 mod ciphertext;
+mod dec_share;
 
 fn load(env: Env, _: Term) -> bool {
     poly::load(env);
@@ -37,6 +38,7 @@ fn load(env: Env, _: Term) -> bool {
     sk_share::load(env);
     sig::load(env);
     ciphertext::load(env);
+    dec_share::load(env);
 
     true
 }
@@ -68,24 +70,27 @@ rustler::init!(
         poly::degree_poly,
         poly::reveal_poly,
         poly::commitment_poly,
-        // PK API
+        // PublicKey API
         pk::pk_reveal,
         pk::pk_to_bytes,
         pk::pk_verify,
         pk::pk_encrypt,
+        // PublicKeyShare API
+        pk_share::pk_share_verify_decryption_share,
         // PublicKeySet API
         pk_set::pk_set_from_commitment,
         pk_set::pk_set_public_key,
         pk_set::pk_set_threshold,
         pk_set::pk_set_public_key_share,
-        pk_set::pk_set_encrypt,
-        // SK API
+        // SecretKey API
         sk::sk_random,
         sk::sk_from_fr,
         sk::sk_public_key,
         sk::sk_reveal,
         sk::sk_sign,
         sk::sk_decrypt,
+        // SecretKeyShare API
+        sk_share::sk_share_decryption_share,
         // SecretKeySet API
         sk_set::sk_set_from_poly,
         sk_set::sk_set_threshold,
@@ -95,7 +100,7 @@ rustler::init!(
         // Signature API
         sig::sig_to_bytes,
         sig::sig_parity,
-        // Fr API
+        // Field Representation API
         fr::into_fr,
         fr::cmp_fr,
         fr::zero_fr,

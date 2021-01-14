@@ -11,29 +11,32 @@
     verify_point/4
 ]).
 
--spec degree(C :: reference()) -> non_neg_integer().
+-type bicommitment() :: reference().
+-export_type([bicommitment/0]).
+
+-spec degree(C :: bicommitment()) -> non_neg_integer().
 degree(C) ->
     erlang_tc:degree_bivar_commitment(C).
 
--spec eval(C :: reference(), X :: integer(), Y :: integer()) -> reference().
+-spec eval(C :: bicommitment(), X :: integer(), Y :: integer()) -> erlang_tc_g1:g1().
 eval(C, X, Y) ->
     erlang_tc:eval_bivar_commitment(C, X, Y).
 
--spec row(C :: reference(), X :: integer()) -> reference().
+-spec row(C :: bicommitment(), X :: integer()) -> erlang_tc_commitment:commitment().
 row(C, X) ->
     erlang_tc:row_bivar_commitment(C, X).
 
--spec cmp(C1 :: reference(), C2 :: reference()) -> boolean().
+-spec cmp(C1 :: bicommitment(), C2 :: bicommitment()) -> boolean().
 cmp(C1, C2) ->
     erlang_tc:cmp_bivar_commitment(C1, C2).
 
--spec reveal(C :: reference()) -> string().
+-spec reveal(C :: bicommitment()) -> string().
 reveal(C) ->
     erlang_tc:reveal_bivar_commitment(C).
 
 -spec verify_poly(
-    BiCommitment :: reference(),
-    RowPoly :: reference(),
+    BiCommitment :: bicommitment(),
+    RowPoly :: erlang_tc_poly:poly(),
     VerifierID :: non_neg_integer()
 ) -> boolean().
 verify_poly(BiCommitment, RowPoly, VerifierID) ->
@@ -41,8 +44,8 @@ verify_poly(BiCommitment, RowPoly, VerifierID) ->
     erlang_tc:cmp_commitment(erlang_tc:commitment_poly(RowPoly), RowCommit).
 
 -spec verify_point(
-    BiCommitment :: reference(),
-    RowPoly :: reference(),
+    BiCommitment :: bicommitment(),
+    RowPoly :: erlang_tc_poly:poly(),
     SenderID :: non_neg_integer(),
     VerifierID :: non_neg_integer()
 ) -> boolean().

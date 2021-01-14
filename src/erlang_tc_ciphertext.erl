@@ -5,6 +5,9 @@
     verify/1
 ]).
 
--spec verify(Ciphertext :: reference()) -> boolean().
+-type ciphertext() :: reference().
+-export_type([ciphertext/0]).
+
+-spec verify(Ciphertext :: ciphertext()) -> boolean().
 verify(Ciphertext) ->
     erlang_tc:ciphertext_verify(Ciphertext).

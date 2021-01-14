@@ -31,7 +31,7 @@
     pk_set_public_key/1,
     pk_set_threshold/1,
     pk_set_public_key_share/2,
-    pk_set_encrypt/2,
+    pk_set_decrypt/3,
 
     %% SecretKeySet API
     sk_set_from_poly/1,
@@ -40,8 +40,12 @@
     sk_set_secret_key_share/2,
     sk_set_random/1,
 
+    %% SecretKeyShare API
+    sk_share_decrypt_share/2,
+
     %% PublicKeyShare API
     share_from_pk/1,
+    pk_share_verify_decryption_share/3,
 
     %% Field Representation API
     into_fr/1,
@@ -118,7 +122,7 @@ ciphertext_verify(_Ciphertext) ->
 %% ==================================================================
 %% PK
 %% ==================================================================
--spec pk_reveal(PK :: reference()) -> reference().
+-spec pk_reveal(PK :: reference()) -> string().
 pk_reveal(_PK) ->
     not_loaded(?LINE).
 
@@ -187,6 +191,14 @@ sk_set_random(_Threshold) ->
     not_loaded(?LINE).
 
 %% ==================================================================
+%% SecretKeyShare
+%% ==================================================================
+
+-spec sk_share_decrypt_share(SKShare :: reference(), Ciphertext :: reference()) -> reference().
+sk_share_decrypt_share(_SKShare, _Ciphertext) ->
+    not_loaded(?LINE).
+
+%% ==================================================================
 %% Signature
 %% ==================================================================
 
@@ -218,8 +230,10 @@ pk_set_threshold(_PKSet) ->
 pk_set_public_key_share(_PKSet, _I) ->
     not_loaded(?LINE).
 
--spec pk_set_encrypt(PKSet :: reference(), Msg :: binary()) -> reference().
-pk_set_encrypt(_PKSet, _Msg) ->
+-spec pk_set_decrypt(PKSet :: reference(),
+                     DecShares :: [{non_neg_integer(), reference()}],
+                     Cipher :: reference()) -> reference().
+pk_set_decrypt(_PKSet, _DecShares, _Cipher) ->
     not_loaded(?LINE).
 
 %% ==================================================================
@@ -230,6 +244,9 @@ pk_set_encrypt(_PKSet, _Msg) ->
 share_from_pk(_PK) ->
     not_loaded(?LINE).
 
+-spec pk_share_verify_decryption_share(PKShare :: reference(), DecShare :: reference(), Cipher :: reference()) -> boolean().
+pk_share_verify_decryption_share(_PKShare, _DecShare, _Cipher) ->
+    not_loaded(?LINE).
 
 %% ==================================================================
 %% Field

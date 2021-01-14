@@ -6,10 +6,14 @@
     parity/1
 ]).
 
--spec to_bytes(Sig :: reference()) -> binary().
+
+-type sig() :: reference().
+-export_type([sig/0]).
+
+-spec to_bytes(Sig :: sig()) -> binary().
 to_bytes(Sig) ->
     erlang_tc:sig_to_bytes(Sig).
 
--spec parity(Sig :: reference()) -> boolean().
+-spec parity(Sig :: sig()) -> boolean().
 parity(Sig) ->
     erlang_tc:sig_parity(Sig).

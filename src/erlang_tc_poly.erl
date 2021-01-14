@@ -28,74 +28,77 @@
 -type coeffs() :: [integer()].
 -type samples() :: [{integer(), integer()}, ...].
 -type fr_samples() :: [{reference(), reference()}, ...].
+-type poly() :: reference().
 
--spec from_coeffs(Coeffs :: coeffs()) -> reference().
+-export_type([poly/0]).
+
+-spec from_coeffs(Coeffs :: coeffs()) -> poly().
 from_coeffs(Coeffs) ->
     erlang_tc:poly_from_coeffs(Coeffs).
 
--spec eval(Poly :: reference(), Point :: integer()) -> reference().
+-spec eval(Poly :: poly(), Point :: integer()) -> erlang_tc_fr:fr().
 eval(Poly, Point) ->
     erlang_tc:eval_uni_poly(Poly, Point).
 
--spec eval_from_fr(Poly :: reference(), Point :: reference()) -> reference().
+-spec eval_from_fr(Poly :: poly(), Point :: erlang_tc_fr:fr()) -> erlang_tc_fr:fr().
 eval_from_fr(Poly, Point) ->
     erlang_tc:eval_uni_poly_from_fr(Poly, Point).
 
--spec cmp(P1 :: reference(), P2 :: reference()) -> boolean().
+-spec cmp(P1 :: poly(), P2 :: poly()) -> boolean().
 cmp(P1, P2) ->
     erlang_tc:cmp_poly(P1, P2).
 
 %% NOTE: only works if the number of samples is `degree + 1` minimum
--spec interpolate(Samples :: samples()) -> reference().
+-spec interpolate(Samples :: samples()) -> poly().
 interpolate(Samples) ->
     erlang_tc:interpolate_uni_poly(Samples).
 
 %% NOTE: only works if the number of samples is `degree + 1` minimum
--spec interpolate_from_fr(Samples :: fr_samples()) -> reference().
+-spec interpolate_from_fr(Samples :: fr_samples()) -> poly().
 interpolate_from_fr(Samples) ->
     erlang_tc:interpolate_uni_poly_from_fr(Samples).
 
--spec degree(Poly :: reference()) -> non_neg_integer().
+-spec degree(Poly :: poly()) -> non_neg_integer().
 degree(Poly) ->
     erlang_tc:degree_poly(Poly).
 
--spec gen_monomial(Degree :: non_neg_integer()) -> reference().
+-spec gen_monomial(Degree :: non_neg_integer()) -> poly().
 gen_monomial(Degree) ->
     erlang_tc:gen_monomial(Degree).
 
--spec random(Degree :: non_neg_integer()) -> reference().
+-spec random(Degree :: non_neg_integer()) -> poly().
 random(Degree) ->
     erlang_tc:random_poly(Degree).
 
--spec constant(C :: number()) -> reference().
+-spec constant(C :: number()) -> poly().
 constant(C) ->
     erlang_tc:constant_poly(C).
 
--spec zero() -> reference().
+-spec zero() -> poly().
 zero() ->
     erlang_tc:zero_poly().
 
--spec zeroize(P :: reference()) -> reference().
+-spec zeroize(P :: poly()) -> poly().
 zeroize(P) ->
     erlang_tc:zeroize_poly(P).
 
--spec is_zero(P :: reference()) -> boolean().
+-spec is_zero(P :: poly()) -> boolean().
 is_zero(P) ->
     erlang_tc:is_zero_poly(P).
 
--spec add(P1 :: reference(), P2 :: reference()) -> reference().
+-spec add(P1 :: poly(), P2 :: poly()) -> poly().
 add(P1, P2) ->
     erlang_tc:add_poly(P1, P2).
 
--spec sub(P1 :: reference(), P2 :: reference()) -> reference().
+-spec sub(P1 :: poly(), P2 :: poly()) -> poly().
 sub(P1, P2) ->
     erlang_tc:sub_poly(P1, P2).
 
--spec mul(P1 :: reference(), P2 :: reference()) -> reference().
+-spec mul(P1 :: poly(), P2 :: poly()) -> poly().
 mul(P1, P2) ->
     erlang_tc:mul_poly(P1, P2).
 
--spec add_scalar(Scalar :: number(), P :: reference()) -> reference().
+-spec add_scalar(Scalar :: number(), P :: poly()) -> poly().
 add_scalar(Scalar, P) ->
     case Scalar < 0 of
         false ->
@@ -104,18 +107,18 @@ add_scalar(Scalar, P) ->
             sub_scalar(Scalar, P)
     end.
 
--spec sub_scalar(Scalar :: number(), P :: reference()) -> reference().
+-spec sub_scalar(Scalar :: number(), P :: poly()) -> poly().
 sub_scalar(Scalar, P) ->
     erlang_tc:sub_scalar_poly(Scalar, P).
 
--spec mul_scalar(Scalar :: number(), P :: reference()) -> reference().
+-spec mul_scalar(Scalar :: number(), P :: poly()) -> poly().
 mul_scalar(Scalar, P) ->
     erlang_tc:mul_scalar_poly(Scalar, P).
 
--spec reveal(P :: reference()) -> string().
+-spec reveal(P :: poly()) -> string().
 reveal(P) ->
     erlang_tc:reveal_poly(P).
 
--spec commitment(P :: reference()) -> reference().
+-spec commitment(P :: poly()) -> erlang_tc_commitment:commitment().
 commitment(P) ->
     erlang_tc:commitment_poly(P).
