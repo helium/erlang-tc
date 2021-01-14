@@ -1,8 +1,8 @@
 use crate::ciphertext::CiphertextArc;
 use crate::commitment::CommitmentArc;
+use crate::dec_share::DecShareArc;
 use crate::pk::{PkArc, PkRes};
 use crate::pk_share::{PKShareArc, PKShareRes};
-use crate::dec_share::DecShareArc;
 use rustler::{Env, ResourceArc};
 use threshold_crypto::PublicKeySet;
 
@@ -45,13 +45,16 @@ fn pk_set_public_key_share(pk_set_arc: PKSetArc, i: i64) -> PKShareArc {
 }
 
 #[rustler::nif(name = "pk_set_decrypt")]
-fn pk_set_decrypt(pk_set_arc: PKSetArc, dec_shares: Vec<(i64, DecShareArc)>, cipher_arc: CiphertextArc) -> Vec<u8> {
-    let mut shares: Vec<(i64, threshold_crypto::DecryptionShare)> = vec![];
-
-    for (index, dec_share_arc) in dec_shares {
-        let dec_share = dec_share_arc.dec_share.clone();
-        shares.push((index, dec_share))
-    }
-
-    pk_set_arc.pk_set.decrypt(shares, &cipher_arc.cipher).unwrap()
+fn pk_set_decrypt(
+    pk_set_arc: PKSetArc,
+    dec_shares: Vec<(i64, DecShareArc)>,
+    cipher_arc: CiphertextArc,
+) -> Vec<u8> {
+    pk_set_arc
+        .pk_set
+        .decrypt(
+            dec_shares.iter().map(|(i, dsa)| (*i, &dsa.dec_share)),
+            &cipher_arc.cipher,
+        )
+        .unwrap()
 }
