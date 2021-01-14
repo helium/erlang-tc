@@ -85,6 +85,7 @@ rustler::init!(
         sk::sk_public_key,
         sk::sk_reveal,
         sk::sk_sign,
+        sk::sk_decrypt,
         // SecretKeySet API
         sk_set::sk_set_from_poly,
         sk_set::sk_set_threshold,

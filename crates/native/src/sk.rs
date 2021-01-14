@@ -1,9 +1,11 @@
 use crate::fr::FrArc;
 use crate::pk::{PkArc, PkRes};
+use crate::ciphertext::CiphertextArc;
 use crate::lazy_binary::LazyBinary;
 use crate::sig::{SigArc, SigRes};
-use rustler::{Env, ResourceArc};
+use rustler::{Env, Binary, OwnedBinary, ResourceArc};
 use threshold_crypto::SecretKey;
+use std::io::Write as _;
 
 /// Struct to hold SecretKey
 pub struct SkRes {
@@ -52,4 +54,12 @@ fn sk_reveal(sk_arc: SkArc) -> String {
 fn sk_sign<'a>(sk_arc: SkArc, msg: LazyBinary<'a>) -> SigArc {
     let sk = sk_arc.sk.clone();
     ResourceArc::new(SigRes { sig: sk.sign(msg) })
+}
+
+#[rustler::nif(name = "sk_decrypt")]
+fn sk_decrypt<'a>(env: Env<'a>, sk_arc: SkArc, cipher_arc: CiphertextArc) -> Binary<'a> {
+    let decrypted = sk_arc.sk.decrypt(&cipher_arc.cipher).unwrap();
+    let mut binary = OwnedBinary::new(decrypted.len()).unwrap();
+    binary.as_mut_slice().write_all(&decrypted).unwrap();
+    Binary::from_owned(binary, env)
 }

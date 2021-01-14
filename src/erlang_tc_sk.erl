@@ -6,7 +6,8 @@
     from_fr/1,
     public_key/1,
     reveal/1,
-    sign/2
+    sign/2,
+    decrypt/2
 ]).
 
 -spec random() -> reference().
@@ -28,3 +29,7 @@ reveal(SK) ->
 -spec sign(SK :: reference(), Msg :: binary()) -> reference().
 sign(SK, Msg) ->
     erlang_tc:sk_sign(SK, Msg).
+
+-spec decrypt(SK :: reference(), Cipher :: reference()) -> binary().
+decrypt(SK, Cipher) ->
+    erlang_tc:sk_decrypt(SK, Cipher).

@@ -20,6 +20,7 @@
     sk_public_key/1,
     sk_reveal/1,
     sk_sign/2,
+    sk_decrypt/2,
 
     %% Signature API
     sig_to_bytes/1,
@@ -155,6 +156,10 @@ sk_reveal(_SK) ->
 
 -spec sk_sign(SK :: reference(), Msg :: binary()) -> reference().
 sk_sign(_SK, _Msg) ->
+    not_loaded(?LINE).
+
+-spec sk_decrypt(SK :: reference(), Cipher :: reference()) -> binary().
+sk_decrypt(_SK, _Cipher) ->
     not_loaded(?LINE).
 
 %% ==================================================================
