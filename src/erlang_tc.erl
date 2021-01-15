@@ -7,6 +7,7 @@
 -export([
     %% Ciphertext API
     ciphertext_verify/1,
+    ciphertext_cmp/2,
 
     %% PublicKey API
     pk_reveal/1,
@@ -41,7 +42,7 @@
     sk_set_random/1,
 
     %% SecretKeyShare API
-    sk_share_decrypt_share/2,
+    sk_share_decryption_share/2,
 
     %% PublicKeyShare API
     share_from_pk/1,
@@ -119,6 +120,10 @@
 ciphertext_verify(_Ciphertext) ->
     not_loaded(?LINE).
 
+-spec ciphertext_cmp(C1 :: reference(), C2 :: reference()) -> boolean().
+ciphertext_cmp(_C1, _C2) ->
+    not_loaded(?LINE).
+
 %% ==================================================================
 %% PK
 %% ==================================================================
@@ -194,8 +199,8 @@ sk_set_random(_Threshold) ->
 %% SecretKeyShare
 %% ==================================================================
 
--spec sk_share_decrypt_share(SKShare :: reference(), Ciphertext :: reference()) -> reference().
-sk_share_decrypt_share(_SKShare, _Ciphertext) ->
+-spec sk_share_decryption_share(SKShare :: reference(), Ciphertext :: reference()) -> reference().
+sk_share_decryption_share(_SKShare, _Ciphertext) ->
     not_loaded(?LINE).
 
 %% ==================================================================
@@ -232,7 +237,7 @@ pk_set_public_key_share(_PKSet, _I) ->
 
 -spec pk_set_decrypt(PKSet :: reference(),
                      DecShares :: [{non_neg_integer(), reference()}],
-                     Cipher :: reference()) -> reference().
+                     Cipher :: reference()) -> binary().
 pk_set_decrypt(_PKSet, _DecShares, _Cipher) ->
     not_loaded(?LINE).
 

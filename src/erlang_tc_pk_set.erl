@@ -33,6 +33,6 @@ public_key_share(PKSet, I) ->
     PKSet :: pk_set(),
     DecShares :: [{non_neg_integer(), erlang_tc_dec_share:dec_share()}],
     Cipher :: erlang_tc_ciphertext:ciphertext()
-) -> erlang_tc_ciphertext:ciphertext().
+) -> binary().
 decrypt(PKSet, DecShares, Cipher) ->
     erlang_tc:pk_set_decrypt(PKSet, DecShares, Cipher).

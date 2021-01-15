@@ -13,4 +13,4 @@
     Ciphertext :: erlang_tc_ciphertext:ciphertext()
 ) -> erlang_tc_dec_share:dec_share().
 decrypt_share(SKShare, Ciphertext) ->
-    erlang_tc:sk_share_decrypt_share(SKShare, Ciphertext).
+    erlang_tc:sk_share_decryption_share(SKShare, Ciphertext).

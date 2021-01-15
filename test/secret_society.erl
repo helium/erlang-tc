@@ -91,8 +91,8 @@ msg_inbox(Actor) ->
 send_msg(Actor, Cipher) ->
     Actor#actor{msg_inbox=Cipher}.
 
-start_decryption_meeting(PKSet) ->
-    #decryption_meeting{pk_set = PKSet}.
+start_decryption_meeting(SecretSociety) ->
+    #decryption_meeting{pk_set = pk_set(SecretSociety)}.
 
 meeting_cipher(DecryptionMeeting) ->
     DecryptionMeeting#decryption_meeting.ciphertext.
@@ -115,20 +115,30 @@ accept_decryption_share(DecryptionMeeting, Actor) ->
         undefined ->
             DecryptionMeeting;
         Cipher ->
-            case Cipher == meeting_cipher(DecryptionMeeting) of
-                false ->
-                    DecryptionMeeting;
-                true ->
+            case meeting_cipher(DecryptionMeeting) of
+                undefined ->
+                    %% no one in the meeting, accept
                     DecryptionMeeting1 = meeting_cipher(DecryptionMeeting, Cipher),
                     DecShare = erlang_tc_sk_share:decrypt_share(sk_share(Actor), Cipher),
                     ?assert(erlang_tc_pk_share:verify_decryption_share(pk_share(Actor), DecShare, Cipher)),
-                    add_share(DecryptionMeeting1, id(Actor), DecShare)
+                    add_share(DecryptionMeeting1, id(Actor), DecShare);
+                MeetingCipher ->
+                    case erlang_tc_ciphertext:cmp(Cipher, MeetingCipher) of
+                        false ->
+                            DecryptionMeeting;
+                        true ->
+                            DecryptionMeeting1 = meeting_cipher(DecryptionMeeting, Cipher),
+                            DecShare = erlang_tc_sk_share:decrypt_share(sk_share(Actor), Cipher),
+                            ?assert(erlang_tc_pk_share:verify_decryption_share(pk_share(Actor), DecShare, Cipher)),
+                            add_share(DecryptionMeeting1, id(Actor), DecShare)
+                    end
             end
     end.
 
 decrypt_msg(DecryptionMeeting) ->
     case meeting_cipher(DecryptionMeeting) of
-        undefined -> [];
+        undefined ->
+            {error, cannot_decrypt};
         Cipher ->
             PKSet = meeting_pk_set(DecryptionMeeting),
             erlang_tc_pk_set:decrypt(PKSet, maps:to_list(dec_shares(DecryptionMeeting)), Cipher)

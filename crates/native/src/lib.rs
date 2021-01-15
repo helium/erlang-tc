@@ -21,6 +21,7 @@ mod sk_share;
 mod sig;
 mod ciphertext;
 mod dec_share;
+mod bin;
 
 fn load(env: Env, _: Term) -> bool {
     poly::load(env);
@@ -48,6 +49,7 @@ rustler::init!(
     [
         // Ciphertext API
         ciphertext::ciphertext_verify,
+        ciphertext::ciphertext_cmp,
         // Polynomial API
         poly::poly_from_coeffs,
         poly::gen_monomial,
@@ -82,6 +84,7 @@ rustler::init!(
         pk_set::pk_set_public_key,
         pk_set::pk_set_threshold,
         pk_set::pk_set_public_key_share,
+        pk_set::pk_set_decrypt,
         // SecretKey API
         sk::sk_random,
         sk::sk_from_fr,

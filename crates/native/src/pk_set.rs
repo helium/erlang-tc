@@ -1,9 +1,11 @@
+use crate::atom::{error, ok};
+use crate::bin::Bin;
 use crate::ciphertext::CiphertextArc;
 use crate::commitment::CommitmentArc;
 use crate::dec_share::DecShareArc;
 use crate::pk::{PkArc, PkRes};
 use crate::pk_share::{PKShareArc, PKShareRes};
-use rustler::{Env, ResourceArc};
+use rustler::{Atom, Env, ResourceArc};
 use threshold_crypto::PublicKeySet;
 
 /// Struct to hold PublicKey
@@ -49,12 +51,14 @@ fn pk_set_decrypt(
     pk_set_arc: PKSetArc,
     dec_shares: Vec<(i64, DecShareArc)>,
     cipher_arc: CiphertextArc,
-) -> Vec<u8> {
-    pk_set_arc
-        .pk_set
-        .decrypt(
-            dec_shares.iter().map(|(i, dsa)| (*i, &dsa.dec_share)),
-            &cipher_arc.cipher,
-        )
-        .unwrap()
+) -> (Atom, Bin) {
+    let decrypted: Result<Vec<u8>, threshold_crypto::error::Error> = pk_set_arc.pk_set.decrypt(
+        dec_shares.iter().map(|(i, dsa)| (*i, &dsa.dec_share)),
+        &cipher_arc.cipher,
+    );
+
+    match decrypted {
+        Ok(d) => (ok(), Bin(d)),
+        _ => (error(), Bin(vec![])),
+    }
 }
