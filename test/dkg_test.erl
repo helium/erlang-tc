@@ -1,8 +1,8 @@
--module(dealer_test).
+-module(dkg_test).
 
 -include_lib("eunit/include/eunit.hrl").
 
-rust_dkg_test() ->
+rust_example_test() ->
     DealerNum = 3,
     NodeNum = 5,
     FaultyNum = 2,

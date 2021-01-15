@@ -1,3 +1,9 @@
+%% Public-Key Cryptography - Demonstrates how to generate a
+%% random secret-key and corresponding public-key, sign some bytes using a
+%% secret-key, validate the signature for some bytes using a public-key, encrypt
+%% some bytes using a public-key, and how to decrypt a ciphertext using a
+%% secret-key.
+
 -module(pkc_test).
 
 -include_lib("eunit/include/eunit.hrl").
@@ -17,7 +23,7 @@ basic_test() ->
     %% then encrypts the signed message with Alice's public key.
     Msg = <<"Frankly, my dear, I don't give a damn">>,
     Sig = erlang_tc_sk:sign(BobSK, Msg),
-    SignedMsg = #{msg => Msg, signature => Sig},
+    SignedMsg = {Msg, Sig},
     %% TODO: Test with actual serialization
     Cipher = erlang_tc_pk:encrypt(AlicePK, term_to_binary(SignedMsg)),
     %% Check that this is a valid cipher
@@ -27,8 +33,7 @@ basic_test() ->
     %% then verifies that the signature of the plaintext is valid using Bob's public key.
     Decrypted = erlang_tc_sk:decrypt(AliceSK, Cipher),
     DecryptedSignedMsg = binary_to_term(Decrypted),
-    ReceivedSignature = maps:get(signature, DecryptedSignedMsg),
-    ReceivedMsg = maps:get(msg, DecryptedSignedMsg),
+    {ReceivedMsg, ReceivedSignature} = DecryptedSignedMsg,
     ?assertEqual(SignedMsg, binary_to_term(Decrypted)),
     ?assert(erlang_tc_pk:verify(BobPK, ReceivedSignature, ReceivedMsg)),
 

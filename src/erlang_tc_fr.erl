@@ -8,18 +8,21 @@
     add_assign/2
 ]).
 
--spec into(Num :: integer()) -> reference().
+-type fr() :: reference().
+-export_type([fr/0]).
+
+-spec into(Num :: integer()) -> fr().
 into(Num) ->
     erlang_tc:into_fr(Num).
 
--spec cmp(FR1 :: reference(), FR2 :: reference()) -> boolean().
+-spec cmp(FR1 :: fr(), FR2 :: fr()) -> boolean().
 cmp(FR1, FR2) ->
     erlang_tc:cmp_fr(FR1, FR2).
 
--spec zero() -> reference().
+-spec zero() -> fr().
 zero() ->
     erlang_tc:zero_fr().
 
--spec add_assign(FR1 :: reference(), FR2 :: reference()) -> reference().
+-spec add_assign(FR1 :: fr(), FR2 :: fr()) -> fr().
 add_assign(FR1, FR2) ->
     erlang_tc:add_assign_fr(FR1, FR2).

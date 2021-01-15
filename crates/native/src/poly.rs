@@ -1,5 +1,5 @@
-use crate::fr::{FrArc, FrRes};
 use crate::commitment::{CommitmentArc, CommitmentRes};
+use crate::fr::{FrArc, FrRes};
 use rustler::{Env, ResourceArc};
 use threshold_crypto::poly::Poly;
 use threshold_crypto::{Fr, IntoFr};
@@ -39,7 +39,7 @@ fn eval_uni_poly_from_fr(p_arc: PolyArc, point_arc: FrArc) -> FrArc {
     let poly = p_arc.poly.clone();
     let point = point_arc.fr.clone();
     ResourceArc::new(FrRes {
-        fr: poly.evaluate(point)
+        fr: poly.evaluate(point),
     })
 }
 
@@ -60,16 +60,13 @@ fn interpolate_uni_poly(samples: Vec<(i64, i64)>) -> PolyArc {
 
 #[rustler::nif(name = "interpolate_uni_poly_from_fr")]
 fn interpolate_uni_poly_from_fr(samples_repr: Vec<(FrArc, FrArc)>) -> PolyArc {
-    let mut samples: Vec<(Fr, Fr)> = vec![];
-
-    for (f1_arc, f2_arc) in samples_repr {
-        let f1 = f1_arc.fr;
-        let f2 = f2_arc.fr;
-        samples.push((f1, f2))
-    }
-
     ResourceArc::new(PolyRes {
-        poly: Poly::interpolate_from_fr(samples),
+        poly: Poly::interpolate_from_fr(
+            samples_repr
+                .iter()
+                .map(|(f1a, f2a)| (f1a.fr, f2a.fr))
+                .collect(),
+        ),
     })
 }
 
@@ -170,4 +167,3 @@ fn commitment_poly(p_arc: PolyArc) -> CommitmentArc {
         commitment: poly.commitment(),
     })
 }
-

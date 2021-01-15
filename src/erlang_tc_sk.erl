@@ -10,26 +10,29 @@
     decrypt/2
 ]).
 
--spec random() -> reference().
+-type sk() :: reference().
+-export_type([sk/0]).
+
+-spec random() -> sk().
 random() ->
     erlang_tc:sk_random().
 
--spec from_fr(Fr :: reference()) -> reference().
+-spec from_fr(Fr :: erlang_tc_fr:fr()) -> sk().
 from_fr(Fr) ->
     erlang_tc:sk_from_fr(Fr).
 
--spec public_key(SK :: reference()) -> reference().
+-spec public_key(SK :: sk()) -> erlang_tc_pk:pk().
 public_key(SK) ->
     erlang_tc:sk_public_key(SK).
 
--spec reveal(SK :: reference()) -> string().
+-spec reveal(SK :: sk()) -> string().
 reveal(SK) ->
     erlang_tc:sk_reveal(SK).
 
--spec sign(SK :: reference(), Msg :: binary()) -> reference().
+-spec sign(SK :: sk(), Msg :: binary()) -> erlang_tc_sig:sig().
 sign(SK, Msg) ->
     erlang_tc:sk_sign(SK, Msg).
 
--spec decrypt(SK :: reference(), Cipher :: reference()) -> binary().
+-spec decrypt(SK :: sk(), Cipher :: erlang_tc_ciphertext:ciphertext()) -> binary().
 decrypt(SK, Cipher) ->
     erlang_tc:sk_decrypt(SK, Cipher).

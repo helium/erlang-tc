@@ -6,10 +6,13 @@
     cmp/2
 ]).
 
--spec zero() -> reference().
+-type g1() :: reference().
+-export_type([g1/0]).
+
+-spec zero() -> g1().
 zero() ->
     erlang_tc:g1_zero().
 
--spec cmp(G1_1 :: reference(), G1_2 :: reference()) -> boolean().
+-spec cmp(G1_1 :: g1(), G1_2 :: g1()) -> boolean().
 cmp(G1_1, G1_2) ->
     erlang_tc:cmp_g1(G1_1, G1_2).
