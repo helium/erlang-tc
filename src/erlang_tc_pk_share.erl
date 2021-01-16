@@ -3,7 +3,8 @@
 -export([
     %% Signature API
     from_pk/1,
-    verify_decryption_share/3
+    verify_decryption_share/3,
+    verify/3
 ]).
 
 -type pk_share() :: reference().
@@ -21,3 +22,9 @@ from_pk(PK) ->
 ) -> boolean().
 verify_decryption_share(PKShare, DecShare, Cipher) ->
     erlang_tc:pk_share_verify_decryption_share(PKShare, DecShare, Cipher).
+
+-spec verify(PKShare :: pk_share(),
+             NodeSig :: erlang_tc_sig_share:sig_share(),
+             Msg :: binary()) -> boolean().
+verify(PKShare, NodeSig, Msg) ->
+    erlang_tc:pk_share_verify(PKShare, NodeSig, Msg).

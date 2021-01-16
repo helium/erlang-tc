@@ -6,7 +6,8 @@
     public_key/1,
     threshold/1,
     public_key_share/2,
-    decrypt/3
+    decrypt/3,
+    combine_signatures/2
 ]).
 
 -type pk_set() :: reference().
@@ -36,3 +37,10 @@ public_key_share(PKSet, I) ->
 ) -> binary().
 decrypt(PKSet, DecShares, Cipher) ->
     erlang_tc:pk_set_decrypt(PKSet, DecShares, Cipher).
+
+-spec combine_signatures(
+    PKSet :: pk_set(),
+    SigShares :: [{non_neg_integer(), erlang_tc_sig_share:sig_share()}]
+) -> {ok, erlang_tc_sig:sig()} | {error, any()}.
+combine_signatures(PKSet, SigShares) ->
+    erlang_tc:pk_set_combine_signatures(PKSet, SigShares).

@@ -33,6 +33,7 @@
     pk_set_threshold/1,
     pk_set_public_key_share/2,
     pk_set_decrypt/3,
+    pk_set_combine_signatures/2,
 
     %% SecretKeySet API
     sk_set_from_poly/1,
@@ -43,10 +44,12 @@
 
     %% SecretKeyShare API
     sk_share_decryption_share/2,
+    sk_share_sign/2,
 
     %% PublicKeyShare API
     share_from_pk/1,
     pk_share_verify_decryption_share/3,
+    pk_share_verify/3,
 
     %% Field Representation API
     into_fr/1,
@@ -203,6 +206,10 @@ sk_set_random(_Threshold) ->
 sk_share_decryption_share(_SKShare, _Ciphertext) ->
     not_loaded(?LINE).
 
+-spec sk_share_sign(SKShare :: reference(), Msg :: binary()) -> reference().
+sk_share_sign(_SKShare, _Msg) ->
+    not_loaded(?LINE).
+
 %% ==================================================================
 %% Signature
 %% ==================================================================
@@ -241,6 +248,11 @@ pk_set_public_key_share(_PKSet, _I) ->
 pk_set_decrypt(_PKSet, _DecShares, _Cipher) ->
     not_loaded(?LINE).
 
+-spec pk_set_combine_signatures(PKSet :: reference(),
+                     SigShare :: [{non_neg_integer(), reference()}]) -> {ok, reference()} | {error, any()}.
+pk_set_combine_signatures(_PKSet, _SigShares) ->
+    not_loaded(?LINE).
+
 %% ==================================================================
 %% PublicKeyShare
 %% ==================================================================
@@ -251,6 +263,10 @@ share_from_pk(_PK) ->
 
 -spec pk_share_verify_decryption_share(PKShare :: reference(), DecShare :: reference(), Cipher :: reference()) -> boolean().
 pk_share_verify_decryption_share(_PKShare, _DecShare, _Cipher) ->
+    not_loaded(?LINE).
+
+-spec pk_share_verify(PKShare :: reference(), Sig :: reference(), Msg :: binary()) -> boolean().
+pk_share_verify(_PKShare, _Sig, _Msg) ->
     not_loaded(?LINE).
 
 %% ==================================================================

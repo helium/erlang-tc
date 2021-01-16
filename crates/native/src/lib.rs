@@ -19,6 +19,7 @@ mod sk;
 mod sk_set;
 mod sk_share;
 mod sig;
+mod sig_share;
 mod ciphertext;
 mod dec_share;
 mod bin;
@@ -38,6 +39,7 @@ fn load(env: Env, _: Term) -> bool {
     sk_set::load(env);
     sk_share::load(env);
     sig::load(env);
+    sig_share::load(env);
     ciphertext::load(env);
     dec_share::load(env);
 
@@ -79,12 +81,14 @@ rustler::init!(
         pk::pk_encrypt,
         // PublicKeyShare API
         pk_share::pk_share_verify_decryption_share,
+        pk_share::pk_share_verify,
         // PublicKeySet API
         pk_set::pk_set_from_commitment,
         pk_set::pk_set_public_key,
         pk_set::pk_set_threshold,
         pk_set::pk_set_public_key_share,
         pk_set::pk_set_decrypt,
+        pk_set::pk_set_combine_signatures,
         // SecretKey API
         sk::sk_random,
         sk::sk_from_fr,
@@ -94,6 +98,7 @@ rustler::init!(
         sk::sk_decrypt,
         // SecretKeyShare API
         sk_share::sk_share_decryption_share,
+        sk_share::sk_share_sign,
         // SecretKeySet API
         sk_set::sk_set_from_poly,
         sk_set::sk_set_threshold,
