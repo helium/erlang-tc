@@ -1,7 +1,9 @@
 use rustler::{Env, ResourceArc};
 use threshold_crypto::PublicKeyShare;
+use crate::lazy_binary::LazyBinary;
 use crate::ciphertext::CiphertextArc;
 use crate::dec_share::DecShareArc;
+use crate::sig_share::SigShareArc;
 
 /// Struct to hold PublicKeyShare
 pub struct PKShareRes {
@@ -25,4 +27,15 @@ fn pk_share_verify_decryption_share(
     pk_share_arc
         .share
         .verify_decryption_share(&dec_share, &cipher_arc.cipher)
+}
+
+#[rustler::nif(name = "pk_share_verify")]
+fn pk_share_verify<'a>(
+    pk_share_arc: PKShareArc,
+    sig_share_arc: SigShareArc,
+    msg: LazyBinary<'a>
+) -> bool {
+    pk_share_arc
+        .share
+        .verify(&sig_share_arc.sig_share, &msg)
 }
