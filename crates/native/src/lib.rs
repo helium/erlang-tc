@@ -9,6 +9,7 @@ mod bivar_poly;
 mod commitment;
 mod fr;
 mod g1;
+mod g2;
 mod g1_affine;
 mod lazy_binary;
 mod pk;
@@ -31,6 +32,7 @@ fn load(env: Env, _: Term) -> bool {
     bivar_commitment::load(env);
     fr::load(env);
     g1::load(env);
+    g2::load(env);
     g1_affine::load(env);
     pk::load(env);
     pk_set::load(env);
@@ -116,6 +118,8 @@ rustler::init!(
         // G1 API
         g1::g1_zero,
         g1::cmp_g1,
+        // G2 API
+        g2::g2_random,
         // G1Affine API
         g1_affine::g1_affine_one,
         g1_affine::g1_affine_mul,
