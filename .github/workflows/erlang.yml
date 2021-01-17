@@ -23,4 +23,4 @@ jobs:
     - name: Compile
       run: make
     - name: Run tests
-      run: make typecheck & make test
+      run: make ci

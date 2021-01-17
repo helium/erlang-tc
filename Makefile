@@ -9,8 +9,10 @@ clean:
 	$(REBAR) clean
 
 test:
-	$(REBAR) as test do eunit
+	$(REBAR) as test do eunit && $(REBAR) ct --verbose
 
 typecheck:
 	$(REBAR) dialyzer
 
+ci:
+	$(REBAR) dialyzer && $(REBAR) do eunit && $(REBAR) ct --verbose
