@@ -106,6 +106,7 @@
     row_bivar_poly/2,
     commitment_bivar_poly/1,
     zeroize_bivar_poly/1,
+    with_secret_bivar_poly/2,
 
     %% Bivariate Commitment API
     degree_bivar_commitment/1,
@@ -473,6 +474,10 @@ commitment_bivar_poly(_BiPoly) ->
 
 -spec zeroize_bivar_poly(BiPoly :: reference()) -> reference().
 zeroize_bivar_poly(_BiPoly) ->
+    not_loaded(?LINE).
+
+-spec with_secret_bivar_poly(Secret :: non_neg_integer(), Degree :: non_neg_integer()) -> reference().
+with_secret_bivar_poly(_Secret, _Degree) ->
     not_loaded(?LINE).
 
 %% ==================================================================

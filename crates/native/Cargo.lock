@@ -322,7 +322,7 @@ dependencies = [
 [[package]]
 name = "threshold_crypto"
 version = "0.4.0"
-source = "git+https://github.com/vihu/threshold_crypto?branch=rg/integrate#6e45efb662bb6a7dc52466bf5eb83f7d3a3bbcce"
+source = "git+https://github.com/vihu/threshold_crypto?branch=rg/integrate#be9b3a55e0951b106532d07d3bfb20071544d295"
 dependencies = [
  "byteorder",
  "ff",

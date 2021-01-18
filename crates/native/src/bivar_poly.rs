@@ -68,3 +68,11 @@ fn zeroize_bivar_poly(p_arc: BivarPolyArc) -> BivarPolyArc {
     bipoly.zeroize();
     ResourceArc::new(BivarPolyRes { bipoly: bipoly })
 }
+
+#[rustler::nif(name = "with_secret_bivar_poly")]
+fn with_secret_bivar_poly(secret: u64, degree: usize) -> BivarPolyArc {
+    let rng = &mut rand::thread_rng();
+    ResourceArc::new(BivarPolyRes {
+        bipoly: BivarPoly::with_secret(secret, degree, rng),
+    })
+}

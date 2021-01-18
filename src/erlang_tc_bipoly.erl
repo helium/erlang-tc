@@ -8,7 +8,8 @@
     eval/3,
     row/2,
     commitment/1,
-    zeroize/1
+    zeroize/1,
+    with_secret/2
 ]).
 
 -type bipoly() :: reference().
@@ -41,3 +42,7 @@ commitment(BiPoly) ->
 -spec zeroize(BiPoly :: bipoly()) -> bipoly().
 zeroize(BiPoly) ->
     erlang_tc:zeroize_bivar_poly(BiPoly).
+
+-spec with_secret(Secret :: non_neg_integer(), Degree :: non_neg_integer()) -> bipoly().
+with_secret(Secret, Degree) ->
+    erlang_tc:with_secret_bivar_poly(Secret, Degree).

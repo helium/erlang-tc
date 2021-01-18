@@ -131,6 +131,7 @@ rustler::init!(
         bivar_poly::row_bivar_poly,
         bivar_poly::commitment_bivar_poly,
         bivar_poly::zeroize_bivar_poly,
+        bivar_poly::with_secret_bivar_poly,
         // Commitment API
         commitment::degree_commitment,
         commitment::eval_commitment,
