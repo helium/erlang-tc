@@ -116,20 +116,19 @@ handle_call(_Request, _From, State) ->
     {reply, Reply, State}.
 
 handle_cast(step, State) ->
-    NewState = case maybe_create_block(State) of
-                   undefined ->
-                       %% no block produced
-                       State;
-                   Block ->
-                       add_block(State, Block)
-               end,
+    NewState =
+        case maybe_create_block(State) of
+            undefined ->
+                %% no block produced
+                State;
+            Block ->
+                add_block(State, Block)
+        end,
     {noreply, NewState};
 handle_cast(_Msg, State) ->
     lager:warning("unexpected cast ~p", [_Msg]),
     {noreply, State}.
 
-handle_info(export, State) ->
-    {noreply, State};
 handle_info(_Info, State) ->
     lager:warning("unexpected message ~p", [_Info]),
     {noreply, State}.
@@ -272,24 +271,38 @@ create_block(State) ->
                                 NodeSigShare = get_node_sig(NodeSig),
                                 {ok, Node} = internal_get_node(NodeID, State),
                                 PKShare = node_pk_share(Node),
-                                case erlang_tc_pk_share:verify(PKShare, NodeSigShare, Msg) of
-                                    false ->
-                                        false;
-                                    true ->
-                                        {true, {NodeID, NodeSigShare}}
-                                end
+                                {Time0, Result} = timer:tc(
+                                    fun() ->
+                                        case
+                                            erlang_tc_pk_share:verify(PKShare, NodeSigShare, Msg)
+                                        of
+                                            false ->
+                                                false;
+                                            true ->
+                                                {true, {NodeID, NodeSigShare}}
+                                        end
+                                    end
+                                ),
+                                ct:pal("Actual sig share verify time: ~p", [Time0 div 1000]),
+                                Result
                             end,
                             case lists:filtermap(Fun, Sigs) of
                                 [] ->
                                     {done, undefined};
                                 L ->
-                                    %% try to combine
-                                    case erlang_tc_pk_set:combine_signatures(PKSet, L) of
-                                        {error, _}=E ->
-                                            {done, E};
-                                        Sig ->
-                                            {done, new_block(UserID, Msg, Sig)}
-                                    end
+                                    {Time, Result} = timer:tc(
+                                        fun() ->
+                                            %% try to combine
+                                            case erlang_tc_pk_set:combine_signatures(PKSet, L) of
+                                                {error, _} = E ->
+                                                    {done, E};
+                                                Sig ->
+                                                    {done, new_block(UserID, Msg, Sig)}
+                                            end
+                                        end
+                                    ),
+                                    ct:pal("Actual combine_signatures time: ~p", [Time div 1000]),
+                                    Result
                             end;
                         (_, {done, R}) ->
                             {done, R}
