@@ -6,9 +6,7 @@ use threshold_crypto::{Fr, IntoFr};
 use zeroize::Zeroize;
 
 /// Struct to hold Polynomial
-pub struct PolyRes {
-    pub poly: Poly,
-}
+pub struct PolyRes(pub(crate) Poly);
 
 pub type PolyArc = ResourceArc<PolyRes>;
 
@@ -21,149 +19,122 @@ pub fn load(env: Env) -> bool {
 fn poly_from_coeffs(vec: Vec<i64>) -> PolyArc {
     let coeffs: Vec<Fr> = vec.iter().map(IntoFr::into_fr).collect();
 
-    ResourceArc::new(PolyRes {
-        poly: Poly::from(coeffs),
-    })
+    ResourceArc::new(PolyRes(Poly::from(coeffs)))
 }
 
 #[rustler::nif(name = "eval_uni_poly")]
-fn eval_uni_poly(p_arc: PolyArc, point: i64) -> FrArc {
-    let poly = p_arc.poly.clone();
+fn eval_uni_poly(p: PolyArc, point: i64) -> FrArc {
     ResourceArc::new(FrRes {
-        fr: poly.evaluate(point.into_fr()),
+        fr: p.0.evaluate(point.into_fr()),
     })
 }
 
 #[rustler::nif(name = "eval_uni_poly_from_fr")]
-fn eval_uni_poly_from_fr(p_arc: PolyArc, point_arc: FrArc) -> FrArc {
-    let poly = p_arc.poly.clone();
-    let point = point_arc.fr.clone();
+fn eval_uni_poly_from_fr(p: PolyArc, point: FrArc) -> FrArc {
+    let point = point.fr.clone();
     ResourceArc::new(FrRes {
-        fr: poly.evaluate(point),
+        fr: p.0.evaluate(point),
     })
 }
 
 #[rustler::nif(name = "random_poly")]
 fn random_poly(degree: usize) -> PolyArc {
     let rng = &mut rand::thread_rng();
-    ResourceArc::new(PolyRes {
-        poly: Poly::random(degree, rng),
-    })
+    ResourceArc::new(PolyRes(Poly::random(degree, rng)))
 }
 
 #[rustler::nif(name = "interpolate_uni_poly")]
 fn interpolate_uni_poly(samples: Vec<(i64, i64)>) -> PolyArc {
-    ResourceArc::new(PolyRes {
-        poly: Poly::interpolate(samples),
-    })
+    ResourceArc::new(PolyRes(Poly::interpolate(samples)))
 }
 
 #[rustler::nif(name = "interpolate_uni_poly_from_fr")]
 fn interpolate_uni_poly_from_fr(samples_repr: Vec<(FrArc, FrArc)>) -> PolyArc {
-    ResourceArc::new(PolyRes {
-        poly: Poly::interpolate_from_fr(
-            samples_repr
-                .iter()
-                .map(|(f1a, f2a)| (f1a.fr, f2a.fr))
-                .collect(),
-        ),
-    })
+    ResourceArc::new(PolyRes(Poly::interpolate_from_fr(
+        samples_repr
+            .iter()
+            .map(|(f1a, f2a)| (f1a.fr, f2a.fr))
+            .collect(),
+    )))
 }
 
 #[rustler::nif(name = "cmp_poly")]
-fn cmp_poly(p1_arc: PolyArc, p2_arc: PolyArc) -> bool {
-    let p1 = p1_arc.poly.clone();
-    let p2 = p2_arc.poly.clone();
-    p1 == p2
+fn cmp_poly(p1: PolyArc, p2: PolyArc) -> bool {
+    p1.0 == p2.0
 }
 
 #[rustler::nif(name = "zero_poly")]
 fn zero_poly() -> PolyArc {
-    ResourceArc::new(PolyRes { poly: Poly::zero() })
+    ResourceArc::new(PolyRes(Poly::zero()))
 }
 
 #[rustler::nif(name = "is_zero_poly")]
-fn is_zero_poly(p_arc: PolyArc) -> bool {
-    let poly = p_arc.poly.clone();
-    poly.is_zero()
+fn is_zero_poly(poly: PolyArc) -> bool {
+    poly.0.is_zero()
 }
 
 #[rustler::nif(name = "zeroize_poly")]
-fn zeroize_poly(p_arc: PolyArc) -> PolyArc {
-    let mut poly = p_arc.poly.clone();
-    poly.zeroize();
-    ResourceArc::new(PolyRes { poly: poly })
+fn zeroize_poly(p: PolyArc) -> PolyArc {
+    let mut p = p.0.clone();
+    p.zeroize();
+    ResourceArc::new(PolyRes(p))
 }
 
 #[rustler::nif(name = "constant_poly")]
 fn constant_poly(c: i64) -> PolyArc {
-    ResourceArc::new(PolyRes {
-        poly: Poly::constant(c.into_fr()),
-    })
+    ResourceArc::new(PolyRes(Poly::constant(c.into_fr())))
 }
 
 #[rustler::nif(name = "gen_monomial")]
 fn gen_monomial(degree: usize) -> PolyArc {
-    ResourceArc::new(PolyRes {
-        poly: Poly::monomial(degree),
-    })
+    ResourceArc::new(PolyRes(Poly::monomial(degree)))
 }
 
 #[rustler::nif(name = "add_poly")]
-fn add_poly(p1_arc: PolyArc, p2_arc: PolyArc) -> PolyArc {
-    let p1 = p1_arc.poly.clone();
-    let p2 = p2_arc.poly.clone();
-    ResourceArc::new(PolyRes { poly: p1 + p2 })
+fn add_poly(p1: PolyArc, p2: PolyArc) -> PolyArc {
+    ResourceArc::new(PolyRes(&p1.0 + &p2.0))
 }
 
 #[rustler::nif(name = "sub_poly")]
-fn sub_poly(p1_arc: PolyArc, p2_arc: PolyArc) -> PolyArc {
-    let p1 = p1_arc.poly.clone();
-    let p2 = p2_arc.poly.clone();
-    ResourceArc::new(PolyRes { poly: p1 - p2 })
+fn sub_poly(p1: PolyArc, p2: PolyArc) -> PolyArc {
+    ResourceArc::new(PolyRes(&p1.0 - &p2.0))
 }
 
 #[rustler::nif(name = "add_scalar_poly")]
-fn add_scalar_poly(scalar: u64, p1_arc: PolyArc) -> PolyArc {
-    let p1 = p1_arc.poly.clone();
-    ResourceArc::new(PolyRes { poly: p1 + scalar })
+fn add_scalar_poly(scalar: u64, p1: PolyArc) -> PolyArc {
+    ResourceArc::new(PolyRes(p1.0.clone() + scalar))
 }
 
 #[rustler::nif(name = "sub_scalar_poly")]
-fn sub_scalar_poly(scalar: u64, p1_arc: PolyArc) -> PolyArc {
-    let p1 = p1_arc.poly.clone();
-    ResourceArc::new(PolyRes { poly: p1 - scalar })
+fn sub_scalar_poly(scalar: u64, p1: PolyArc) -> PolyArc {
+    let p1 = p1.0.clone();
+    ResourceArc::new(PolyRes(p1 - scalar))
 }
 
 #[rustler::nif(name = "mul_scalar_poly")]
 fn mul_scalar_poly(scalar: u64, p1_arc: PolyArc) -> PolyArc {
-    let p1 = p1_arc.poly.clone();
-    ResourceArc::new(PolyRes { poly: p1 * scalar })
+    let p1 = p1_arc.0.clone();
+    ResourceArc::new(PolyRes(p1 * scalar))
 }
 
 #[rustler::nif(name = "mul_poly")]
-fn mul_poly(p1_arc: PolyArc, p2_arc: PolyArc) -> PolyArc {
-    let p1 = p1_arc.poly.clone();
-    let p2 = p2_arc.poly.clone();
-    ResourceArc::new(PolyRes { poly: p1 * p2 })
+fn mul_poly(p1: PolyArc, p2: PolyArc) -> PolyArc {
+    ResourceArc::new(PolyRes(&p1.0 * &p2.0))
 }
 
 #[rustler::nif(name = "degree_poly")]
-fn degree_poly(p_arc: PolyArc) -> usize {
-    let poly = p_arc.poly.clone();
-    poly.degree()
+fn degree_poly(p: PolyArc) -> usize {
+    p.0.degree()
 }
 
 #[rustler::nif(name = "reveal_poly")]
-fn reveal_poly(p_arc: PolyArc) -> String {
-    let poly = p_arc.poly.clone();
-    poly.reveal()
+fn reveal_poly(p: PolyArc) -> String {
+    p.0.reveal()
 }
 
 #[rustler::nif(name = "commitment_poly")]
-fn commitment_poly(p_arc: PolyArc) -> CommitmentArc {
-    let poly = p_arc.poly.clone();
+fn commitment_poly(p: PolyArc) -> CommitmentArc {
     ResourceArc::new(CommitmentRes {
-        commitment: poly.commitment(),
+        commitment: p.0.commitment(),
     })
 }
