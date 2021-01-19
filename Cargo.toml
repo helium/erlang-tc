@@ -3,6 +3,7 @@ name = "native"
 version = "0.1.0"
 authors = ["Rahul Garg <rg@vihu.dev>"]
 edition = "2018"
+build = "native/build.rs"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
