@@ -25,3 +25,9 @@ fn cmp_g1(g1_arc: G1Arc, g2_arc: G1Arc) -> bool {
     let g1_2 = g2_arc.g1;
     g1_1 == g1_2
 }
+
+#[rustler::nif(name = "g1_random")]
+fn g1_random() -> G1Arc {
+    let rng = &mut rand::thread_rng();
+    ResourceArc::new(G1Res { g1: G1::random(rng) })
+}

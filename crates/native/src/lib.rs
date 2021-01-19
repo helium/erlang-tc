@@ -118,6 +118,7 @@ rustler::init!(
         // G1 API
         g1::g1_zero,
         g1::cmp_g1,
+        g1::g1_random,
         // G2 API
         g2::g2_random,
         // G1Affine API

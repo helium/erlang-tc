@@ -60,6 +60,7 @@
     %% G1 API
     g1_zero/0,
     cmp_g1/2,
+    g1_random/0,
 
     %% G2 API
     g2_random/0,
@@ -303,6 +304,10 @@ g1_zero() ->
 
 -spec cmp_g1(G1_1 :: reference(), G1_2 :: reference()) -> boolean().
 cmp_g1(_G1_1, _G1_2) ->
+    not_loaded(?LINE).
+
+-spec g1_random() -> reference().
+g1_random() ->
     not_loaded(?LINE).
 
 %% ==================================================================
