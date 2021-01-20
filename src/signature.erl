@@ -1,4 +1,4 @@
--module(erlang_tc_sig).
+-module(signature).
 
 -export([
     %% Signature API

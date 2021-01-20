@@ -1,4 +1,4 @@
--module(erlang_tc_ciphertext).
+-module(ciphertext).
 
 -export([
     %% Ciphertext API

@@ -1,4 +1,4 @@
--module(erlang_tc_poly).
+-module(poly).
 
 -export([
     %% polynomial API
@@ -36,11 +36,11 @@
 from_coeffs(Coeffs) ->
     erlang_tc:poly_from_coeffs(Coeffs).
 
--spec eval(Poly :: poly(), Point :: integer()) -> erlang_tc_fr:fr().
+-spec eval(Poly :: poly(), Point :: integer()) -> fr:fr().
 eval(Poly, Point) ->
     erlang_tc:eval_uni_poly(Poly, Point).
 
--spec eval_from_fr(Poly :: poly(), Point :: erlang_tc_fr:fr()) -> erlang_tc_fr:fr().
+-spec eval_from_fr(Poly :: poly(), Point :: fr:fr()) -> fr:fr().
 eval_from_fr(Poly, Point) ->
     erlang_tc:eval_uni_poly_from_fr(Poly, Point).
 
@@ -119,6 +119,6 @@ mul_scalar(Scalar, P) ->
 reveal(P) ->
     erlang_tc:reveal_poly(P).
 
--spec commitment(P :: poly()) -> erlang_tc_commitment:commitment().
+-spec commitment(P :: poly()) -> commitment:commitment().
 commitment(P) ->
     erlang_tc:commitment_poly(P).

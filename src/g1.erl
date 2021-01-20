@@ -1,4 +1,4 @@
--module(erlang_tc_g1).
+-module(g1).
 
 -export([
     %% G1 API

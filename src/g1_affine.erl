@@ -1,4 +1,4 @@
--module(erlang_tc_g1_affine).
+-module(g1_affine).
 
 -export([
     %% G1Affine API
@@ -13,6 +13,6 @@
 one() ->
     erlang_tc:g1_affine_one().
 
--spec mul(G1Affine :: g1_affine(), Fr :: erlang_tc_fr:fr()) -> erlang_tc_g1:g1().
+-spec mul(G1Affine :: g1_affine(), Fr :: fr:fr()) -> g1:g1().
 mul(G1Affine, Fr) ->
     erlang_tc:g1_affine_mul(G1Affine, Fr).

@@ -17,7 +17,7 @@
 -type msg() :: binary().
 
 -record(network, {
-    pk_set :: erlang_tc_pk_set:pk_set(),
+    pk_set :: public_key_set:pk_set(),
     chat_nodes :: [chat_node()],
     blocks = [] :: blocks(),
     n_users = 0 :: non_neg_integer()
@@ -25,12 +25,12 @@
 
 -record(chat_node, {
     id :: node_id(),
-    sk_share :: erlang_tc_sk_share:sk_share(),
-    pk_share :: erlang_tc_pk_share:pk_share(),
+    sk_share :: signature_share:sk_share(),
+    pk_share :: public_key_share:pk_share(),
     pending = #{} :: pending()
 }).
 
--record(node_signature, {node_id :: node_id(), sig :: erlang_tc_sig_share:sig_share()}).
+-record(node_signature, {node_id :: node_id(), sig :: signature_share:sig_share()}).
 
 -record(user, {id :: user_id()}).
 
@@ -39,19 +39,19 @@
 -type signed_msgs() :: #{msg() => [node_signature()]}.
 -type node_signature() :: #node_signature{}.
 -type chat_node() :: #chat_node{}.
--type block() :: {user_id(), msg(), erlang_tc_sig:sig()}.
+-type block() :: {user_id(), msg(), signature:sig()}.
 -type blocks() :: [block()].
 -type user() :: #user{}.
 
 -spec new_network(NumNodes :: non_neg_integer(), Threshold :: non_neg_integer()) -> network().
 new_network(NumNodes, Threshold) ->
-    SKSet = erlang_tc_sk_set:random(Threshold),
-    PKSet = erlang_tc_sk_set:public_keys(SKSet),
+    SKSet = secret_key_set:random(Threshold),
+    PKSet = secret_key_set:public_keys(SKSet),
 
     Nodes = lists:map(
         fun(ID) ->
-            SKShare = erlang_tc_sk_set:secret_key_share(SKSet, ID),
-            PKShare = erlang_tc_pk_set:public_key_share(PKSet, ID),
+            SKShare = secret_key_set:secret_key_share(SKSet, ID),
+            PKShare = public_key_set:public_key_share(PKSet, ID),
             new_node(ID, SKShare, PKShare)
         end,
         lists:seq(1, NumNodes)
@@ -116,7 +116,7 @@ add_block(Network, Block) ->
     Blocks = blocks(Network),
     Network#network{blocks = Blocks ++ [Block]}.
 
--spec new_block(UserID :: user_id(), Msg :: msg(), Sig :: erlang_tc_sig:sig()) -> block().
+-spec new_block(UserID :: user_id(), Msg :: msg(), Sig :: signature:sig()) -> block().
 new_block(UserID, Msg, Sig) ->
     {UserID, Msg, Sig}.
 
@@ -143,7 +143,7 @@ node_id(Node) ->
 node_signature(Node, Msg) ->
     #node_signature{
         node_id = node_id(Node),
-        sig = erlang_tc_sk_share:sign(node_sk_share(Node), Msg)
+        sig = secret_key_share:sign(node_sk_share(Node), Msg)
     }.
 
 get_node_id(NodeSignature) ->
@@ -227,7 +227,7 @@ create_block(Network) ->
                                 NodeSigShare = get_node_sig(NodeSig),
                                 {ok, Node} = get_node(Network, NodeID),
                                 PKShare = node_pk_share(Node),
-                                case erlang_tc_pk_share:verify(PKShare, NodeSigShare, Msg) of
+                                case public_key_share:verify(PKShare, NodeSigShare, Msg) of
                                     false ->
                                         false;
                                     true ->
@@ -239,7 +239,7 @@ create_block(Network) ->
                                     {done, undefined};
                                 L ->
                                     %% try to combine
-                                    case erlang_tc_pk_set:combine_signatures(PKSet, L) of
+                                    case public_key_set:combine_signatures(PKSet, L) of
                                         {error, _}=E ->
                                             {done, E};
                                         Sig ->

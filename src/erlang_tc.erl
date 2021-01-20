@@ -1,3 +1,5 @@
+%% NOTE: This module is NOT to be used directly!
+
 -module(erlang_tc).
 
 -export([load/0]).
