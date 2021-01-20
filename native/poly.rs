@@ -1,6 +1,6 @@
 use crate::commitment::{CommitmentArc, CommitmentRes};
 use crate::fr::{FrArc, FrRes};
-use rustler::{Env, ResourceArc};
+use rustler::{Env, ListIterator, ResourceArc};
 use threshold_crypto::poly::Poly;
 use threshold_crypto::{Fr, IntoFr};
 use zeroize::Zeroize;
@@ -16,9 +16,11 @@ pub fn load(env: Env) -> bool {
 }
 
 #[rustler::nif(name = "poly_from_coeffs")]
-fn poly_from_coeffs(vec: Vec<i64>) -> PolyArc {
-    let coeffs: Vec<Fr> = vec.iter().map(IntoFr::into_fr).collect();
-
+fn poly_from_coeffs<'a>(coeffs: ListIterator<'a>) -> PolyArc {
+    let coeffs = coeffs
+        .map(|coeff| coeff.decode::<i64>().map(IntoFr::into_fr))
+        .collect::<Result<Vec<Fr>, _>>()
+        .expect("expected a list of i64s");
     ResourceArc::new(PolyRes(Poly::from(coeffs)))
 }
 
