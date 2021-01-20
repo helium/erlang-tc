@@ -1,4 +1,4 @@
--module(erlang_tc_sk).
+-module(secret_key).
 
 -export([
     %% SecretKey API
@@ -17,11 +17,11 @@
 random() ->
     erlang_tc:sk_random().
 
--spec from_fr(Fr :: erlang_tc_fr:fr()) -> sk().
+-spec from_fr(Fr :: fr:fr()) -> sk().
 from_fr(Fr) ->
     erlang_tc:sk_from_fr(Fr).
 
--spec public_key(SK :: sk()) -> erlang_tc_pk:pk().
+-spec public_key(SK :: sk()) -> public_key:pk().
 public_key(SK) ->
     erlang_tc:sk_public_key(SK).
 
@@ -29,10 +29,10 @@ public_key(SK) ->
 reveal(SK) ->
     erlang_tc:sk_reveal(SK).
 
--spec sign(SK :: sk(), Msg :: binary()) -> erlang_tc_sig:sig().
+-spec sign(SK :: sk(), Msg :: binary()) -> signature:sig().
 sign(SK, Msg) ->
     erlang_tc:sk_sign(SK, Msg).
 
--spec decrypt(SK :: sk(), Cipher :: erlang_tc_ciphertext:ciphertext()) -> binary().
+-spec decrypt(SK :: sk(), Cipher :: ciphertext:ciphertext()) -> binary().
 decrypt(SK, Cipher) ->
     erlang_tc:sk_decrypt(SK, Cipher).

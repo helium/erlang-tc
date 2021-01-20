@@ -1,4 +1,4 @@
--module(erlang_tc_sig_share).
+-module(signature_share).
 
 -type sig_share() :: reference().
 

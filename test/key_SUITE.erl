@@ -38,58 +38,58 @@ end_per_testcase(_, Config) ->
 
 pk_size_test(Config) ->
     PKSize = ?config(pk_size, Config),
-    SK = erlang_tc_sk:random(),
-    PK = erlang_tc_sk:public_key(SK),
-    ?assertEqual(PKSize, byte_size(erlang_tc_pk:to_bytes(PK))).
+    SK = secret_key:random(),
+    PK = secret_key:public_key(SK),
+    ?assertEqual(PKSize, byte_size(public_key:to_bytes(PK))).
 
 signature_test(Config) ->
     SigSize = ?config(sig_size, Config),
-    SK = erlang_tc_sk:random(),
-    Signature = erlang_tc_sk:sign(SK, <<"resistance is futile">>),
-    %% Parity = erlang_tc_sig:parity(Signature),
+    SK = secret_key:random(),
+    Signature = secret_key:sign(SK, <<"resistance is futile">>),
+    %% Parity = signature:parity(Signature),
     %% ?debugFmt("Parity: ~p~n", [Parity]),
-    ?assertEqual(SigSize, byte_size(erlang_tc_sig:to_bytes(Signature))).
+    ?assertEqual(SigSize, byte_size(signature:to_bytes(Signature))).
 
 pk_set_test(Config) ->
     PKSize = ?config(pk_size, Config),
     Degree = ?config(degree, Config),
-    RandomPoly = erlang_tc_poly:random(Degree),
-    Commitment = erlang_tc_poly:commitment(RandomPoly),
-    PKSet = erlang_tc_pk_set:from_commitment(Commitment),
-    PK = erlang_tc_pk_set:public_key(PKSet),
-    ?assertEqual(PKSize, byte_size(erlang_tc_pk:to_bytes(PK))),
-    ?assertEqual(Degree, erlang_tc_pk_set:threshold(PKSet)).
+    RandomPoly = poly:random(Degree),
+    Commitment = poly:commitment(RandomPoly),
+    PKSet = public_key_set:from_commitment(Commitment),
+    PK = public_key_set:public_key(PKSet),
+    ?assertEqual(PKSize, byte_size(public_key:to_bytes(PK))),
+    ?assertEqual(Degree, public_key_set:threshold(PKSet)).
 
 sk_set_test(Config) ->
     PKSize = ?config(pk_size, Config),
     Degree = ?config(degree, Config),
-    RandomPoly = erlang_tc_poly:random(Degree),
-    SKSet = erlang_tc_sk_set:from_poly(RandomPoly),
-    PKSet = erlang_tc_sk_set:public_keys(SKSet),
-    PK = erlang_tc_pk_set:public_key(PKSet),
-    ?assertEqual(PKSize, byte_size(erlang_tc_pk:to_bytes(PK))),
-    ?assertEqual(Degree, erlang_tc_sk_set:threshold(SKSet)).
+    RandomPoly = poly:random(Degree),
+    SKSet = secret_key_set:from_poly(RandomPoly),
+    PKSet = secret_key_set:public_keys(SKSet),
+    PK = public_key_set:public_key(PKSet),
+    ?assertEqual(PKSize, byte_size(public_key:to_bytes(PK))),
+    ?assertEqual(Degree, secret_key_set:threshold(SKSet)).
 
 random_sk_set_test(Config) ->
     PKSize = ?config(pk_size, Config),
     Degree = ?config(degree, Config),
-    SKSet = erlang_tc_sk_set:random(Degree),
-    PKSet = erlang_tc_sk_set:public_keys(SKSet),
-    PK = erlang_tc_pk_set:public_key(PKSet),
-    ?assertEqual(PKSize, byte_size(erlang_tc_pk:to_bytes(PK))),
-    ?assertEqual(Degree, erlang_tc_sk_set:threshold(SKSet)).
+    SKSet = secret_key_set:random(Degree),
+    PKSet = secret_key_set:public_keys(SKSet),
+    PK = public_key_set:public_key(PKSet),
+    ?assertEqual(PKSize, byte_size(public_key:to_bytes(PK))),
+    ?assertEqual(Degree, secret_key_set:threshold(SKSet)).
 
 verify_sig_test(_Config) ->
-    SK = erlang_tc_sk:random(),
+    SK = secret_key:random(),
     Msg = <<"Say hello to my little friend">>,
-    Sig = erlang_tc_sk:sign(SK, Msg),
-    PK = erlang_tc_sk:public_key(SK),
-    ?assert(erlang_tc_pk:verify(PK, Sig, Msg)).
+    Sig = secret_key:sign(SK, Msg),
+    PK = secret_key:public_key(SK),
+    ?assert(public_key:verify(PK, Sig, Msg)).
 
 verify_ciphertext_test(_Config) ->
-    SK = erlang_tc_sk:random(),
+    SK = secret_key:random(),
     Msg = <<"His name is Robert Paulson">>,
-    PK = erlang_tc_sk:public_key(SK),
+    PK = secret_key:public_key(SK),
 
-    Cipher = erlang_tc_pk:encrypt(PK, Msg),
-    ?assert(erlang_tc_ciphertext:verify(Cipher)).
+    Cipher = public_key:encrypt(PK, Msg),
+    ?assert(ciphertext:verify(Cipher)).

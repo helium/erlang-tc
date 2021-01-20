@@ -1,4 +1,4 @@
--module(erlang_tc_fr).
+-module(fr).
 
 -export([
     %% field API

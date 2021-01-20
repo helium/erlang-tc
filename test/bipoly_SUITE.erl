@@ -17,12 +17,12 @@ end_per_testcase(_, Config) ->
 generate_with_constant_term_test(_Config) ->
     Secret = 42,
     Degree = 3,
-    BiPoly = erlang_tc_bipoly:with_secret(Secret, Degree),
-    Eval = erlang_tc_bipoly:eval(BiPoly, 0, 0),
+    BiPoly = bipoly:with_secret(Secret, Degree),
+    Eval = bipoly:eval(BiPoly, 0, 0),
 
     %% Evaluating the bipoly at (0,0) implies we only get the constant term,
     %% which is the secret value we constructed the bipoly to begin with
-    SecretFr = erlang_tc_fr:into(Secret),
-    ?assert(erlang_tc_fr:cmp(Eval, SecretFr)),
+    SecretFr = fr:into(Secret),
+    ?assert(fr:cmp(Eval, SecretFr)),
 
     ok.

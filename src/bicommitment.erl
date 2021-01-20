@@ -1,4 +1,4 @@
--module(erlang_tc_bicommitment).
+-module(bicommitment).
 
 -export([
     %% bivariate commitment API
@@ -18,11 +18,11 @@
 degree(C) ->
     erlang_tc:degree_bivar_commitment(C).
 
--spec eval(C :: bicommitment(), X :: integer(), Y :: integer()) -> erlang_tc_g1:g1().
+-spec eval(C :: bicommitment(), X :: integer(), Y :: integer()) -> g1:g1().
 eval(C, X, Y) ->
     erlang_tc:eval_bivar_commitment(C, X, Y).
 
--spec row(C :: bicommitment(), X :: integer()) -> erlang_tc_commitment:commitment().
+-spec row(C :: bicommitment(), X :: integer()) -> commitment:commitment().
 row(C, X) ->
     erlang_tc:row_bivar_commitment(C, X).
 
@@ -36,7 +36,7 @@ reveal(C) ->
 
 -spec verify_poly(
     BiCommitment :: bicommitment(),
-    RowPoly :: erlang_tc_poly:poly(),
+    RowPoly :: poly:poly(),
     VerifierID :: non_neg_integer()
 ) -> boolean().
 verify_poly(BiCommitment, RowPoly, VerifierID) ->
@@ -45,7 +45,7 @@ verify_poly(BiCommitment, RowPoly, VerifierID) ->
 
 -spec verify_point(
     BiCommitment :: bicommitment(),
-    RowPoly :: erlang_tc_poly:poly(),
+    RowPoly :: poly:poly(),
     SenderID :: non_neg_integer(),
     VerifierID :: non_neg_integer()
 ) -> boolean().

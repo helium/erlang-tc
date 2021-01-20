@@ -1,4 +1,4 @@
--module(erlang_tc_sk_share).
+-module(secret_key_share).
 
 -export([
     decrypt_share/2,
@@ -11,14 +11,14 @@
 
 -spec decrypt_share(
     SKShare :: sk_share(),
-    Ciphertext :: erlang_tc_ciphertext:ciphertext()
-) -> erlang_tc_dec_share:dec_share().
+    Ciphertext :: ciphertext:ciphertext()
+) -> decryption_share:dec_share().
 decrypt_share(SKShare, Ciphertext) ->
     erlang_tc:sk_share_decryption_share(SKShare, Ciphertext).
 
 -spec sign(
     SKShare :: sk_share(),
     Msg :: binary()
-) -> erlang_tc_sig_share:sig_share().
+) -> signature_share:sig_share().
 sign(SKShare, Msg) ->
     erlang_tc:sk_share_sign(SKShare, Msg).

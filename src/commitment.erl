@@ -1,4 +1,4 @@
--module(erlang_tc_commitment).
+-module(commitment).
 
 -export([
     %% commitment API
@@ -16,7 +16,7 @@
 degree(C) ->
     erlang_tc:degree_commitment(C).
 
--spec eval(C :: commitment(), Point :: integer()) -> erlang_tc_g1:g1().
+-spec eval(C :: commitment(), Point :: integer()) -> g1:g1().
 eval(C, Point) ->
     erlang_tc:eval_commitment(C, Point).
 

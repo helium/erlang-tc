@@ -1,4 +1,4 @@
--module(erlang_tc_pk).
+-module(public_key).
 
 -export([
     %% public key API
@@ -19,10 +19,10 @@ reveal(PK) ->
 to_bytes(PK) ->
     erlang_tc:pk_to_bytes(PK).
 
--spec verify(PK :: pk(), Sig :: erlang_tc_sig:sig(), Msg :: binary()) -> binary().
+-spec verify(PK :: pk(), Sig :: signature:sig(), Msg :: binary()) -> binary().
 verify(PK, Sig, Msg) ->
     erlang_tc:pk_verify(PK, Sig, Msg).
 
--spec encrypt(PK :: pk(), Msg :: binary()) -> erlang_tc_ciphertext:ciphertext().
+-spec encrypt(PK :: pk(), Msg :: binary()) -> ciphertext:ciphertext().
 encrypt(PK, Msg) ->
     erlang_tc:pk_encrypt(PK, Msg).

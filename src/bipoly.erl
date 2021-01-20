@@ -1,4 +1,4 @@
--module(erlang_tc_bipoly).
+-module(bipoly).
 
 -export([
     %% bivariate polynomial API
@@ -27,15 +27,15 @@ degree(BiPoly) ->
 reveal(BiPoly) ->
     erlang_tc:reveal_bivar_poly(BiPoly).
 
--spec eval(BiPoly :: bipoly(), X :: integer(), Y :: integer()) -> erlang_tc_fr:fr().
+-spec eval(BiPoly :: bipoly(), X :: integer(), Y :: integer()) -> fr:fr().
 eval(BiPoly, X, Y) ->
     erlang_tc:eval_bivar_poly(BiPoly, X, Y).
 
--spec row(BiPoly :: bipoly(), X :: integer()) -> erlang_tc_poly:poly().
+-spec row(BiPoly :: bipoly(), X :: integer()) -> poly:poly().
 row(BiPoly, X) ->
     erlang_tc:row_bivar_poly(BiPoly, X).
 
--spec commitment(BiPoly :: bipoly()) -> erlang_tc_bicommitment:bicommitment().
+-spec commitment(BiPoly :: bipoly()) -> bicommitment:bicommitment().
 commitment(BiPoly) ->
     erlang_tc:commitment_bivar_poly(BiPoly).
 

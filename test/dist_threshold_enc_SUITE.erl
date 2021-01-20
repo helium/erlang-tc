@@ -90,7 +90,7 @@ run(Config) ->
     Threshold = ?config(threshold, Config),
     PK = dist_secret_society:publish_public_key(),
 
-    Ciphertext = erlang_tc_pk:encrypt(PK, Msg),
+    Ciphertext = public_key:encrypt(PK, Msg),
 
     Actors = [dist_secret_society:get_actor(I) || I <- lists:seq(1, Threshold + 1)],
 
