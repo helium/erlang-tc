@@ -34,7 +34,7 @@ fn pk_to_bytes<'a>(env: Env<'a>, pk_arc: PkArc) -> Binary<'a> {
 #[rustler::nif(name = "pk_verify")]
 fn pk_verify<'a>(pk_arc: PkArc, sig_arc: SigArc, msg: LazyBinary<'a>) -> bool {
     let pk = pk_arc.pk;
-    let sig = sig_arc.sig.clone();
+    let sig = sig_arc.0.clone();
     pk.verify(&sig, msg)
 }
 

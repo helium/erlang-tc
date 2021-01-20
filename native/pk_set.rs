@@ -76,7 +76,7 @@ fn pk_set_combine_signatures<'a>(
         .combine_signatures(sig_shares.iter().map(|(i, sa)| (*i, &sa.sig_share)));
 
     match res {
-        Ok(r) => Ok(ResourceArc::new(SigRes { sig: r }).encode(env)),
+        Ok(r) => Ok(ResourceArc::new(SigRes(r)).encode(env)),
         _ => Ok((error(), cannot_combine()).encode(env)),
     }
 }
