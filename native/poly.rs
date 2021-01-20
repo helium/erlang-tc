@@ -136,7 +136,5 @@ fn reveal_poly(p: PolyArc) -> String {
 
 #[rustler::nif(name = "commitment_poly")]
 fn commitment_poly(p: PolyArc) -> CommitmentArc {
-    ResourceArc::new(CommitmentRes {
-        commitment: p.0.commitment(),
-    })
+    ResourceArc::new(CommitmentRes(p.0.commitment()))
 }

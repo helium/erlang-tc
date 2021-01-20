@@ -25,7 +25,7 @@ pub fn load(env: Env) -> bool {
 #[rustler::nif(name = "pk_set_from_commitment")]
 fn pk_set_from_commitment(c_arc: CommitmentArc) -> PKSetArc {
     ResourceArc::new(PKSetRes {
-        pk_set: PublicKeySet::from(c_arc.commitment.clone()),
+        pk_set: PublicKeySet::from(c_arc.0.clone()),
     })
 }
 

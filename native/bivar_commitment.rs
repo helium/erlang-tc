@@ -28,9 +28,7 @@ fn eval_bivar_commitment(bvc: BivarCommitmentArc, x: i64, y: i64) -> G1Arc {
 
 #[rustler::nif(name = "row_bivar_commitment")]
 fn row_bivar_commitment(bvc: BivarCommitmentArc, x: i64) -> CommitmentArc {
-    ResourceArc::new(CommitmentRes {
-        commitment: bvc.0.row(x.into_fr()),
-    })
+    ResourceArc::new(CommitmentRes(bvc.0.row(x.into_fr())))
 }
 
 #[rustler::nif(name = "cmp_bivar_commitment")]
