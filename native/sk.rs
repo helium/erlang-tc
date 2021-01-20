@@ -53,7 +53,7 @@ fn sk_reveal(sk_arc: SkArc) -> String {
 #[rustler::nif(name = "sk_sign")]
 fn sk_sign<'a>(sk_arc: SkArc, msg: LazyBinary<'a>) -> SigArc {
     let sk = sk_arc.sk.clone();
-    ResourceArc::new(SigRes { sig: sk.sign(msg) })
+    ResourceArc::new(SigRes(sk.sign(msg)))
 }
 
 #[rustler::nif(name = "sk_decrypt")]

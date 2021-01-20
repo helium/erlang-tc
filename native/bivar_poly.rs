@@ -49,15 +49,13 @@ fn eval_bivar_poly(p_arc: BivarPolyArc, x: i64, y: i64) -> FrArc {
 #[rustler::nif(name = "row_bivar_poly")]
 fn row_bivar_poly(p_arc: BivarPolyArc, x: i64) -> PolyArc {
     let bipoly = p_arc.bipoly.clone();
-    ResourceArc::new(PolyRes (bipoly.row(x.into_fr())))
+    ResourceArc::new(PolyRes(bipoly.row(x.into_fr())))
 }
 
 #[rustler::nif(name = "commitment_bivar_poly")]
 fn commitment_bivar_poly(p_arc: BivarPolyArc) -> BivarCommitmentArc {
     let bipoly = p_arc.bipoly.clone();
-    ResourceArc::new(BivarCommitmentRes {
-        bicommitment: bipoly.commitment(),
-    })
+    ResourceArc::new(BivarCommitmentRes(bipoly.commitment()))
 }
 
 #[rustler::nif(name = "zeroize_bivar_poly")]
