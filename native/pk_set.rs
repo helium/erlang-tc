@@ -56,7 +56,7 @@ fn pk_set_decrypt(
 ) -> (Atom, Bin) {
     let decrypted: Result<Vec<u8>, threshold_crypto::error::Error> = pk_set_arc.pk_set.decrypt(
         dec_shares.iter().map(|(i, dsa)| (*i, &dsa.dec_share)),
-        &cipher_arc.cipher,
+        &cipher_arc.0,
     );
 
     match decrypted {

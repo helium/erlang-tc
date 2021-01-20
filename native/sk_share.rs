@@ -20,7 +20,7 @@ pub fn load(env: Env) -> bool {
 #[rustler::nif(name = "sk_share_decryption_share")]
 fn sk_share_decryption_share(sk_share_arc: SKShareArc, cipher_arc: CiphertextArc) -> DecShareArc {
     ResourceArc::new(DecShareRes {
-        dec_share: sk_share_arc.share.decrypt_share(&cipher_arc.cipher).unwrap()
+        dec_share: sk_share_arc.share.decrypt_share(&cipher_arc.0).unwrap()
     })
 }
 

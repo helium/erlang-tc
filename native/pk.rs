@@ -41,7 +41,5 @@ fn pk_verify<'a>(pk_arc: PkArc, sig_arc: SigArc, msg: LazyBinary<'a>) -> bool {
 #[rustler::nif(name = "pk_encrypt")]
 fn pk_encrypt<'a>(pk_arc: PkArc, msg: LazyBinary<'a>) -> CiphertextArc {
     let pk = pk_arc.pk;
-    ResourceArc::new(CiphertextRes {
-        cipher: pk.encrypt(&msg),
-    })
+    ResourceArc::new(CiphertextRes(pk.encrypt(&msg)))
 }

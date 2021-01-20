@@ -58,7 +58,7 @@ fn sk_sign<'a>(sk_arc: SkArc, msg: LazyBinary<'a>) -> SigArc {
 
 #[rustler::nif(name = "sk_decrypt")]
 fn sk_decrypt<'a>(env: Env<'a>, sk_arc: SkArc, cipher_arc: CiphertextArc) -> Binary<'a> {
-    let decrypted = sk_arc.sk.decrypt(&cipher_arc.cipher).unwrap();
+    let decrypted = sk_arc.sk.decrypt(&cipher_arc.0).unwrap();
     let mut binary = OwnedBinary::new(decrypted.len()).unwrap();
     binary.as_mut_slice().write_all(&decrypted).unwrap();
     Binary::from_owned(binary, env)
