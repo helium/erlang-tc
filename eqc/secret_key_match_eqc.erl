@@ -17,7 +17,7 @@ prop_secret_key_match() ->
                     io:format("EvaluatedSecret ~p~n", [EvaluatedSecret])
                 end,
                 conjunction([
-                    {secret_equality, eqc:equals(fr:cmp(fr:into(Secret), EvaluatedSecret))}
+                    {secret_equality, fr:cmp(fr:into(Secret), EvaluatedSecret)}
                 ])
             )
         end
