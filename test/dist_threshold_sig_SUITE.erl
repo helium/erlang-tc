@@ -80,7 +80,7 @@ run(Config) ->
     Threshold = ?config(threshold, Config),
 
     ValidatorNodes = lists:foldl(fun(I, Acc) ->
-                                      {ok, Node} = dist_chat_network:get_node(I),
+                                      Node = dist_chat_network:get_node(I),
                                       [Node | Acc]
                               end, [], lists:seq(1, Threshold + 1)),
 

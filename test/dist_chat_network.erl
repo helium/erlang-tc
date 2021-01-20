@@ -28,13 +28,15 @@
     code_change/3
 ]).
 
+%% The chat network holds validator nodes, number of users, blocks and a network-wide public_key_set
 -record(state, {
     pk_set :: erlang_tc_pk_set:pk_set(),
-    chat_nodes :: [chat_node()],
+    chat_nodes :: chat_nodes(),
     blocks = [] :: blocks(),
     n_users = 0 :: non_neg_integer()
 }).
 
+%% Each node has an id, a secret_key_share, corresponding public_key_share and any messages this node has pending to process
 -record(chat_node, {
     id :: node_id(),
     sk_share :: erlang_tc_sk_share:sk_share(),
@@ -54,6 +56,7 @@
 -type signed_msgs() :: #{msg() => [node_signature()]}.
 -type node_signature() :: #node_signature{}.
 -type chat_node() :: #chat_node{}.
+-type chat_nodes() :: #{node_id() => chat_node()}.
 -type block() :: {user_id(), msg(), erlang_tc_sig:sig()}.
 -type blocks() :: [block()].
 -type user() :: #user{}.
@@ -147,12 +150,13 @@ init_network(NumNodes, Threshold) ->
     SKSet = erlang_tc_sk_set:random(Threshold),
     PKSet = erlang_tc_sk_set:public_keys(SKSet),
 
-    Nodes = lists:map(
-        fun(ID) ->
+    Nodes = lists:foldl(
+        fun(ID, Acc) ->
             SKShare = erlang_tc_sk_set:secret_key_share(SKSet, ID),
             PKShare = erlang_tc_pk_set:public_key_share(PKSet, ID),
-            new_node(ID, SKShare, PKShare)
+            maps:put(ID, new_node(ID, SKShare, PKShare), Acc)
         end,
+        #{},
         lists:seq(1, NumNodes)
     ),
     #state{pk_set = PKSet, chat_nodes = Nodes}.
@@ -208,15 +212,10 @@ node_pk_share(Node) ->
 
 -spec update_node(State :: state(), Node :: chat_node()) -> state().
 update_node(State, Node) ->
-    Nodes = chat_nodes(State),
-    NewNodes = setnth(node_id(Node), Nodes, Node),
-    State#state{chat_nodes = NewNodes}.
+    State#state{chat_nodes=maps:put(node_id(Node), Node, chat_nodes(State))}.
 
 chat_nodes(State) ->
     State#state.chat_nodes.
-
-setnth(1, [_ | Rest], New) -> [New | Rest];
-setnth(I, [E | Rest], New) -> [E | setnth(I - 1, Rest, New)].
 
 -spec maybe_create_block(State :: state()) -> undefined | block().
 maybe_create_block(State) ->
@@ -231,7 +230,7 @@ all_pending(State) ->
     Nodes = chat_nodes(State),
 
     lists:foldl(
-        fun(Node, Acc) ->
+        fun({_NodeID, Node}, Acc) ->
             Pending = pending(Node),
 
             Fun = fun({UserID, SignedMsgs}, Acc2) ->
@@ -251,7 +250,7 @@ all_pending(State) ->
             lists:foldl(Fun, Acc, maps:to_list(Pending))
         end,
         #{},
-        Nodes
+        maps:to_list(Nodes)
     ).
 
 pk_set(State) ->
@@ -269,7 +268,7 @@ create_block(State) ->
                             Fun = fun(NodeSig) ->
                                 NodeID = get_node_id(NodeSig),
                                 NodeSigShare = get_node_sig(NodeSig),
-                                {ok, Node} = internal_get_node(NodeID, State),
+                                Node = internal_get_node(NodeID, State),
                                 PKShare = node_pk_share(Node),
                                 {Time0, Result} = timer:tc(
                                     fun() ->
@@ -318,13 +317,7 @@ create_block(State) ->
     ).
 
 internal_get_node(NodeID, State) ->
-    try
-        Node = lists:nth(NodeID, chat_nodes(State)),
-        {ok, Node}
-    catch
-        _W:_Why:_ST ->
-            {error, not_found}
-    end.
+    maps:get(NodeID, chat_nodes(State), not_found).
 
 -spec new_block(UserID :: user_id(), Msg :: msg(), Sig :: erlang_tc_sig:sig()) -> block().
 new_block(UserID, Msg, Sig) ->
