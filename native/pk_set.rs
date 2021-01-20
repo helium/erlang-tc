@@ -25,7 +25,7 @@ pub fn load(env: Env) -> bool {
 #[rustler::nif(name = "pk_set_from_commitment")]
 fn pk_set_from_commitment(c_arc: CommitmentArc) -> PKSetArc {
     ResourceArc::new(PKSetRes {
-        pk_set: PublicKeySet::from(c_arc.commitment.clone()),
+        pk_set: PublicKeySet::from(c_arc.0.clone()),
     })
 }
 
@@ -56,7 +56,7 @@ fn pk_set_decrypt(
 ) -> (Atom, Bin) {
     let decrypted: Result<Vec<u8>, threshold_crypto::error::Error> = pk_set_arc.pk_set.decrypt(
         dec_shares.iter().map(|(i, dsa)| (*i, &dsa.dec_share)),
-        &cipher_arc.cipher,
+        &cipher_arc.0,
     );
 
     match decrypted {
@@ -76,7 +76,7 @@ fn pk_set_combine_signatures<'a>(
         .combine_signatures(sig_shares.iter().map(|(i, sa)| (*i, &sa.sig_share)));
 
     match res {
-        Ok(r) => Ok(ResourceArc::new(SigRes { sig: r }).encode(env)),
+        Ok(r) => Ok(ResourceArc::new(SigRes(r)).encode(env)),
         _ => Ok((error(), cannot_combine()).encode(env)),
     }
 }

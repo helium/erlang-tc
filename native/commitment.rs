@@ -4,9 +4,7 @@ use threshold_crypto::poly::Commitment;
 use threshold_crypto::IntoFr;
 
 /// Struct to hold Commitment
-pub struct CommitmentRes {
-    pub commitment: Commitment,
-}
+pub struct CommitmentRes(pub(crate) Commitment);
 
 pub type CommitmentArc = ResourceArc<CommitmentRes>;
 
@@ -17,36 +15,31 @@ pub fn load(env: Env) -> bool {
 
 #[rustler::nif(name = "degree_commitment")]
 fn degree_commitment(c_arc: CommitmentArc) -> usize {
-    let commitment = c_arc.commitment.clone();
-    commitment.degree()
+    c_arc.0.degree()
 }
 
 #[rustler::nif(name = "eval_commitment")]
 fn eval_commitment(c_arc: CommitmentArc, point: i64) -> G1Arc {
-    let commitment = c_arc.commitment.clone();
     ResourceArc::new(G1Res {
-        g1: commitment.evaluate(point.into_fr()),
+        g1: c_arc.0.evaluate(point.into_fr()),
     })
 }
 
 #[rustler::nif(name = "cmp_commitment")]
 fn cmp_commitment(c1_arc: CommitmentArc, c2_arc: CommitmentArc) -> bool {
-    let c1 = c1_arc.commitment.clone();
-    let c2 = c2_arc.commitment.clone();
+    let c1 = c1_arc.0.clone();
+    let c2 = c2_arc.0.clone();
     c1 == c2
 }
 
 #[rustler::nif(name = "add_commitment")]
 fn add_commitment(c1_arc: CommitmentArc, c2_arc: CommitmentArc) -> CommitmentArc {
-    let c1 = c1_arc.commitment.clone();
-    let c2 = c2_arc.commitment.clone();
-    ResourceArc::new(CommitmentRes {
-        commitment: c1 + c2
-    })
+    let c1 = c1_arc.0.clone();
+    let c2 = c2_arc.0.clone();
+    ResourceArc::new(CommitmentRes(c1 + c2))
 }
 
 #[rustler::nif(name = "reveal_commitment")]
 fn reveal_commitment(c_arc: CommitmentArc) -> String {
-    let commitment = c_arc.commitment.clone();
-    commitment.reveal()
+    c_arc.0.reveal()
 }

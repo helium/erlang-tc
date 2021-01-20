@@ -53,12 +53,12 @@ fn sk_reveal(sk_arc: SkArc) -> String {
 #[rustler::nif(name = "sk_sign")]
 fn sk_sign<'a>(sk_arc: SkArc, msg: LazyBinary<'a>) -> SigArc {
     let sk = sk_arc.sk.clone();
-    ResourceArc::new(SigRes { sig: sk.sign(msg) })
+    ResourceArc::new(SigRes(sk.sign(msg)))
 }
 
 #[rustler::nif(name = "sk_decrypt")]
 fn sk_decrypt<'a>(env: Env<'a>, sk_arc: SkArc, cipher_arc: CiphertextArc) -> Binary<'a> {
-    let decrypted = sk_arc.sk.decrypt(&cipher_arc.cipher).unwrap();
+    let decrypted = sk_arc.sk.decrypt(&cipher_arc.0).unwrap();
     let mut binary = OwnedBinary::new(decrypted.len()).unwrap();
     binary.as_mut_slice().write_all(&decrypted).unwrap();
     Binary::from_owned(binary, env)
