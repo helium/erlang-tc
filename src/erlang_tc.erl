@@ -102,6 +102,8 @@
     cmp_commitment/2,
     reveal_commitment/1,
     add_commitment/2,
+    serialize_commitment/1,
+    deserialize_commitment/1,
 
     %% Bivariate Polynomial API
     random_bivar_poly/1,
@@ -459,6 +461,14 @@ reveal_commitment(_C) ->
 
 -spec add_commitment(C1 :: reference(), C2 :: reference()) -> reference().
 add_commitment(_C1, _C2) ->
+    not_loaded(?LINE).
+
+-spec serialize_commitment(C :: reference()) -> binary().
+serialize_commitment(_C) ->
+    not_loaded(?LINE).
+
+-spec deserialize_commitment(B :: binary()) -> reference().
+deserialize_commitment(_B) ->
     not_loaded(?LINE).
 
 %% ==================================================================

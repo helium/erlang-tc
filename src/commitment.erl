@@ -6,7 +6,9 @@
     eval/2,
     cmp/2,
     reveal/1,
-    add/2
+    add/2,
+    serialize/1,
+    deserialize/1
 ]).
 
 -type commitment() :: reference().
@@ -31,3 +33,11 @@ reveal(C) ->
 -spec add(C1 :: commitment(), C2 :: commitment()) -> commitment().
 add(C1, C2) ->
     erlang_tc:add_commitment(C1, C2).
+
+-spec serialize(C :: commitment()) -> binary().
+serialize(C) ->
+    erlang_tc:serialize_commitment(C).
+
+-spec deserialize(B :: binary()) -> commitment().
+deserialize(B) ->
+    erlang_tc:deserialize_commitment(B).

@@ -141,6 +141,8 @@ rustler::init!(
         commitment::cmp_commitment,
         commitment::reveal_commitment,
         commitment::add_commitment,
+        commitment::serialize_commitment,
+        commitment::deserialize_commitment,
         // BivarCommitment API
         bivar_commitment::degree_bivar_commitment,
         bivar_commitment::eval_bivar_commitment,
