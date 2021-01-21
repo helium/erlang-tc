@@ -1,11 +1,14 @@
+use crate::bin::Bin;
 use crate::commitment::{CommitmentArc, CommitmentRes};
 use crate::fr::{FrArc, FrRes};
 use rustler::{Env, ListIterator, ResourceArc};
+use serde::{Deserialize, Serialize};
 use threshold_crypto::poly::Poly;
 use threshold_crypto::{Fr, IntoFr};
 use zeroize::Zeroize;
 
 /// Struct to hold Polynomial
+#[derive(Serialize, Deserialize)]
 pub struct PolyRes(pub(crate) Poly);
 
 pub type PolyArc = ResourceArc<PolyRes>;
@@ -137,4 +140,17 @@ fn reveal_poly(p: PolyArc) -> String {
 #[rustler::nif(name = "commitment_poly")]
 fn commitment_poly(p: PolyArc) -> CommitmentArc {
     ResourceArc::new(CommitmentRes(p.0.commitment()))
+}
+
+#[rustler::nif(name = "serialize_poly")]
+pub fn serialize_poly(p: PolyArc) -> Bin {
+    // TODO: Investigate allowing specifying encoding type using an erlang atom
+    let bytes = bincode::serialize(&p.0).unwrap();
+    Bin(bytes)
+}
+
+#[rustler::nif(name = "deserialize_poly")]
+pub fn deserialize_poly(bin: rustler::Binary) -> PolyArc {
+    let poly_res = bincode::deserialize(&bin).unwrap();
+    PolyArc::new(poly_res)
 }

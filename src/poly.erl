@@ -22,7 +22,9 @@
     add_scalar/2,
     sub_scalar/2,
     reveal/1,
-    commitment/1
+    commitment/1,
+    serialize/1,
+    deserialize/1
 ]).
 
 -type coeffs() :: [integer()].
@@ -122,3 +124,11 @@ reveal(P) ->
 -spec commitment(P :: poly()) -> commitment:commitment().
 commitment(P) ->
     erlang_tc:commitment_poly(P).
+
+-spec serialize(P :: poly()) -> binary().
+serialize(P) ->
+    erlang_tc:serialize_poly(P).
+
+-spec deserialize(B :: binary()) -> poly().
+deserialize(B) ->
+    erlang_tc:deserialize_poly(B).

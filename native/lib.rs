@@ -76,6 +76,8 @@ rustler::init!(
         poly::degree_poly,
         poly::reveal_poly,
         poly::commitment_poly,
+        poly::serialize_poly,
+        poly::deserialize_poly,
         // PublicKey API
         pk::pk_reveal,
         pk::pk_to_bytes,
@@ -139,6 +141,8 @@ rustler::init!(
         commitment::cmp_commitment,
         commitment::reveal_commitment,
         commitment::add_commitment,
+        commitment::serialize_commitment,
+        commitment::deserialize_commitment,
         // BivarCommitment API
         bivar_commitment::degree_bivar_commitment,
         bivar_commitment::eval_bivar_commitment,
