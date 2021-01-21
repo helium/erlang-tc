@@ -76,6 +76,8 @@ rustler::init!(
         poly::degree_poly,
         poly::reveal_poly,
         poly::commitment_poly,
+        poly::serialize_poly,
+        poly::deserialize_poly,
         // PublicKey API
         pk::pk_reveal,
         pk::pk_to_bytes,

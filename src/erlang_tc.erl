@@ -93,6 +93,8 @@
     sub_scalar_poly/2,
     reveal_poly/1,
     commitment_poly/1,
+    serialize_poly/1,
+    deserialize_poly/1,
 
     %% Commitment API
     degree_commitment/1,
@@ -421,6 +423,14 @@ reveal_poly(_P) ->
 
 -spec commitment_poly(P :: reference()) -> reference().
 commitment_poly(_P) ->
+    not_loaded(?LINE).
+
+-spec serialize_poly(P :: reference()) -> binary().
+serialize_poly(_P) ->
+    not_loaded(?LINE).
+
+-spec deserialize_poly(B :: binary()) -> reference().
+deserialize_poly(_B) ->
     not_loaded(?LINE).
 
 -spec mul_scalar_poly(Scalar :: number(), P :: reference()) -> reference().

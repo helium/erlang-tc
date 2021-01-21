@@ -14,7 +14,8 @@
         mul_poly_test/1,
         add_different_sizes_poly_test/1,
         negative_cmp_test/1,
-        f_of_x_test/1
+        f_of_x_test/1,
+        serde_test/1
     ]
 ).
 
@@ -28,7 +29,8 @@ all() ->
         mul_poly_test,
         add_different_sizes_poly_test,
         negative_cmp_test,
-        f_of_x_test
+        f_of_x_test,
+        serde_test
     ].
 
 init_per_testcase(_, Config) ->
@@ -153,4 +155,12 @@ f_of_x_test(_Config) ->
     P = poly:from_coeffs([0, 0, 5]),
     Eval = poly:eval(P, 2),
     ?assert(fr:cmp(fr:into(5 * 2 * 2), Eval)),
+    ok.
+
+serde_test(_Config) ->
+    %% f(x) = 5x², f(2) = 5 * 2 * 2
+    P = poly:from_coeffs([0, 0, 5]),
+    SerializedPoly = poly:serialize(P),
+    DeserializePoly = poly:deserialize(SerializedPoly),
+    ?assert(fr:cmp(fr:into(5 * 2 * 2), poly:eval(DeserializePoly, 2))),
     ok.
