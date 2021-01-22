@@ -43,7 +43,7 @@ basic_test() ->
     %% Alice is the first actor to arrive at the meeting, she provides her decryption share. One
     %% actor alone cannot decrypt the ciphertext, decryption fails.
     DecryptionMeeting1 = secret_society:accept_decryption_share(DecryptionMeeting, NewAlice),
-    ?assertEqual({error, << >>}, secret_society:decrypt_msg(DecryptionMeeting1)),
+    ?assertEqual({error, cannot_decrypt}, secret_society:decrypt_msg(DecryptionMeeting1)),
 
     %% Bob joins the meeting and provides his decryption share. Alice and Bob are now collaborating
     %% to decrypt the ciphertext, they succeed because the society requires two or more actors for
