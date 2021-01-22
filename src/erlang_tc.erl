@@ -255,12 +255,12 @@ pk_set_public_key_share(_PKSet, _I) ->
 
 -spec pk_set_decrypt(PKSet :: reference(),
                      DecShares :: [{non_neg_integer(), reference()}],
-                     Cipher :: reference()) -> binary().
+                     Cipher :: reference()) -> {ok, binary()} | {error, cannot_decrypt}.
 pk_set_decrypt(_PKSet, _DecShares, _Cipher) ->
     not_loaded(?LINE).
 
 -spec pk_set_combine_signatures(PKSet :: reference(),
-                     SigShare :: [{non_neg_integer(), reference()}]) -> {ok, reference()} | {error, any()}.
+                     SigShare :: [{non_neg_integer(), reference()}]) -> {ok, reference()} | {error, cannot_combine}.
 pk_set_combine_signatures(_PKSet, _SigShares) ->
     not_loaded(?LINE).
 

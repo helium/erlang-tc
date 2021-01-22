@@ -34,13 +34,13 @@ public_key_share(PKSet, I) ->
     PKSet :: pk_set(),
     DecShares :: [{non_neg_integer(), decryption_share:dec_share()}],
     Cipher :: ciphertext:ciphertext()
-) -> binary().
+) -> {ok, binary()} | {error, cannot_decrypt}.
 decrypt(PKSet, DecShares, Cipher) ->
     erlang_tc:pk_set_decrypt(PKSet, DecShares, Cipher).
 
 -spec combine_signatures(
     PKSet :: pk_set(),
     SigShares :: [{non_neg_integer(), signature_share:sig_share()}]
-) -> {ok, signature:sig()} | {error, any()}.
+) -> {ok, signature:sig()} | {error, cannot_combine}.
 combine_signatures(PKSet, SigShares) ->
     erlang_tc:pk_set_combine_signatures(PKSet, SigShares).

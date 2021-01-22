@@ -89,18 +89,23 @@ run(Config) ->
     Msg = ?config(msg, Config),
     Threshold = ?config(threshold, Config),
     PK = dist_secret_society:publish_public_key(),
-
     Ciphertext = public_key:encrypt(PK, Msg),
-
-    Actors = [dist_secret_society:get_actor(I) || I <- lists:seq(1, Threshold + 1)],
-
     ok = dist_secret_society:start_decryption_meeting(),
 
+    [Head | Tail] = [dist_secret_society:get_actor(I) || I <- lists:seq(1, Threshold + 1)],
+
+    %% send msg just to `Tail` (only threshold number of actors), they cannot decrypt msg yet
     true = lists:all(fun(R) -> R == ok end, [
         dist_secret_society:send_msg(Actor, Ciphertext)
-        || Actor <- Actors
+        || Actor <- Tail
     ]),
 
+    {error, cannot_decrypt} = dist_secret_society:decrypt_msg(),
+
+    %% now send a msg to the `Head`, making the total number of Actors = Threshold + 1
+    ok = dist_secret_society:send_msg(Head, Ciphertext),
+
+    %% The msg can be decrypted now
     {ok, Msg} = dist_secret_society:decrypt_msg(),
 
     ok.
