@@ -334,7 +334,7 @@ dependencies = [
 [[package]]
 name = "threshold_crypto"
 version = "0.4.0"
-source = "git+https://github.com/vihu/threshold_crypto?branch=rg/serde-bipoly#e94230aa16168a385c1f4dc1eb9056d54f08c089"
+source = "git+https://github.com/vihu/threshold_crypto#a60061c80b5d1235f7f420f962c83d42d5e8832f"
 dependencies = [
  "byteorder",
  "ff",
