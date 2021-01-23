@@ -135,6 +135,8 @@ rustler::init!(
         bivar_poly::commitment_bivar_poly,
         bivar_poly::zeroize_bivar_poly,
         bivar_poly::with_secret_bivar_poly,
+        bivar_poly::serialize_bivar_poly,
+        bivar_poly::deserialize_bivar_poly,
         // Commitment API
         commitment::degree_commitment,
         commitment::eval_commitment,
@@ -149,6 +151,8 @@ rustler::init!(
         bivar_commitment::row_bivar_commitment,
         bivar_commitment::cmp_bivar_commitment,
         bivar_commitment::reveal_bivar_commitment,
+        bivar_commitment::serialize_bivar_commitment,
+        bivar_commitment::deserialize_bivar_commitment,
     ],
     load = load
 );
