@@ -8,7 +8,9 @@
     cmp/2,
     reveal/1,
     verify_poly/3,
-    verify_point/4
+    verify_point/4,
+    serialize/1,
+    deserialize/1
 ]).
 
 -type bicommitment() :: reference().
@@ -54,3 +56,11 @@ verify_point(BiCommitment, RowPoly, SenderID, VerifierID) ->
     G1AffineOne = erlang_tc:g1_affine_one(),
     ValG1 = erlang_tc:g1_affine_mul(G1AffineOne, Val),
     erlang_tc:cmp_g1(erlang_tc:eval_bivar_commitment(BiCommitment, VerifierID, SenderID), ValG1).
+
+-spec serialize(C :: bicommitment()) -> binary().
+serialize(C) ->
+    erlang_tc:serialize_bivar_commitment(C).
+
+-spec deserialize(B :: binary()) -> bicommitment().
+deserialize(B) ->
+    erlang_tc:deserialize_bivar_commitment(B).

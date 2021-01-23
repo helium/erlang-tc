@@ -114,13 +114,17 @@
     commitment_bivar_poly/1,
     zeroize_bivar_poly/1,
     with_secret_bivar_poly/2,
+    serialize_bivar_poly/1,
+    deserialize_bivar_poly/1,
 
     %% Bivariate Commitment API
     degree_bivar_commitment/1,
     eval_bivar_commitment/3,
     row_bivar_commitment/2,
     cmp_bivar_commitment/2,
-    reveal_bivar_commitment/1
+    reveal_bivar_commitment/1,
+    serialize_bivar_commitment/1,
+    deserialize_bivar_commitment/1
 ]).
 
 -type coeffs() :: [integer()].
@@ -507,6 +511,14 @@ zeroize_bivar_poly(_BiPoly) ->
 with_secret_bivar_poly(_Secret, _Degree) ->
     not_loaded(?LINE).
 
+-spec serialize_bivar_poly(P :: reference()) -> binary().
+serialize_bivar_poly(_P) ->
+    not_loaded(?LINE).
+
+-spec deserialize_bivar_poly(B :: binary()) -> reference().
+deserialize_bivar_poly(_B) ->
+    not_loaded(?LINE).
+
 %% ==================================================================
 %% BiVariate Commitment
 %% ==================================================================
@@ -529,6 +541,14 @@ cmp_bivar_commitment(_C1, _C2) ->
 
 -spec reveal_bivar_commitment(C :: reference()) -> string().
 reveal_bivar_commitment(_C) ->
+    not_loaded(?LINE).
+
+-spec serialize_bivar_commitment(P :: reference()) -> binary().
+serialize_bivar_commitment(_P) ->
+    not_loaded(?LINE).
+
+-spec deserialize_bivar_commitment(B :: binary()) -> reference().
+deserialize_bivar_commitment(_B) ->
     not_loaded(?LINE).
 
 %% ==================================================================

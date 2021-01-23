@@ -1,10 +1,13 @@
+use crate::bin::Bin;
 use crate::commitment::{CommitmentArc, CommitmentRes};
 use crate::g1::{G1Arc, G1Res};
 use rustler::{Env, ResourceArc};
+use serde::{Deserialize, Serialize};
 use threshold_crypto::poly::BivarCommitment;
 use threshold_crypto::IntoFr;
 
 /// Struct to hold BivariateCommitment (a commitment over a bivar_poly)
+#[derive(Serialize, Deserialize)]
 pub struct BivarCommitmentRes(pub(crate) BivarCommitment);
 
 pub type BivarCommitmentArc = ResourceArc<BivarCommitmentRes>;
@@ -39,4 +42,17 @@ fn cmp_bivar_commitment(bvc1: BivarCommitmentArc, bvc2: BivarCommitmentArc) -> b
 #[rustler::nif(name = "reveal_bivar_commitment")]
 fn reveal_bivar_commitment(bvc: BivarCommitmentArc) -> String {
     bvc.0.reveal()
+}
+
+#[rustler::nif(name = "serialize_bivar_commitment")]
+pub fn serialize_bivar_commitment(p: BivarCommitmentArc) -> Bin {
+    // TODO: Investigate allowing specifying encoding type using an erlang atom
+    let bytes = bincode::serialize(&p.0).unwrap();
+    Bin(bytes)
+}
+
+#[rustler::nif(name = "deserialize_bivar_commitment")]
+pub fn deserialize_bivar_commitment(bin: rustler::Binary) -> BivarCommitmentArc {
+    let bvc_res = bincode::deserialize(&bin).unwrap();
+    BivarCommitmentArc::new(bvc_res)
 }

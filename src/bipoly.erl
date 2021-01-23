@@ -9,7 +9,9 @@
     row/2,
     commitment/1,
     zeroize/1,
-    with_secret/2
+    with_secret/2,
+    serialize/1,
+    deserialize/1
 ]).
 
 -type bipoly() :: reference().
@@ -46,3 +48,11 @@ zeroize(BiPoly) ->
 -spec with_secret(Secret :: non_neg_integer(), Degree :: non_neg_integer()) -> bipoly().
 with_secret(Secret, Degree) ->
     erlang_tc:with_secret_bivar_poly(Secret, Degree).
+
+-spec serialize(C :: bipoly()) -> binary().
+serialize(C) ->
+    erlang_tc:serialize_bivar_poly(C).
+
+-spec deserialize(B :: binary()) -> bipoly().
+deserialize(B) ->
+    erlang_tc:deserialize_bivar_poly(B).

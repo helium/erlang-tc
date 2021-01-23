@@ -1,12 +1,15 @@
+use crate::bin::Bin;
 use crate::bivar_commitment::{BivarCommitmentArc, BivarCommitmentRes};
 use crate::fr::{FrArc, FrRes};
 use crate::poly::{PolyArc, PolyRes};
 use rustler::{Env, ResourceArc};
+use serde::{Deserialize, Serialize};
 use threshold_crypto::poly::BivarPoly;
 use threshold_crypto::IntoFr;
 use zeroize::Zeroize;
 
 /// Struct to hold Bivariate Polynomial
+#[derive(Serialize, Deserialize)]
 pub struct BivarPolyRes(pub(crate) BivarPoly);
 
 pub type BivarPolyArc = ResourceArc<BivarPolyRes>;
@@ -60,4 +63,17 @@ fn zeroize_bivar_poly(bvp: BivarPolyArc) -> BivarPolyArc {
 fn with_secret_bivar_poly(secret: u64, degree: usize) -> BivarPolyArc {
     let rng = &mut rand::thread_rng();
     ResourceArc::new(BivarPolyRes(BivarPoly::with_secret(secret, degree, rng)))
+}
+
+#[rustler::nif(name = "serialize_bivar_poly")]
+pub fn serialize_bivar_poly(p: BivarPolyArc) -> Bin {
+    // TODO: Investigate allowing specifying encoding type using an erlang atom
+    let bytes = bincode::serialize(&p.0).unwrap();
+    Bin(bytes)
+}
+
+#[rustler::nif(name = "deserialize_bivar_poly")]
+pub fn deserialize_bivar_poly(bin: rustler::Binary) -> BivarPolyArc {
+    let bipoly_res = bincode::deserialize(&bin).unwrap();
+    BivarPolyArc::new(bipoly_res)
 }
