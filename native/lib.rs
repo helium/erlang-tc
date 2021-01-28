@@ -4,26 +4,26 @@ extern crate threshold_crypto;
 use rustler::{Env, Term};
 
 mod atom;
+mod bin;
 mod bivar_commitment;
 mod bivar_poly;
+mod ciphertext;
 mod commitment;
+mod dec_share;
 mod fr;
 mod g1;
-mod g2;
 mod g1_affine;
+mod g2;
 mod lazy_binary;
 mod pk;
 mod pk_set;
 mod pk_share;
 mod poly;
+mod sig;
+mod sig_share;
 mod sk;
 mod sk_set;
 mod sk_share;
-mod sig;
-mod sig_share;
-mod ciphertext;
-mod dec_share;
-mod bin;
 
 fn load(env: Env, _: Term) -> bool {
     poly::load(env);
@@ -117,6 +117,8 @@ rustler::init!(
         fr::cmp_fr,
         fr::zero_fr,
         fr::add_assign_fr,
+        fr::serialize_fr,
+        fr::deserialize_fr,
         // G1 API
         g1::g1_zero,
         g1::cmp_g1,

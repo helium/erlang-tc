@@ -1,6 +1,5 @@
 -module(key_SUITE).
 
--include_lib("eunit/include/eunit.hrl").
 -include_lib("common_test/include/ct.hrl").
 
 -export([all/0, init_per_testcase/2, end_per_testcase/2]).
@@ -13,7 +12,8 @@
         sk_set_test/1,
         random_sk_set_test/1,
         verify_sig_test/1,
-        verify_ciphertext_test/1
+        verify_ciphertext_test/1,
+        fr_serde_test/1
     ]
 ).
 
@@ -25,7 +25,8 @@ all() ->
         sk_set_test,
         random_sk_set_test,
         verify_sig_test,
-        verify_ciphertext_test
+        verify_ciphertext_test,
+        fr_serde_test
     ].
 
 init_per_testcase(_, Config) ->
@@ -40,7 +41,8 @@ pk_size_test(Config) ->
     PKSize = ?config(pk_size, Config),
     SK = secret_key:random(),
     PK = secret_key:public_key(SK),
-    ?assertEqual(PKSize, byte_size(public_key:to_bytes(PK))).
+    PKSize = byte_size(public_key:to_bytes(PK)),
+    ok.
 
 signature_test(Config) ->
     SigSize = ?config(sig_size, Config),
@@ -48,7 +50,8 @@ signature_test(Config) ->
     Signature = secret_key:sign(SK, <<"resistance is futile">>),
     %% Parity = signature:parity(Signature),
     %% ?debugFmt("Parity: ~p~n", [Parity]),
-    ?assertEqual(SigSize, byte_size(signature:to_bytes(Signature))).
+    SigSize = byte_size(signature:to_bytes(Signature)),
+    ok.
 
 pk_set_test(Config) ->
     PKSize = ?config(pk_size, Config),
@@ -57,8 +60,9 @@ pk_set_test(Config) ->
     Commitment = poly:commitment(RandomPoly),
     PKSet = public_key_set:from_commitment(Commitment),
     PK = public_key_set:public_key(PKSet),
-    ?assertEqual(PKSize, byte_size(public_key:to_bytes(PK))),
-    ?assertEqual(Degree, public_key_set:threshold(PKSet)).
+    PKSize = byte_size(public_key:to_bytes(PK)),
+    Degree = public_key_set:threshold(PKSet),
+    ok.
 
 sk_set_test(Config) ->
     PKSize = ?config(pk_size, Config),
@@ -67,8 +71,9 @@ sk_set_test(Config) ->
     SKSet = secret_key_set:from_poly(RandomPoly),
     PKSet = secret_key_set:public_keys(SKSet),
     PK = public_key_set:public_key(PKSet),
-    ?assertEqual(PKSize, byte_size(public_key:to_bytes(PK))),
-    ?assertEqual(Degree, secret_key_set:threshold(SKSet)).
+    PKSize = byte_size(public_key:to_bytes(PK)),
+    Degree = secret_key_set:threshold(SKSet),
+    ok.
 
 random_sk_set_test(Config) ->
     PKSize = ?config(pk_size, Config),
@@ -76,15 +81,17 @@ random_sk_set_test(Config) ->
     SKSet = secret_key_set:random(Degree),
     PKSet = secret_key_set:public_keys(SKSet),
     PK = public_key_set:public_key(PKSet),
-    ?assertEqual(PKSize, byte_size(public_key:to_bytes(PK))),
-    ?assertEqual(Degree, secret_key_set:threshold(SKSet)).
+    PKSize = byte_size(public_key:to_bytes(PK)),
+    Degree = secret_key_set:threshold(SKSet),
+    ok.
 
 verify_sig_test(_Config) ->
     SK = secret_key:random(),
     Msg = <<"Say hello to my little friend">>,
     Sig = secret_key:sign(SK, Msg),
     PK = secret_key:public_key(SK),
-    ?assert(public_key:verify(PK, Sig, Msg)).
+    true = public_key:verify(PK, Sig, Msg),
+    ok.
 
 verify_ciphertext_test(_Config) ->
     SK = secret_key:random(),
@@ -92,4 +99,12 @@ verify_ciphertext_test(_Config) ->
     PK = secret_key:public_key(SK),
 
     Cipher = public_key:encrypt(PK, Msg),
-    ?assert(ciphertext:verify(Cipher)).
+    true = ciphertext:verify(Cipher),
+    ok.
+
+fr_serde_test(_Config) ->
+    true = fr:cmp(fr:deserialize(fr:serialize(fr:into(0))), fr:into(0)),
+    true = fr:cmp(fr:deserialize(fr:serialize(fr:into(42))), fr:into(42)),
+    true = fr:cmp(fr:deserialize(fr:serialize(fr:into(-8))), fr:into(-8)),
+    true = fr:cmp(fr:deserialize(fr:serialize(fr:zero())), fr:zero()),
+    ok.
