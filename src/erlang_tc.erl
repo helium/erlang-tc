@@ -58,6 +58,8 @@
     cmp_fr/2,
     zero_fr/0,
     add_assign_fr/2,
+    serialize_fr/1,
+    deserialize_fr/1,
 
     %% G1 API
     g1_zero/0,
@@ -302,6 +304,14 @@ zero_fr() ->
 
 -spec add_assign_fr(FR1 :: reference(), FR2 :: reference()) -> reference().
 add_assign_fr(_FR1, _FR2) ->
+    not_loaded(?LINE).
+
+-spec serialize_fr(Fr :: reference()) -> binary().
+serialize_fr(_Fr) ->
+    not_loaded(?LINE).
+
+-spec deserialize_fr(BinFr :: binary()) -> reference().
+deserialize_fr(_BinFr) ->
     not_loaded(?LINE).
 
 %% ==================================================================

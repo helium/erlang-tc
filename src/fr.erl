@@ -5,7 +5,9 @@
     into/1,
     cmp/2,
     zero/0,
-    add_assign/2
+    add_assign/2,
+    serialize/1,
+    deserialize/1
 ]).
 
 -type fr() :: reference().
@@ -26,3 +28,11 @@ zero() ->
 -spec add_assign(FR1 :: fr(), FR2 :: fr()) -> fr().
 add_assign(FR1, FR2) ->
     erlang_tc:add_assign_fr(FR1, FR2).
+
+-spec serialize(Fr :: fr()) -> binary().
+serialize(Fr) ->
+    erlang_tc:serialize_fr(Fr).
+
+-spec deserialize(BinFr :: binary()) -> fr().
+deserialize(BinFr) ->
+    erlang_tc:deserialize_fr(BinFr).
