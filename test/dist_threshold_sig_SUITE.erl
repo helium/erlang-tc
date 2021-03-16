@@ -17,6 +17,7 @@
          threshold_ten_test/1,
          threshold_twenty_test/1,
          threshold_thirty_test/1,
+         threshold_forty_test/1,
          threshold_fifty_test/1,
          threshold_one_hundred_test/1
         ]).
@@ -28,6 +29,7 @@ all() -> [
          threshold_ten_test,
          threshold_twenty_test,
          threshold_thirty_test,
+         threshold_forty_test,
          threshold_fifty_test
          %% threshold_one_hundred_test
          ].
@@ -45,6 +47,7 @@ init_per_testcase(TestCase, Config) ->
                                 threshold_ten_test -> {23, 10};
                                 threshold_twenty_test -> {30, 20};
                                 threshold_thirty_test -> {40, 30};
+                                threshold_forty_test -> {50, 40};
                                 threshold_fifty_test -> {60, 50};
                                 threshold_one_hundred_test -> {120, 100}
                             end,
@@ -65,6 +68,9 @@ threshold_twenty_test(Config) ->
     run(Config).
 
 threshold_thirty_test(Config) ->
+    run(Config).
+
+threshold_forty_test(Config) ->
     run(Config).
 
 threshold_fifty_test(Config) ->
