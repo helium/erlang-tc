@@ -9,6 +9,7 @@
     reveal/1,
     verify_poly/3,
     verify_point/4,
+    validate_point/4,
     serialize/1,
     deserialize/1
 ]).
@@ -52,9 +53,22 @@ verify_poly(BiCommitment, RowPoly, VerifierID) ->
     VerifierID :: non_neg_integer()
 ) -> boolean().
 verify_point(BiCommitment, RowPoly, SenderID, VerifierID) ->
-    Val = erlang_tc:eval_uni_poly(RowPoly, SenderID),
-    G1AffineOne = erlang_tc:g1_affine_one(),
-    ValG1 = erlang_tc:g1_affine_mul(G1AffineOne, Val),
+    Val = poly:eval(RowPoly, SenderID),
+    G1AffineOne = g1_affine:one(),
+    ValG1 = g1_affine:mul(G1AffineOne, Val),
+    erlang_tc:cmp_g1(erlang_tc:eval_bivar_commitment(BiCommitment, VerifierID, SenderID), ValG1).
+
+-spec validate_point(BiCommitment :: bicommitment(),
+                     SenderID :: non_neg_integer(),
+                     VerifierID :: non_neg_integer(),
+                     Point :: non_neg_integer() | fr:fr()) -> boolean().
+validate_point(BiCommitment, SenderID, VerifierID, Point) when is_reference(Point) ->
+    G1AffineOne = g1_affine:one(),
+    ValG1 = g1_affine:mul(G1AffineOne, Point),
+    erlang_tc:cmp_g1(erlang_tc:eval_bivar_commitment(BiCommitment, VerifierID, SenderID), ValG1);
+validate_point(BiCommitment, SenderID, VerifierID, Point) when is_integer(Point) ->
+    G1AffineOne = g1_affine:one(),
+    ValG1 = g1_affine:mul(G1AffineOne, fr:into(Point)),
     erlang_tc:cmp_g1(erlang_tc:eval_bivar_commitment(BiCommitment, VerifierID, SenderID), ValG1).
 
 -spec serialize(C :: bicommitment()) -> binary().

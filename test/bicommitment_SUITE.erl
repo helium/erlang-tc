@@ -8,6 +8,7 @@
 -export([
     verify_poly_test/1,
     verify_point_test/1,
+    validate_point_test/1,
     serde_verify_poly_test/1,
     serde_verify_point_test/1
 ]).
@@ -16,6 +17,7 @@ all() ->
     [
         verify_poly_test,
         verify_point_test,
+        validate_point_test,
         serde_verify_poly_test,
         serde_verify_point_test
     ].
@@ -59,6 +61,35 @@ verify_point_test(Config) ->
                     lists:map(
                         fun({VerifierID, Poly2}) ->
                             bicommitment:verify_point(BiCommitment, Poly2, SenderID, VerifierID)
+                        end,
+                        RowPolys
+                    );
+                false ->
+                    false
+            end
+        end,
+        RowPolys
+    ),
+    ct:pal("Res: ~p~n", [Res]),
+    ?assert(lists:all(fun(X) -> X end, lists:flatten(Res))),
+    ok.
+
+validate_point_test(Config) ->
+    Secret = ?config(secret, Config),
+    Degree = ?config(degree, Config),
+    BiPoly = bipoly:with_secret(Secret, Degree),
+
+    BiCommitment = bipoly:commitment(BiPoly),
+    RowPolys = [{ID, bipoly:row(BiPoly, ID)} || ID <- lists:seq(1, Degree)],
+    Res = lists:map(
+        fun({SenderID, Poly}) ->
+            case bicommitment:verify_poly(BiCommitment, Poly, SenderID) of
+                true ->
+                    %% verify_poly succeeded, check verify_point for verifiers
+                    lists:map(
+                        fun({VerifierID, Poly2}) ->
+                            Point = poly:eval(Poly2, SenderID),
+                            bicommitment:validate_point(BiCommitment, SenderID, VerifierID, Point)
                         end,
                         RowPolys
                     );
