@@ -2,7 +2,6 @@
 
 -export([
     %% Signature API
-    from_pk/1,
     verify_decryption_share/3,
     verify_signature_share/3
 ]).
@@ -10,10 +9,6 @@
 -type pk_share() :: reference().
 
 -export_type([pk_share/0]).
-
--spec from_pk(PK :: public_key:pk()) -> pk_share().
-from_pk(PK) ->
-    erlang_tc:share_from_pk(PK).
 
 -spec verify_decryption_share(
     PKShare :: pk_share(),

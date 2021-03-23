@@ -50,7 +50,6 @@
     sk_share_from_fr/1,
 
     %% PublicKeyShare API
-    share_from_pk/1,
     pk_share_verify_decryption_share/3,
     pk_share_verify/3,
 
@@ -278,10 +277,6 @@ pk_set_combine_signatures(_PKSet, _SigShares) ->
 %% ==================================================================
 %% PublicKeyShare
 %% ==================================================================
-
--spec share_from_pk(PK :: reference()) -> reference().
-share_from_pk(_PK) ->
-    not_loaded(?LINE).
 
 -spec pk_share_verify_decryption_share(PKShare :: reference(), DecShare :: reference(), Cipher :: reference()) -> boolean().
 pk_share_verify_decryption_share(_PKShare, _DecShare, _Cipher) ->
