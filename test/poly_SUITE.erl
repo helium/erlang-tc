@@ -7,6 +7,7 @@
 -export(
     [
         eval_test/1,
+        interpolate_with_fr_test/1,
         zeroize_test/1,
         self_subtract_test/1,
         add_zero_test/1,
@@ -22,6 +23,7 @@
 all() ->
     [
         eval_test,
+        interpolate_with_fr_test,
         zeroize_test,
         self_subtract_test,
         add_zero_test,
@@ -59,6 +61,35 @@ eval_test(_Config) ->
 
     %% poly can be interpolated because num_sample >= degree + 1
     ?assert(poly:cmp(Poly, poly:interpolate(Samples))),
+
+    ?assertEqual(3, poly:degree(Poly)),
+
+    ok.
+
+interpolate_with_fr_test(_Config) ->
+    %% poly = x³ + x - 2.
+    Poly = poly:from_coeffs([-2, 1, 0, 5]),
+
+    Samples = [{-1, -8}, {2, 40}, {3, 136}, {5, 628}],
+    FrSamples = [{fr:into(A), fr:into(B)} || {A, B} <- Samples],
+
+    %% check f(a) = b
+    ?assert(
+        lists:all(
+            fun({Point, Answer}) ->
+                AnswerFr = fr:into(Answer),
+                EvalFr = poly:eval(Poly, Point),
+                fr:cmp(AnswerFr, EvalFr)
+            end,
+            Samples
+        )
+    ),
+
+    %% poly can be interpolated because num_sample >= degree + 1
+    ?assert(poly:cmp(Poly, poly:interpolate(Samples))),
+
+    %% we should also be able to interpolate poly using fr values of samples
+    ?assert(poly:cmp(Poly, poly:interpolate_from_fr(FrSamples))),
 
     ?assertEqual(3, poly:degree(Poly)),
 
