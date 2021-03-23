@@ -56,6 +56,7 @@ rustler::init!(
         ciphertext::ciphertext_cmp,
         // Polynomial API
         poly::poly_from_coeffs,
+        poly::poly_from_frs,
         poly::gen_monomial,
         poly::random_poly,
         poly::zero_poly,

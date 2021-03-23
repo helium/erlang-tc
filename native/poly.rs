@@ -27,6 +27,15 @@ fn poly_from_coeffs<'a>(coeffs: ListIterator<'a>) -> PolyArc {
     ResourceArc::new(PolyRes(Poly::from(coeffs)))
 }
 
+#[rustler::nif(name = "poly_from_frs")]
+fn poly_from_frs<'a>(frs: Vec<FrArc>) -> PolyArc {
+    ResourceArc::new(PolyRes(Poly::from(
+                frs
+                .iter()
+                .map(|fa| fa.fr)
+                .collect::<Vec<Fr>>())))
+}
+
 #[rustler::nif(name = "eval_uni_poly")]
 fn eval_uni_poly(p: PolyArc, point: i64) -> FrArc {
     ResourceArc::new(FrRes {

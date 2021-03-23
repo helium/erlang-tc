@@ -3,6 +3,7 @@
 -export([
     %% polynomial API
     from_coeffs/1,
+    from_frs/1,
     eval/2,
     eval_from_fr/2,
     cmp/2,
@@ -37,6 +38,10 @@
 -spec from_coeffs(Coeffs :: coeffs()) -> poly().
 from_coeffs(Coeffs) ->
     erlang_tc:poly_from_coeffs(Coeffs).
+
+-spec from_frs(FRs :: [fr:fr()]) -> poly().
+from_frs(FRs) ->
+    erlang_tc:poly_from_frs(FRs).
 
 -spec eval(Poly :: poly(), Point :: integer()) -> fr:fr().
 eval(Poly, Point) ->

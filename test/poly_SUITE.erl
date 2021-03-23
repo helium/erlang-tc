@@ -7,6 +7,7 @@
 -export(
     [
         eval_test/1,
+        from_fr_test/1,
         interpolate_with_fr_test/1,
         zeroize_test/1,
         self_subtract_test/1,
@@ -23,6 +24,7 @@
 all() ->
     [
         eval_test,
+        from_fr_test,
         interpolate_with_fr_test,
         zeroize_test,
         self_subtract_test,
@@ -42,7 +44,7 @@ end_per_testcase(_, Config) ->
     Config.
 
 eval_test(_Config) ->
-    %% poly = x³ + x - 2.
+    %% poly = 5x³ + x - 2.
     Poly = poly:from_coeffs([-2, 1, 0, 5]),
 
     Samples = [{-1, -8}, {2, 40}, {3, 136}, {5, 628}],
@@ -66,8 +68,36 @@ eval_test(_Config) ->
 
     ok.
 
+from_fr_test(_Config) ->
+    %% poly = 5x³ + x - 2.
+    Coeffs = [-2, 1, 0, 5],
+    Frs = [fr:into(I) || I <- Coeffs],
+
+    Poly = poly:from_frs(Frs),
+
+    Samples = [{-1, -8}, {2, 40}, {3, 136}, {5, 628}],
+
+    %% check f(a) = b
+    ?assert(
+        lists:all(
+            fun({Point, Answer}) ->
+                AnswerFr = fr:into(Answer),
+                EvalFr = poly:eval(Poly, Point),
+                fr:cmp(AnswerFr, EvalFr)
+            end,
+            Samples
+        )
+    ),
+
+    %% poly can be interpolated because num_sample >= degree + 1
+    ?assert(poly:cmp(Poly, poly:interpolate(Samples))),
+
+    ?assertEqual(3, poly:degree(Poly)),
+
+    ok.
+
 interpolate_with_fr_test(_Config) ->
-    %% poly = x³ + x - 2.
+    %% poly = 5x³ + x - 2.
     Poly = poly:from_coeffs([-2, 1, 0, 5]),
 
     Samples = [{-1, -8}, {2, 40}, {3, 136}, {5, 628}],

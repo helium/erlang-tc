@@ -75,6 +75,7 @@
 
     %% Polynomial API
     poly_from_coeffs/1,
+    poly_from_frs/1,
     eval_uni_poly/2,
     eval_uni_poly_from_fr/2,
     cmp_poly/2,
@@ -356,6 +357,10 @@ g1_affine_mul(_G1Affine, _Fr) ->
 
 -spec poly_from_coeffs(CoeffVec :: coeffs()) -> reference().
 poly_from_coeffs(_CoeffVec) ->
+    not_loaded(?LINE).
+
+-spec poly_from_frs(FRVec :: [fr:fr()]) -> reference().
+poly_from_frs(_FRVec) ->
     not_loaded(?LINE).
 
 -spec eval_uni_poly(Poly :: reference(), Point :: integer()) -> reference().
