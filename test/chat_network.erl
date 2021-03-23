@@ -227,7 +227,7 @@ create_block(Network) ->
                                 NodeSigShare = get_node_sig(NodeSig),
                                 {ok, Node} = get_node(Network, NodeID),
                                 PKShare = node_pk_share(Node),
-                                case public_key_share:verify(PKShare, NodeSigShare, Msg) of
+                                case public_key_share:verify_signature_share(PKShare, NodeSigShare, Msg) of
                                     false ->
                                         false;
                                     true ->

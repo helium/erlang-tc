@@ -103,6 +103,7 @@ rustler::init!(
         // SecretKeyShare API
         sk_share::sk_share_decryption_share,
         sk_share::sk_share_sign,
+        sk_share::sk_share_from_fr,
         // SecretKeySet API
         sk_set::sk_set_from_poly,
         sk_set::sk_set_threshold,

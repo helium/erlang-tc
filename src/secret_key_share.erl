@@ -2,12 +2,17 @@
 
 -export([
     decrypt_share/2,
-    sign/2
+    sign/2,
+    from_fr/1
 ]).
 
 -type sk_share() :: reference().
 
 -export_type([sk_share/0]).
+
+-spec from_fr(Fr :: fr:fr()) -> sk_share().
+from_fr(Fr) ->
+    erlang_tc:sk_share_from_fr(Fr).
 
 -spec decrypt_share(
     SKShare :: sk_share(),

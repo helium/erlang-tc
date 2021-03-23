@@ -273,7 +273,7 @@ create_block(State) ->
                                 {Time0, Result} = timer:tc(
                                     fun() ->
                                         case
-                                            public_key_share:verify(PKShare, NodeSigShare, Msg)
+                                            public_key_share:verify_signature_share(PKShare, NodeSigShare, Msg)
                                         of
                                             false ->
                                                 false;

@@ -47,6 +47,7 @@
     %% SecretKeyShare API
     sk_share_decryption_share/2,
     sk_share_sign/2,
+    sk_share_from_fr/1,
 
     %% PublicKeyShare API
     share_from_pk/1,
@@ -225,6 +226,10 @@ sk_share_decryption_share(_SKShare, _Ciphertext) ->
 
 -spec sk_share_sign(SKShare :: reference(), Msg :: binary()) -> reference().
 sk_share_sign(_SKShare, _Msg) ->
+    not_loaded(?LINE).
+
+-spec sk_share_from_fr(Fr :: reference()) -> reference().
+sk_share_from_fr(_Fr) ->
     not_loaded(?LINE).
 
 %% ==================================================================
