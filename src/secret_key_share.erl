@@ -3,7 +3,8 @@
 -export([
     decrypt_share/2,
     sign/2,
-    from_fr/1
+    from_fr/1,
+    public_key_share/1
 ]).
 
 -type sk_share() :: reference().
@@ -27,3 +28,7 @@ decrypt_share(SKShare, Ciphertext) ->
 ) -> signature_share:sig_share().
 sign(SKShare, Msg) ->
     erlang_tc:sk_share_sign(SKShare, Msg).
+
+-spec public_key_share(SKShare :: sk_share()) -> public_key_share:pk_share().
+public_key_share(SKShare) ->
+    erlang_tc:sk_share_public_key_share(SKShare).

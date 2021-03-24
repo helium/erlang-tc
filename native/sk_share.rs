@@ -5,6 +5,7 @@ use crate::ciphertext::CiphertextArc;
 use crate::lazy_binary::LazyBinary;
 use crate::dec_share::{DecShareRes, DecShareArc};
 use crate::sig_share::{SigShareArc, SigShareRes};
+use crate::pk_share::{PKShareArc, PKShareRes};
 
 /// Struct to hold PublicKeyShare
 pub struct SKShareRes {
@@ -37,5 +38,12 @@ fn sk_share_from_fr<'a>(fr_arc: FrArc) -> SKShareArc {
     let mut fr = fr_arc.fr.clone();
     ResourceArc::new(SKShareRes {
         share: SecretKeyShare::from_mut(&mut fr)
+    })
+}
+
+#[rustler::nif(name = "sk_share_public_key_share")]
+fn sk_share_public_key_share(sk_share_arc: SKShareArc) -> PKShareArc {
+    ResourceArc::new(PKShareRes {
+        share: sk_share_arc.share.public_key_share()
     })
 }

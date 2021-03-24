@@ -105,6 +105,7 @@ rustler::init!(
         sk_share::sk_share_decryption_share,
         sk_share::sk_share_sign,
         sk_share::sk_share_from_fr,
+        sk_share::sk_share_public_key_share,
         // SecretKeySet API
         sk_set::sk_set_from_poly,
         sk_set::sk_set_threshold,

@@ -48,6 +48,7 @@
     sk_share_decryption_share/2,
     sk_share_sign/2,
     sk_share_from_fr/1,
+    sk_share_public_key_share/1,
 
     %% PublicKeyShare API
     pk_share_verify_decryption_share/3,
@@ -230,6 +231,10 @@ sk_share_sign(_SKShare, _Msg) ->
 
 -spec sk_share_from_fr(Fr :: reference()) -> reference().
 sk_share_from_fr(_Fr) ->
+    not_loaded(?LINE).
+
+-spec sk_share_public_key_share(SKShare :: reference()) -> reference().
+sk_share_public_key_share(_SKShare) ->
     not_loaded(?LINE).
 
 %% ==================================================================
