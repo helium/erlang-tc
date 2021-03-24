@@ -5,7 +5,8 @@
     sign/2,
     from_fr/1,
     public_key_share/1,
-    reveal/1
+    reveal/1,
+    combine/2
 ]).
 
 -type sk_share() :: reference().
@@ -37,3 +38,7 @@ public_key_share(SKShare) ->
 -spec reveal(SKShare :: sk_share()) -> string().
 reveal(SKShare) ->
     erlang_tc:sk_share_reveal(SKShare).
+
+-spec combine(SKS1 :: sk_share(), SKS2 :: sk_share()) -> sk_share().
+combine(SKS1, SKS2) ->
+    erlang_tc:sk_share_combine(SKS1, SKS2).

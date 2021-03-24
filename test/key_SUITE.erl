@@ -16,6 +16,7 @@
         random_sk_set_test/1,
         verify_sig_test/1,
         verify_ciphertext_test/1,
+        sk_share_combine_test/1,
         fr_serde_test/1
     ]
 ).
@@ -32,6 +33,7 @@ all() ->
         random_sk_set_test,
         verify_sig_test,
         verify_ciphertext_test,
+        sk_share_combine_test,
         fr_serde_test
     ].
 
@@ -147,6 +149,21 @@ verify_sig_test(_Config) ->
     Sig = secret_key:sign(SK, Msg),
     PK = secret_key:public_key(SK),
     true = pubkey:verify(PK, Sig, Msg),
+    ok.
+
+sk_share_combine_test(_Config) ->
+    Fr1 = fr:into(42),
+    Fr2 = fr:into(666),
+
+    SKS1 = secret_key_share:from_fr(Fr1),
+    SKS2 = secret_key_share:from_fr(Fr2),
+
+    SKSC = secret_key_share:combine(SKS1, SKS2),
+
+    ct:pal("SKS1: ~p", [secret_key_share:reveal(SKS1)]),
+    ct:pal("SKS2: ~p", [secret_key_share:reveal(SKS2)]),
+    ct:pal("SKSC: ~p", [secret_key_share:reveal(SKSC)]),
+
     ok.
 
 verify_ciphertext_test(_Config) ->

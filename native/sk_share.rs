@@ -5,6 +5,7 @@ use crate::lazy_binary::LazyBinary;
 use crate::pk_share::{PKShareArc, PKShareRes};
 use crate::sig_share::{SigShareArc, SigShareRes};
 use rustler::{Env, ResourceArc};
+use std::ops::Add;
 use threshold_crypto::SecretKeyShare;
 
 /// Struct to hold PublicKeyShare
@@ -51,4 +52,11 @@ fn sk_share_public_key_share(sk_share_arc: SKShareArc) -> PKShareArc {
 #[rustler::nif(name = "sk_share_reveal")]
 fn sk_share_reveal(sk_share_arc: SKShareArc) -> String {
     sk_share_arc.share.reveal()
+}
+
+#[rustler::nif(name = "sk_share_combine")]
+fn sk_share_combine(ska1: SKShareArc, ska2: SKShareArc) -> SKShareArc {
+    ResourceArc::new(SKShareRes {
+        share: ska1.share.add(&ska2.share),
+    })
 }

@@ -53,6 +53,7 @@
     sk_share_from_fr/1,
     sk_share_public_key_share/1,
     sk_share_reveal/1,
+    sk_share_combine/2,
 
     %% PublicKeyShare API
     pk_share_verify_decryption_share/3,
@@ -247,6 +248,10 @@ sk_share_public_key_share(_SKShare) ->
 
 -spec sk_share_reveal(SKShare :: reference()) -> string().
 sk_share_reveal(_SKShare) ->
+    not_loaded(?LINE).
+
+-spec sk_share_combine(SKS1 :: reference(), SKS2 :: reference()) -> reference().
+sk_share_combine(_SKS1, _SKS2) ->
     not_loaded(?LINE).
 
 %% ==================================================================
