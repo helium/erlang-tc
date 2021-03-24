@@ -6,7 +6,9 @@
     from_fr/1,
     public_key_share/1,
     reveal/1,
-    combine/2
+    combine/2,
+    serialize/1,
+    deserialize/1
 ]).
 
 -type sk_share() :: reference().
@@ -42,3 +44,11 @@ reveal(SKShare) ->
 -spec combine(SKS1 :: sk_share(), SKS2 :: sk_share()) -> sk_share().
 combine(SKS1, SKS2) ->
     erlang_tc:sk_share_combine(SKS1, SKS2).
+
+-spec serialize(SKShare :: sk_share()) -> binary().
+serialize(SKShare) ->
+    erlang_tc:sk_share_serialize(SKShare).
+
+-spec deserialize(BinSKS :: binary()) -> sk_share().
+deserialize(BinSKS) ->
+    erlang_tc:sk_share_deserialize(BinSKS).
