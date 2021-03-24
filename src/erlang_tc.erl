@@ -36,6 +36,7 @@
     pk_set_public_key_share/2,
     pk_set_decrypt/3,
     pk_set_combine_signatures/2,
+    pk_set_combine/2,
     pk_set_serialize/1,
     pk_set_deserialize/1,
 
@@ -58,6 +59,7 @@
     pk_share_verify_signature_share/3,
     pk_share_reveal/1,
     pk_share_to_bytes/1,
+    pk_share_combine/2,
 
     %% Field Representation API
     into_fr/1,
@@ -290,6 +292,10 @@ pk_set_decrypt(_PKSet, _DecShares, _Cipher) ->
 pk_set_combine_signatures(_PKSet, _SigShares) ->
     not_loaded(?LINE).
 
+-spec pk_set_combine(PKS1 :: reference(), PKS2 :: reference()) -> reference().
+pk_set_combine(_PKS1, _PKS2) ->
+    not_loaded(?LINE).
+
 -spec pk_set_serialize(PKSet :: reference()) -> binary().
 pk_set_serialize(_PKSet) ->
     not_loaded(?LINE).
@@ -316,6 +322,10 @@ pk_share_reveal(_PKShare) ->
 
 -spec pk_share_to_bytes(PKShare :: reference()) -> binary().
 pk_share_to_bytes(_PKShare) ->
+    not_loaded(?LINE).
+
+-spec pk_share_combine(PKS1 :: reference(), PKS2 :: reference()) -> reference().
+pk_share_combine(_PKS1, _PKS2) ->
     not_loaded(?LINE).
 
 %% ==================================================================

@@ -1,4 +1,4 @@
-use crate::atom::{cannot_decrypt, cannot_combine, error, ok};
+use crate::atom::{cannot_combine, cannot_decrypt, error, ok};
 use crate::bin::Bin;
 use crate::ciphertext::CiphertextArc;
 use crate::commitment::CommitmentArc;
@@ -7,8 +7,8 @@ use crate::pk::{PkArc, PkRes};
 use crate::pk_share::{PKShareArc, PKShareRes};
 use crate::sig::SigRes;
 use crate::sig_share::SigShareArc;
-use serde::{Deserialize, Serialize};
 use rustler::{Encoder, Env, NifResult, ResourceArc, Term};
+use serde::{Deserialize, Serialize};
 use threshold_crypto::PublicKeySet;
 
 /// Struct to hold PublicKey
@@ -82,6 +82,13 @@ fn pk_set_combine_signatures<'a>(
         Ok(r) => Ok((ok(), ResourceArc::new(SigRes(r))).encode(env)),
         _ => Ok((error(), cannot_combine()).encode(env)),
     }
+}
+
+#[rustler::nif(name = "pk_set_combine")]
+pub fn pk_set_combine(pka1: PKSetArc, pka2: PKSetArc) -> PKSetArc {
+    ResourceArc::new(PKSetRes {
+        pk_set: pka1.pk_set.combine(pka2.pk_set.clone()),
+    })
 }
 
 #[rustler::nif(name = "pk_set_serialize")]

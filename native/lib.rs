@@ -89,6 +89,7 @@ rustler::init!(
         pk_share::pk_share_verify_signature_share,
         pk_share::pk_share_reveal,
         pk_share::pk_share_to_bytes,
+        pk_share::pk_share_combine,
         // PublicKeySet API
         pk_set::pk_set_from_commitment,
         pk_set::pk_set_public_key,
@@ -96,6 +97,7 @@ rustler::init!(
         pk_set::pk_set_public_key_share,
         pk_set::pk_set_decrypt,
         pk_set::pk_set_combine_signatures,
+        pk_set::pk_set_combine,
         pk_set::pk_set_serialize,
         pk_set::pk_set_deserialize,
         // SecretKey API

@@ -10,6 +10,8 @@
         signature_test/1,
         pk_set_test/1,
         pk_set_serde_test/1,
+        pk_set_combine_test/1,
+        pk_share_combine_test/1,
         sk_set_test/1,
         random_sk_set_test/1,
         verify_sig_test/1,
@@ -24,6 +26,8 @@ all() ->
         signature_test,
         pk_set_test,
         pk_set_serde_test,
+        pk_set_combine_test,
+        pk_share_combine_test,
         sk_set_test,
         random_sk_set_test,
         verify_sig_test,
@@ -79,6 +83,40 @@ pk_set_serde_test(Config) ->
     PK = public_key_set:public_key(DeserPKSet),
     PKSize = byte_size(pubkey:to_bytes(PK)),
     Degree = public_key_set:threshold(DeserPKSet),
+
+    ok.
+
+pk_set_combine_test(Config) ->
+    Degree = ?config(degree, Config),
+    RandomPoly = poly:random(Degree),
+    Commitment = poly:commitment(RandomPoly),
+    PKSet = public_key_set:from_commitment(Commitment),
+
+    RandomPoly2 = poly:random(Degree),
+    Commitment2 = poly:commitment(RandomPoly2),
+    PKSet2 = public_key_set:from_commitment(Commitment2),
+
+    PKSC = public_key_set:combine(PKSet, PKSet2),
+
+    ct:pal("PKS1: ~p", [public_key_set:serialize(PKSet)]),
+    ct:pal("PKS2: ~p", [public_key_set:serialize(PKSet2)]),
+    ct:pal("PKSC: ~p", [public_key_set:serialize(PKSC)]),
+
+    ok.
+
+pk_share_combine_test(Config) ->
+    Degree = ?config(degree, Config),
+    RandomPoly = poly:random(Degree),
+    Commitment = poly:commitment(RandomPoly),
+    PKSet = public_key_set:from_commitment(Commitment),
+
+    PKS1 = public_key_set:public_key_share(PKSet, 1),
+    PKS2 = public_key_set:public_key_share(PKSet, 2),
+    PKSC = public_key_share:combine(PKS1, PKS2),
+
+    ct:pal("PKS1: ~p", [public_key_share:reveal(PKS1)]),
+    ct:pal("PKS2: ~p", [public_key_share:reveal(PKS2)]),
+    ct:pal("PKSC: ~p", [public_key_share:reveal(PKSC)]),
 
     ok.
 

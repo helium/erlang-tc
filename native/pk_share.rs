@@ -51,3 +51,10 @@ fn pk_share_to_bytes<'a>(env: Env<'a>, pka: PKShareArc) -> Binary<'a> {
     binary.as_mut_slice().write_all(&bin_vec).unwrap();
     Binary::from_owned(binary, env)
 }
+
+#[rustler::nif(name = "pk_share_combine")]
+fn pk_share_combine(pka1: PKShareArc, pka2: PKShareArc) -> PKShareArc {
+    ResourceArc::new(PKShareRes {
+        share: pka1.share.combine(pka2.share)
+    })
+}

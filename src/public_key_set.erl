@@ -8,6 +8,7 @@
     public_key_share/2,
     decrypt/3,
     combine_signatures/2,
+    combine/2,
     serialize/1,
     deserialize/1
 ]).
@@ -46,6 +47,10 @@ decrypt(PKSet, DecShares, Cipher) ->
 ) -> {ok, signature:sig()} | {error, cannot_combine}.
 combine_signatures(PKSet, SigShares) ->
     erlang_tc:pk_set_combine_signatures(PKSet, SigShares).
+
+-spec combine(PKS1 :: pk_set(), PKS2 :: pk_set()) -> pk_set().
+combine(PKS1, PKS2) ->
+    erlang_tc:pk_set_combine(PKS1, PKS2).
 
 -spec serialize(PKSet :: pk_set()) -> binary().
 serialize(PKSet) ->
