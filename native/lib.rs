@@ -153,6 +153,7 @@ rustler::init!(
         commitment::add_commitment,
         commitment::serialize_commitment,
         commitment::deserialize_commitment,
+        commitment::commitment_public_key,
         // BivarCommitment API
         bivar_commitment::degree_bivar_commitment,
         bivar_commitment::eval_bivar_commitment,

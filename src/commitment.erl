@@ -8,7 +8,8 @@
     reveal/1,
     add/2,
     serialize/1,
-    deserialize/1
+    deserialize/1,
+    public_key/1
 ]).
 
 -type commitment() :: reference().
@@ -41,3 +42,7 @@ serialize(C) ->
 -spec deserialize(B :: binary()) -> commitment().
 deserialize(B) ->
     erlang_tc:deserialize_commitment(B).
+
+-spec public_key(C :: commitment()) -> public_key:pk().
+public_key(C) ->
+    erlang_tc:commitment_public_key(C).

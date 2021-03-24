@@ -1,5 +1,6 @@
 use crate::bin::Bin;
 use crate::g1::{G1Arc, G1Res};
+use crate::pk::{PkArc, PkRes};
 use rustler::{Env, ResourceArc};
 use serde::{Deserialize, Serialize};
 use threshold_crypto::poly::Commitment;
@@ -58,4 +59,11 @@ pub fn serialize_commitment(c_arc: CommitmentArc) -> Bin {
 pub fn deserialize_commitment(bin: rustler::Binary) -> CommitmentArc {
     let c_res = bincode::deserialize(&bin).unwrap();
     CommitmentArc::new(c_res)
+}
+
+#[rustler::nif(name = "commitment_public_key")]
+fn commitment_public_key(c_arc: CommitmentArc) -> PkArc {
+    ResourceArc::new(PkRes {
+        pk: c_arc.0.public_key(),
+    })
 }

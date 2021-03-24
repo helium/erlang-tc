@@ -111,6 +111,7 @@
     add_commitment/2,
     serialize_commitment/1,
     deserialize_commitment/1,
+    commitment_public_key/1,
 
     %% Bivariate Polynomial API
     random_bivar_poly/1,
@@ -508,6 +509,10 @@ serialize_commitment(_C) ->
 
 -spec deserialize_commitment(B :: binary()) -> reference().
 deserialize_commitment(_B) ->
+    not_loaded(?LINE).
+
+-spec commitment_public_key(C :: reference()) -> reference().
+commitment_public_key(_C) ->
     not_loaded(?LINE).
 
 %% ==================================================================
