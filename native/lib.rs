@@ -86,7 +86,9 @@ rustler::init!(
         pk::pk_encrypt,
         // PublicKeyShare API
         pk_share::pk_share_verify_decryption_share,
-        pk_share::pk_share_verify,
+        pk_share::pk_share_verify_signature_share,
+        pk_share::pk_share_reveal,
+        pk_share::pk_share_to_bytes,
         // PublicKeySet API
         pk_set::pk_set_from_commitment,
         pk_set::pk_set_public_key,
@@ -106,6 +108,7 @@ rustler::init!(
         sk_share::sk_share_sign,
         sk_share::sk_share_from_fr,
         sk_share::sk_share_public_key_share,
+        sk_share::sk_share_reveal,
         // SecretKeySet API
         sk_set::sk_set_from_poly,
         sk_set::sk_set_threshold,

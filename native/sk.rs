@@ -46,8 +46,7 @@ fn sk_public_key(sk_arc: SkArc) -> PkArc {
 
 #[rustler::nif(name = "sk_reveal")]
 fn sk_reveal(sk_arc: SkArc) -> String {
-    let sk = sk_arc.sk.clone();
-    sk.reveal()
+    sk_arc.sk.reveal()
 }
 
 #[rustler::nif(name = "sk_sign")]

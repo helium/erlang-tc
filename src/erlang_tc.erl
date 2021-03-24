@@ -49,10 +49,13 @@
     sk_share_sign/2,
     sk_share_from_fr/1,
     sk_share_public_key_share/1,
+    sk_share_reveal/1,
 
     %% PublicKeyShare API
     pk_share_verify_decryption_share/3,
-    pk_share_verify/3,
+    pk_share_verify_signature_share/3,
+    pk_share_reveal/1,
+    pk_share_to_bytes/1,
 
     %% Field Representation API
     into_fr/1,
@@ -237,6 +240,10 @@ sk_share_from_fr(_Fr) ->
 sk_share_public_key_share(_SKShare) ->
     not_loaded(?LINE).
 
+-spec sk_share_reveal(SKShare :: reference()) -> string().
+sk_share_reveal(_SKShare) ->
+    not_loaded(?LINE).
+
 %% ==================================================================
 %% Signature
 %% ==================================================================
@@ -288,8 +295,16 @@ pk_set_combine_signatures(_PKSet, _SigShares) ->
 pk_share_verify_decryption_share(_PKShare, _DecShare, _Cipher) ->
     not_loaded(?LINE).
 
--spec pk_share_verify(PKShare :: reference(), Sig :: reference(), Msg :: binary()) -> boolean().
-pk_share_verify(_PKShare, _Sig, _Msg) ->
+-spec pk_share_verify_signature_share(PKShare :: reference(), Sig :: reference(), Msg :: binary()) -> boolean().
+pk_share_verify_signature_share(_PKShare, _Sig, _Msg) ->
+    not_loaded(?LINE).
+
+-spec pk_share_reveal(PKShare :: reference()) -> string().
+pk_share_reveal(_PKShare) ->
+    not_loaded(?LINE).
+
+-spec pk_share_to_bytes(PKShare :: reference()) -> binary().
+pk_share_to_bytes(_PKShare) ->
     not_loaded(?LINE).
 
 %% ==================================================================
