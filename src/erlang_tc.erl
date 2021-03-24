@@ -36,6 +36,8 @@
     pk_set_public_key_share/2,
     pk_set_decrypt/3,
     pk_set_combine_signatures/2,
+    pk_set_serialize/1,
+    pk_set_deserialize/1,
 
     %% SecretKeySet API
     sk_set_from_poly/1,
@@ -286,6 +288,14 @@ pk_set_decrypt(_PKSet, _DecShares, _Cipher) ->
 -spec pk_set_combine_signatures(PKSet :: reference(),
                      SigShare :: [{non_neg_integer(), reference()}]) -> {ok, reference()} | {error, cannot_combine}.
 pk_set_combine_signatures(_PKSet, _SigShares) ->
+    not_loaded(?LINE).
+
+-spec pk_set_serialize(PKSet :: reference()) -> binary().
+pk_set_serialize(_PKSet) ->
+    not_loaded(?LINE).
+
+-spec pk_set_deserialize(Bin :: binary()) -> reference().
+pk_set_deserialize(_Bin) ->
     not_loaded(?LINE).
 
 %% ==================================================================

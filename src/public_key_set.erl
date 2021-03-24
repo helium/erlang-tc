@@ -7,7 +7,9 @@
     threshold/1,
     public_key_share/2,
     decrypt/3,
-    combine_signatures/2
+    combine_signatures/2,
+    serialize/1,
+    deserialize/1
 ]).
 
 -type pk_set() :: reference().
@@ -18,7 +20,7 @@
 from_commitment(Commitment) ->
     erlang_tc:pk_set_from_commitment(Commitment).
 
--spec public_key(PKSet :: pk_set()) -> public_key:pk().
+-spec public_key(PKSet :: pk_set()) -> pubkey:pk().
 public_key(PKSet) ->
     erlang_tc:pk_set_public_key(PKSet).
 
@@ -44,3 +46,11 @@ decrypt(PKSet, DecShares, Cipher) ->
 ) -> {ok, signature:sig()} | {error, cannot_combine}.
 combine_signatures(PKSet, SigShares) ->
     erlang_tc:pk_set_combine_signatures(PKSet, SigShares).
+
+-spec serialize(PKSet :: pk_set()) -> binary().
+serialize(PKSet) ->
+    erlang_tc:pk_set_serialize(PKSet).
+
+-spec deserialize(Bin :: binary()) -> pk_set().
+deserialize(Bin) ->
+    erlang_tc:pk_set_deserialize(Bin).

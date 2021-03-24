@@ -43,6 +43,6 @@ serialize(C) ->
 deserialize(B) ->
     erlang_tc:deserialize_commitment(B).
 
--spec public_key(C :: commitment()) -> public_key:pk().
+-spec public_key(C :: commitment()) -> pubkey:pk().
 public_key(C) ->
     erlang_tc:commitment_public_key(C).

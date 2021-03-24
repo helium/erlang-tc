@@ -1,4 +1,4 @@
--module(public_key).
+-module(pubkey).
 
 -export([
     %% public key API

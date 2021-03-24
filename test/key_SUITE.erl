@@ -9,6 +9,7 @@
         pk_size_test/1,
         signature_test/1,
         pk_set_test/1,
+        pk_set_serde_test/1,
         sk_set_test/1,
         random_sk_set_test/1,
         verify_sig_test/1,
@@ -22,6 +23,7 @@ all() ->
         pk_size_test,
         signature_test,
         pk_set_test,
+        pk_set_serde_test,
         sk_set_test,
         random_sk_set_test,
         verify_sig_test,
@@ -41,7 +43,7 @@ pk_size_test(Config) ->
     PKSize = ?config(pk_size, Config),
     SK = secret_key:random(),
     PK = secret_key:public_key(SK),
-    PKSize = byte_size(public_key:to_bytes(PK)),
+    PKSize = byte_size(pubkey:to_bytes(PK)),
     ok.
 
 signature_test(Config) ->
@@ -60,8 +62,24 @@ pk_set_test(Config) ->
     Commitment = poly:commitment(RandomPoly),
     PKSet = public_key_set:from_commitment(Commitment),
     PK = public_key_set:public_key(PKSet),
-    PKSize = byte_size(public_key:to_bytes(PK)),
+    PKSize = byte_size(pubkey:to_bytes(PK)),
     Degree = public_key_set:threshold(PKSet),
+    ok.
+
+pk_set_serde_test(Config) ->
+    PKSize = ?config(pk_size, Config),
+    Degree = ?config(degree, Config),
+    RandomPoly = poly:random(Degree),
+    Commitment = poly:commitment(RandomPoly),
+    PKSet = public_key_set:from_commitment(Commitment),
+
+    SerPKSet = public_key_set:serialize(PKSet),
+    DeserPKSet = public_key_set:deserialize(SerPKSet),
+
+    PK = public_key_set:public_key(DeserPKSet),
+    PKSize = byte_size(pubkey:to_bytes(PK)),
+    Degree = public_key_set:threshold(DeserPKSet),
+
     ok.
 
 sk_set_test(Config) ->
@@ -71,7 +89,7 @@ sk_set_test(Config) ->
     SKSet = secret_key_set:from_poly(RandomPoly),
     PKSet = secret_key_set:public_keys(SKSet),
     PK = public_key_set:public_key(PKSet),
-    PKSize = byte_size(public_key:to_bytes(PK)),
+    PKSize = byte_size(pubkey:to_bytes(PK)),
     Degree = secret_key_set:threshold(SKSet),
     ok.
 
@@ -81,7 +99,7 @@ random_sk_set_test(Config) ->
     SKSet = secret_key_set:random(Degree),
     PKSet = secret_key_set:public_keys(SKSet),
     PK = public_key_set:public_key(PKSet),
-    PKSize = byte_size(public_key:to_bytes(PK)),
+    PKSize = byte_size(pubkey:to_bytes(PK)),
     Degree = secret_key_set:threshold(SKSet),
     ok.
 
@@ -90,7 +108,7 @@ verify_sig_test(_Config) ->
     Msg = <<"Say hello to my little friend">>,
     Sig = secret_key:sign(SK, Msg),
     PK = secret_key:public_key(SK),
-    true = public_key:verify(PK, Sig, Msg),
+    true = pubkey:verify(PK, Sig, Msg),
     ok.
 
 verify_ciphertext_test(_Config) ->
@@ -98,7 +116,7 @@ verify_ciphertext_test(_Config) ->
     Msg = <<"His name is Robert Paulson">>,
     PK = secret_key:public_key(SK),
 
-    Cipher = public_key:encrypt(PK, Msg),
+    Cipher = pubkey:encrypt(PK, Msg),
     true = ciphertext:verify(Cipher),
     ok.
 

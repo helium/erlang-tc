@@ -31,7 +31,7 @@ basic_test() ->
     %% comrades. I encrypt my message with the society's public-key. I then send the ciphertext to
     %% each of the society's actors.
     Msg = <<"May the force be with you">>,
-    Ciphertext = public_key:encrypt(PK, Msg),
+    Ciphertext = pubkey:encrypt(PK, Msg),
     NewAlice = secret_society:send_msg(Alice, Ciphertext),
     NewBob = secret_society:send_msg(Bob, Ciphertext),
     NewClara = secret_society:send_msg(Clara, Ciphertext),

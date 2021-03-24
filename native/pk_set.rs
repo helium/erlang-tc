@@ -7,10 +7,12 @@ use crate::pk::{PkArc, PkRes};
 use crate::pk_share::{PKShareArc, PKShareRes};
 use crate::sig::SigRes;
 use crate::sig_share::SigShareArc;
+use serde::{Deserialize, Serialize};
 use rustler::{Encoder, Env, NifResult, ResourceArc, Term};
 use threshold_crypto::PublicKeySet;
 
 /// Struct to hold PublicKey
+#[derive(Serialize, Deserialize)]
 pub struct PKSetRes {
     pub pk_set: PublicKeySet,
 }
@@ -80,4 +82,17 @@ fn pk_set_combine_signatures<'a>(
         Ok(r) => Ok((ok(), ResourceArc::new(SigRes(r))).encode(env)),
         _ => Ok((error(), cannot_combine()).encode(env)),
     }
+}
+
+#[rustler::nif(name = "pk_set_serialize")]
+pub fn pk_set_serialize(pka: PKSetArc) -> Bin {
+    // TODO: Investigate allowing specifying encoding type using an erlang atom
+    let bytes = bincode::serialize(&pka.pk_set).unwrap();
+    Bin(bytes)
+}
+
+#[rustler::nif(name = "pk_set_deserialize")]
+pub fn pk_set_deserialize(bin: rustler::Binary) -> PKSetArc {
+    let pk_set_res = bincode::deserialize(&bin).unwrap();
+    PKSetArc::new(pk_set_res)
 }

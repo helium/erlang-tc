@@ -96,6 +96,8 @@ rustler::init!(
         pk_set::pk_set_public_key_share,
         pk_set::pk_set_decrypt,
         pk_set::pk_set_combine_signatures,
+        pk_set::pk_set_serialize,
+        pk_set::pk_set_deserialize,
         // SecretKey API
         sk::sk_random,
         sk::sk_from_fr,

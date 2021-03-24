@@ -21,7 +21,7 @@ random() ->
 from_fr(Fr) ->
     erlang_tc:sk_from_fr(Fr).
 
--spec public_key(SK :: sk()) -> public_key:pk().
+-spec public_key(SK :: sk()) -> pubkey:pk().
 public_key(SK) ->
     erlang_tc:sk_public_key(SK).
 

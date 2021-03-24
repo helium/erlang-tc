@@ -25,7 +25,7 @@ basic_test() ->
     Sig = secret_key:sign(BobSK, Msg),
     SignedMsg = {Msg, Sig},
     %% TODO: Test with actual serialization
-    Cipher = public_key:encrypt(AlicePK, term_to_binary(SignedMsg)),
+    Cipher = pubkey:encrypt(AlicePK, term_to_binary(SignedMsg)),
     %% Check that this is a valid cipher
     ?assert(ciphertext:verify(Cipher)),
 
@@ -35,7 +35,7 @@ basic_test() ->
     DecryptedSignedMsg = binary_to_term(Decrypted),
     {ReceivedMsg, ReceivedSignature} = DecryptedSignedMsg,
     ?assertEqual(SignedMsg, binary_to_term(Decrypted)),
-    ?assert(public_key:verify(BobPK, ReceivedSignature, ReceivedMsg)),
+    ?assert(pubkey:verify(BobPK, ReceivedSignature, ReceivedMsg)),
 
     %% We assert that the message that Alice received is the same message that Bob sent.
     ?assertEqual(ReceivedMsg, Msg),
