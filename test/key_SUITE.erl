@@ -17,7 +17,8 @@
         verify_sig_test/1,
         verify_ciphertext_test/1,
         sk_share_combine_test/1,
-        fr_serde_test/1
+        fr_serde_test/1,
+        sk_share_serde_test/1
     ]
 ).
 
@@ -34,7 +35,8 @@ all() ->
         verify_sig_test,
         verify_ciphertext_test,
         sk_share_combine_test,
-        fr_serde_test
+        fr_serde_test,
+        sk_share_serde_test
     ].
 
 init_per_testcase(_, Config) ->
@@ -180,4 +182,16 @@ fr_serde_test(_Config) ->
     true = fr:cmp(fr:deserialize(fr:serialize(fr:into(42))), fr:into(42)),
     true = fr:cmp(fr:deserialize(fr:serialize(fr:into(-8))), fr:into(-8)),
     true = fr:cmp(fr:deserialize(fr:serialize(fr:zero())), fr:zero()),
+    ok.
+
+sk_share_serde_test(_Config) ->
+    Fr1 = fr:into(42),
+
+    SKS = secret_key_share:from_fr(Fr1),
+
+    SerSKS = secret_key_share:serialize(SKS),
+    DeserSKS = secret_key_share:deserialize(SerSKS),
+
+    ?assert(secret_key_share:cmp(SKS, DeserSKS)),
+
     ok.
