@@ -73,3 +73,8 @@ fn sk_share_deserialize(bin: rustler::Binary) -> SKShareArc {
     let sk_share: SecretKeyShare = bincode::deserialize(&bin).unwrap();
     ResourceArc::new(SKShareRes { share: sk_share })
 }
+
+#[rustler::nif(name = "sk_share_cmp")]
+fn sk_share_cmp(ska1: SKShareArc, ska2: SKShareArc) -> bool {
+    ska1.share == ska2.share
+}
