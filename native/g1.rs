@@ -21,9 +21,7 @@ fn g1_zero() -> G1Arc {
 
 #[rustler::nif(name = "cmp_g1")]
 fn cmp_g1(g1_arc: G1Arc, g2_arc: G1Arc) -> bool {
-    let g1_1 = g1_arc.g1;
-    let g1_2 = g2_arc.g1;
-    g1_1 == g1_2
+    g1_arc.g1 == g2_arc.g1
 }
 
 #[rustler::nif(name = "g1_random")]

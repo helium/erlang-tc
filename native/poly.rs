@@ -45,9 +45,8 @@ fn eval_uni_poly(p: PolyArc, point: i64) -> FrArc {
 
 #[rustler::nif(name = "eval_uni_poly_from_fr")]
 fn eval_uni_poly_from_fr(p: PolyArc, point: FrArc) -> FrArc {
-    let point = point.fr.clone();
     ResourceArc::new(FrRes {
-        fr: p.0.evaluate(point),
+        fr: p.0.evaluate(point.fr),
     })
 }
 
