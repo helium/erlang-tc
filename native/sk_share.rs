@@ -1,3 +1,4 @@
+use crate::bin::Bin;
 use crate::ciphertext::CiphertextArc;
 use crate::dec_share::{DecShareArc, DecShareRes};
 use crate::fr::FrArc;
@@ -6,7 +7,7 @@ use crate::pk_share::{PKShareArc, PKShareRes};
 use crate::sig_share::{SigShareArc, SigShareRes};
 use rustler::{Env, ResourceArc};
 use std::ops::Add;
-use threshold_crypto::SecretKeyShare;
+use threshold_crypto::{serde_impl::SerdeSecret, SecretKeyShare};
 
 /// Struct to hold PublicKeyShare
 pub struct SKShareRes {
@@ -59,4 +60,21 @@ fn sk_share_combine(ska1: SKShareArc, ska2: SKShareArc) -> SKShareArc {
     ResourceArc::new(SKShareRes {
         share: ska1.share.add(&ska2.share),
     })
+}
+
+#[rustler::nif(name = "sk_share_serialize")]
+fn sk_share_serialize(sk_share_arc: SKShareArc) -> Bin {
+    let bytes = bincode::serialize(&SerdeSecret(&sk_share_arc.share)).unwrap();
+    Bin(bytes)
+}
+
+#[rustler::nif(name = "sk_share_deserialize")]
+fn sk_share_deserialize(bin: rustler::Binary) -> SKShareArc {
+    let sk_share: SecretKeyShare = bincode::deserialize(&bin).unwrap();
+    ResourceArc::new(SKShareRes { share: sk_share })
+}
+
+#[rustler::nif(name = "sk_share_cmp")]
+fn sk_share_cmp(ska1: SKShareArc, ska2: SKShareArc) -> bool {
+    ska1.share == ska2.share
 }

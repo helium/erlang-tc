@@ -54,6 +54,9 @@
     sk_share_public_key_share/1,
     sk_share_reveal/1,
     sk_share_combine/2,
+    sk_share_serialize/1,
+    sk_share_deserialize/1,
+    sk_share_cmp/2,
 
     %% PublicKeyShare API
     pk_share_verify_decryption_share/3,
@@ -252,6 +255,18 @@ sk_share_reveal(_SKShare) ->
 
 -spec sk_share_combine(SKS1 :: reference(), SKS2 :: reference()) -> reference().
 sk_share_combine(_SKS1, _SKS2) ->
+    not_loaded(?LINE).
+
+-spec sk_share_serialize(SKShare :: reference()) -> binary().
+sk_share_serialize(_SKShare) ->
+    not_loaded(?LINE).
+
+-spec sk_share_deserialize(BinSKShare :: binary()) -> reference().
+sk_share_deserialize(_BinSKShare) ->
+    not_loaded(?LINE).
+
+-spec sk_share_cmp(SKS1 :: reference(), SKS2 :: reference()) -> boolean().
+sk_share_cmp(_SKS1, _SKS2) ->
     not_loaded(?LINE).
 
 %% ==================================================================
