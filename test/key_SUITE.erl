@@ -12,6 +12,7 @@
         pk_set_serde_test/1,
         pk_set_combine_test/1,
         pk_share_combine_test/1,
+        pk_share_serde_test/1,
         sk_set_test/1,
         random_sk_set_test/1,
         verify_sig_test/1,
@@ -30,6 +31,7 @@ all() ->
         pk_set_serde_test,
         pk_set_combine_test,
         pk_share_combine_test,
+        pk_share_serde_test,
         sk_set_test,
         random_sk_set_test,
         verify_sig_test,
@@ -75,7 +77,6 @@ pk_set_test(Config) ->
     ok.
 
 pk_set_serde_test(Config) ->
-    PKSize = ?config(pk_size, Config),
     Degree = ?config(degree, Config),
     RandomPoly = poly:random(Degree),
     Commitment = poly:commitment(RandomPoly),
@@ -84,9 +85,7 @@ pk_set_serde_test(Config) ->
     SerPKSet = public_key_set:serialize(PKSet),
     DeserPKSet = public_key_set:deserialize(SerPKSet),
 
-    PK = public_key_set:public_key(DeserPKSet),
-    PKSize = byte_size(pubkey:to_bytes(PK)),
-    Degree = public_key_set:threshold(DeserPKSet),
+    ?assert(public_key_set:cmp(PKSet, DeserPKSet)),
 
     ok.
 
@@ -124,6 +123,19 @@ pk_share_combine_test(Config) ->
 
     ok.
 
+pk_share_serde_test(Config) ->
+    Degree = ?config(degree, Config),
+    RandomPoly = poly:random(Degree),
+    Commitment = poly:commitment(RandomPoly),
+    PKSet = public_key_set:from_commitment(Commitment),
+    PKShare = public_key_set:public_key_share(PKSet, 1),
+
+    SerPKShare = public_key_share:serialize(PKShare),
+    DeserPKShare = public_key_share:deserialize(SerPKShare),
+
+    ?assert(public_key_share:cmp(PKShare, DeserPKShare)),
+
+    ok.
 sk_set_test(Config) ->
     PKSize = ?config(pk_size, Config),
     Degree = ?config(degree, Config),

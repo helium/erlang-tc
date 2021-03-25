@@ -10,7 +10,8 @@
     combine_signatures/2,
     combine/2,
     serialize/1,
-    deserialize/1
+    deserialize/1,
+    cmp/2
 ]).
 
 -type pk_set() :: reference().
@@ -59,3 +60,7 @@ serialize(PKSet) ->
 -spec deserialize(Bin :: binary()) -> pk_set().
 deserialize(Bin) ->
     erlang_tc:pk_set_deserialize(Bin).
+
+-spec cmp(PKS1 :: pk_set(), PKS2 :: pk_set()) -> boolean().
+cmp(PKS1, PKS2) ->
+    erlang_tc:pk_set_cmp(PKS1, PKS2).

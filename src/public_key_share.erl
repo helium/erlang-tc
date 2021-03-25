@@ -6,7 +6,10 @@
     verify_signature_share/3,
     reveal/1,
     to_bytes/1,
-    combine/2
+    combine/2,
+    serialize/1,
+    deserialize/1,
+    cmp/2
 ]).
 
 -type pk_share() :: reference().
@@ -38,3 +41,15 @@ to_bytes(PKShare) ->
 -spec combine(PKS1 :: pk_share(), PKS2 :: pk_share()) -> pk_share().
 combine(PKS1, PKS2) ->
     erlang_tc:pk_share_combine(PKS1, PKS2).
+
+-spec serialize(PKS :: pk_share()) -> binary().
+serialize(PKS) ->
+    erlang_tc:pk_share_serialize(PKS).
+
+-spec deserialize(Bin :: binary()) -> pk_share().
+deserialize(Bin) ->
+    erlang_tc:pk_share_deserialize(Bin).
+
+-spec cmp(PKS1 :: pk_share(), PKS2 :: pk_share()) -> boolean().
+cmp(PKS1, PKS2) ->
+    erlang_tc:pk_share_cmp(PKS1, PKS2).

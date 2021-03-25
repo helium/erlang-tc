@@ -1,12 +1,15 @@
+use crate::bin::Bin;
 use crate::ciphertext::CiphertextArc;
 use crate::dec_share::DecShareArc;
 use crate::lazy_binary::LazyBinary;
 use crate::sig_share::SigShareArc;
 use rustler::{Binary, Env, OwnedBinary, ResourceArc};
+use serde::{Deserialize, Serialize};
 use std::io::Write as _;
 use threshold_crypto::PublicKeyShare;
 
 /// Struct to hold PublicKeyShare
+#[derive(Serialize, Deserialize)]
 pub struct PKShareRes {
     pub share: PublicKeyShare,
 }
@@ -55,6 +58,24 @@ fn pk_share_to_bytes<'a>(env: Env<'a>, pka: PKShareArc) -> Binary<'a> {
 #[rustler::nif(name = "pk_share_combine")]
 fn pk_share_combine(pka1: PKShareArc, pka2: PKShareArc) -> PKShareArc {
     ResourceArc::new(PKShareRes {
-        share: pka1.share.combine(pka2.share)
+        share: pka1.share.combine(pka2.share),
     })
+}
+
+#[rustler::nif(name = "pk_share_serialize")]
+pub fn pk_share_serialize(pka: PKShareArc) -> Bin {
+    // TODO: Investigate allowing specifying encoding type using an erlang atom
+    let bytes = bincode::serialize(&pka.share).unwrap();
+    Bin(bytes)
+}
+
+#[rustler::nif(name = "pk_share_deserialize")]
+pub fn pk_share_deserialize(bin: rustler::Binary) -> PKShareArc {
+    let pk_share_res = bincode::deserialize(&bin).unwrap();
+    PKShareArc::new(pk_share_res)
+}
+
+#[rustler::nif(name = "pk_share_cmp")]
+pub fn pk_share_cmp(pka1: PKShareArc, pka2: PKShareArc) -> bool {
+    pka1.share == pka2.share
 }

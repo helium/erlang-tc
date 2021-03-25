@@ -103,3 +103,8 @@ pub fn pk_set_deserialize(bin: rustler::Binary) -> PKSetArc {
     let pk_set_res = bincode::deserialize(&bin).unwrap();
     PKSetArc::new(pk_set_res)
 }
+
+#[rustler::nif(name = "pk_set_cmp")]
+pub fn pk_set_cmp(pka1: PKSetArc, pka2: PKSetArc) -> bool {
+    pka1.pk_set == pka2.pk_set
+}

@@ -90,6 +90,9 @@ rustler::init!(
         pk_share::pk_share_reveal,
         pk_share::pk_share_to_bytes,
         pk_share::pk_share_combine,
+        pk_share::pk_share_serialize,
+        pk_share::pk_share_deserialize,
+        pk_share::pk_share_cmp,
         // PublicKeySet API
         pk_set::pk_set_from_commitment,
         pk_set::pk_set_public_key,
@@ -100,6 +103,7 @@ rustler::init!(
         pk_set::pk_set_combine,
         pk_set::pk_set_serialize,
         pk_set::pk_set_deserialize,
+        pk_set::pk_set_cmp,
         // SecretKey API
         sk::sk_random,
         sk::sk_from_fr,

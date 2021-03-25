@@ -39,6 +39,7 @@
     pk_set_combine/2,
     pk_set_serialize/1,
     pk_set_deserialize/1,
+    pk_set_cmp/2,
 
     %% SecretKeySet API
     sk_set_from_poly/1,
@@ -64,6 +65,9 @@
     pk_share_reveal/1,
     pk_share_to_bytes/1,
     pk_share_combine/2,
+    pk_share_serialize/1,
+    pk_share_deserialize/1,
+    pk_share_cmp/2,
 
     %% Field Representation API
     into_fr/1,
@@ -324,6 +328,10 @@ pk_set_serialize(_PKSet) ->
 pk_set_deserialize(_Bin) ->
     not_loaded(?LINE).
 
+-spec pk_set_cmp(PKS1 :: reference(), PKS2 :: reference()) -> boolean().
+pk_set_cmp(_PKS1, _PKS2) ->
+    not_loaded(?LINE).
+
 %% ==================================================================
 %% PublicKeyShare
 %% ==================================================================
@@ -346,6 +354,18 @@ pk_share_to_bytes(_PKShare) ->
 
 -spec pk_share_combine(PKS1 :: reference(), PKS2 :: reference()) -> reference().
 pk_share_combine(_PKS1, _PKS2) ->
+    not_loaded(?LINE).
+
+-spec pk_share_serialize(PKS :: reference()) -> binary().
+pk_share_serialize(_PKS) ->
+    not_loaded(?LINE).
+
+-spec pk_share_deserialize(BinPKS :: binary()) -> reference().
+pk_share_deserialize(_BinPKS) ->
+    not_loaded(?LINE).
+
+-spec pk_share_cmp(PKS1 :: reference(), PKS2 :: reference()) -> boolean().
+pk_share_cmp(_PKS1, _PKS2) ->
     not_loaded(?LINE).
 
 %% ==================================================================
