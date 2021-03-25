@@ -31,9 +31,7 @@ fn eval_commitment(c_arc: CommitmentArc, point: i64) -> G1Arc {
 
 #[rustler::nif(name = "cmp_commitment")]
 fn cmp_commitment(c1_arc: CommitmentArc, c2_arc: CommitmentArc) -> bool {
-    let c1 = c1_arc.0.clone();
-    let c2 = c2_arc.0.clone();
-    c1 == c2
+    c1_arc.0 == c2_arc.0
 }
 
 #[rustler::nif(name = "add_commitment")]

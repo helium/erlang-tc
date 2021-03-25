@@ -27,10 +27,9 @@ fn pk_share_verify_decryption_share(
     dec_share_arc: DecShareArc,
     cipher_arc: CiphertextArc,
 ) -> bool {
-    let dec_share = dec_share_arc.dec_share.clone();
     pk_share_arc
         .share
-        .verify_decryption_share(&dec_share, &cipher_arc.0)
+        .verify_decryption_share(&dec_share_arc.dec_share, &cipher_arc.0)
 }
 
 #[rustler::nif(name = "pk_share_verify_signature_share")]

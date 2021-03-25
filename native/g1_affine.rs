@@ -23,8 +23,7 @@ fn g1_affine_one() -> G1AffineArc {
 
 #[rustler::nif(name = "g1_affine_mul")]
 fn g1_affine_mul(g1_affine_arc_1: G1AffineArc, fr_arc: FrArc) -> G1Arc {
-    let g1_affine_1 = g1_affine_arc_1.g1_affine.clone();
-    let fr = fr_arc.fr.clone();
-
-    ResourceArc::new(G1Res { g1: g1_affine_1.mul(fr) })
+    ResourceArc::new(G1Res {
+        g1: g1_affine_arc_1.g1_affine.mul(fr_arc.fr),
+    })
 }
