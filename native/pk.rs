@@ -22,12 +22,12 @@ fn pk_reveal(pk_arc: PkArc) -> String {
     pk_arc.pk.reveal()
 }
 
-#[rustler::nif(name = "pk_verify")]
+#[rustler::nif(name = "pk_verify", schedule = "DirtyCpu")]
 fn pk_verify<'a>(pk_arc: PkArc, sig_arc: SigArc, msg: LazyBinary<'a>) -> bool {
     pk_arc.pk.verify(&sig_arc.0, msg)
 }
 
-#[rustler::nif(name = "pk_encrypt")]
+#[rustler::nif(name = "pk_encrypt", schedule = "DirtyCpu")]
 fn pk_encrypt<'a>(pk_arc: PkArc, msg: LazyBinary<'a>) -> CiphertextArc {
     let pk = pk_arc.pk;
     ResourceArc::new(CiphertextRes(pk.encrypt(&msg)))
