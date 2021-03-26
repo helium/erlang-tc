@@ -4,9 +4,11 @@
     new/3,
     encrypt/2,
     decrypt_share/2,
+    verify_decryption_share/3,
     combine_decryption_shares/3,
     verify/3,
     sign_share/2,
+    verify_signature_share/3,
     combine_signature_shares/2,
     serialize/1,
     deserialize/1
@@ -35,6 +37,9 @@ encrypt(#tc_key_share{public_key_set = PublicKeySet}, PlainText) ->
 decrypt_share(#tc_key_share{secret_key_share = SK, index = Id}, Ciphertext) ->
     {Id, secret_key_share:decrypt_share(SK, Ciphertext)}.
 
+verify_decryption_share(#tc_key_share{public_key_set=PK}, {Id, DecShare}, Ciphertext) ->
+    public_key_share:verify_decryption_share(public_key_set:public_key_share(PK, Id), DecShare, Ciphertext).
+
 -spec combine_decryption_shares(
     tc_key_share(),
     [{non_neg_integer(), decryption_share:dec_share()}],
@@ -50,6 +55,9 @@ verify(#tc_key_share{public_key_set = PK}, Signature, Msg) ->
 -spec sign_share(tc_key_share(), binary()) -> {non_neg_integer(), signature_share:sig_share()}.
 sign_share(#tc_key_share{secret_key_share = SK, index = Id}, Msg) ->
     {Id, secret_key_share:sign(SK, Msg)}.
+
+verify_signature_share(#tc_key_share{public_key_set=PK}, {Id, SigShare}, Msg) ->
+    public_key_share:verify_signature_share(public_key_set:public_key_share(PK, Id), SigShare, Msg).
 
 -spec combine_signature_shares(tc_key_share(), [{non_neg_integer(), signature_share:sig_share()}]) ->
     {ok, signature:sig()} | {error, cannot_combine}.
