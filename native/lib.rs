@@ -54,6 +54,8 @@ rustler::init!(
         // Ciphertext API
         ciphertext::ciphertext_verify,
         ciphertext::ciphertext_cmp,
+        ciphertext::ciphertext_serialize,
+        ciphertext::ciphertext_deserialize,
         // Polynomial API
         poly::poly_from_coeffs,
         poly::poly_from_frs,

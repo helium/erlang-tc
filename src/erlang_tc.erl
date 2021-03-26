@@ -10,6 +10,8 @@
     %% Ciphertext API
     ciphertext_verify/1,
     ciphertext_cmp/2,
+    ciphertext_serialize/1,
+    ciphertext_deserialize/1,
 
     %% PublicKey API
     pk_reveal/1,
@@ -164,6 +166,14 @@ ciphertext_verify(_Ciphertext) ->
 
 -spec ciphertext_cmp(C1 :: reference(), C2 :: reference()) -> boolean().
 ciphertext_cmp(_C1, _C2) ->
+    not_loaded(?LINE).
+
+-spec ciphertext_serialize(Ciphertext :: reference()) -> binary().
+ciphertext_serialize(_Ciphertext) ->
+    not_loaded(?LINE).
+
+-spec ciphertext_deserialize(BinC :: binary()) -> reference().
+ciphertext_deserialize(_BinC) ->
     not_loaded(?LINE).
 
 %% ==================================================================

@@ -1,7 +1,6 @@
 -module(public_key_share).
 
 -export([
-    %% Signature API
     verify_decryption_share/3,
     verify_signature_share/3,
     reveal/1,

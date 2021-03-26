@@ -17,6 +17,7 @@
         random_sk_set_test/1,
         verify_sig_test/1,
         verify_ciphertext_test/1,
+        ciphertext_serde_test/1,
         sk_share_combine_test/1,
         fr_serde_test/1,
         sk_share_serde_test/1
@@ -36,6 +37,7 @@ all() ->
         random_sk_set_test,
         verify_sig_test,
         verify_ciphertext_test,
+        ciphertext_serde_test,
         sk_share_combine_test,
         fr_serde_test,
         sk_share_serde_test
@@ -187,6 +189,23 @@ verify_ciphertext_test(_Config) ->
 
     Cipher = pubkey:encrypt(PK, Msg),
     true = ciphertext:verify(Cipher),
+    ok.
+
+ciphertext_serde_test(_Config) ->
+    SK = secret_key:random(),
+    Msg = <<"His name is Robert Paulson">>,
+    PK = secret_key:public_key(SK),
+
+    Cipher = pubkey:encrypt(PK, Msg),
+    true = ciphertext:verify(Cipher),
+
+    SerCipher = ciphertext:serialize(Cipher),
+    DeserCipher = ciphertext:deserialize(SerCipher),
+
+    true = ciphertext:verify(DeserCipher),
+
+    ?assert(ciphertext:cmp(Cipher, DeserCipher)),
+
     ok.
 
 fr_serde_test(_Config) ->
