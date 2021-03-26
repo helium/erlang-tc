@@ -21,7 +21,7 @@ pub fn load(env: Env) -> bool {
     true
 }
 
-#[rustler::nif(name = "pk_share_verify_decryption_share")]
+#[rustler::nif(name = "pk_share_verify_decryption_share", schedule = "DirtyCpu")]
 fn pk_share_verify_decryption_share(
     pk_share_arc: PKShareArc,
     dec_share_arc: DecShareArc,
@@ -32,7 +32,7 @@ fn pk_share_verify_decryption_share(
         .verify_decryption_share(&dec_share_arc.dec_share, &cipher_arc.0)
 }
 
-#[rustler::nif(name = "pk_share_verify_signature_share")]
+#[rustler::nif(name = "pk_share_verify_signature_share", schedule = "DirtyCpu")]
 fn pk_share_verify_signature_share<'a>(
     pk_share_arc: PKShareArc,
     sig_share_arc: SigShareArc,
