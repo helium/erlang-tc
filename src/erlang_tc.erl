@@ -187,7 +187,7 @@ pk_reveal(_PK) ->
 pk_to_bytes(_PK) ->
     not_loaded(?LINE).
 
--spec pk_verify(PK :: reference(), Sig :: reference(), Msg :: binary()) -> binary().
+-spec pk_verify(PK :: reference(), Sig :: reference(), Msg :: binary()) -> boolean().
 pk_verify(_PK, _Sig, _Msg) ->
     not_loaded(?LINE).
 

@@ -19,7 +19,7 @@ reveal(PK) ->
 to_bytes(PK) ->
     erlang_tc:pk_to_bytes(PK).
 
--spec verify(PK :: pk(), Sig :: signature:sig(), Msg :: binary()) -> binary().
+-spec verify(PK :: pk(), Sig :: signature:sig(), Msg :: binary()) -> boolean().
 verify(PK, Sig, Msg) ->
     erlang_tc:pk_verify(PK, Sig, Msg).
 
