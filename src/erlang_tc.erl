@@ -144,7 +144,11 @@
     cmp_bivar_commitment/2,
     reveal_bivar_commitment/1,
     serialize_bivar_commitment/1,
-    deserialize_bivar_commitment/1
+    deserialize_bivar_commitment/1,
+
+    %% SigShare API
+    sig_share_serialize/1,
+    sig_share_deserialize/1
 ]).
 
 -type coeffs() :: [integer()].
@@ -649,6 +653,18 @@ serialize_bivar_commitment(_P) ->
 
 -spec deserialize_bivar_commitment(B :: binary()) -> reference().
 deserialize_bivar_commitment(_B) ->
+    not_loaded(?LINE).
+
+%% ==================================================================
+%% Signature Share
+%% ==================================================================
+
+-spec sig_share_serialize(S :: reference()) -> binary().
+sig_share_serialize(_S) ->
+    not_loaded(?LINE).
+
+-spec sig_share_deserialize(B :: binary()) -> reference().
+sig_share_deserialize(_B) ->
     not_loaded(?LINE).
 
 %% ==================================================================

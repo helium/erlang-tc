@@ -174,6 +174,9 @@ rustler::init!(
         bivar_commitment::reveal_bivar_commitment,
         bivar_commitment::serialize_bivar_commitment,
         bivar_commitment::deserialize_bivar_commitment,
+        // Sig Share API
+        sig_share::sig_share_serialize,
+        sig_share::sig_share_deserialize,
     ],
     load = load
 );
