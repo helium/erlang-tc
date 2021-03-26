@@ -11,7 +11,12 @@
     verify_signature_share/3,
     combine_signature_shares/2,
     serialize/1,
-    deserialize/1
+    deserialize/1,
+    deal/2
+]).
+
+-export([
+    public_key/1
 ]).
 
 -record(tc_key_share, {
@@ -23,6 +28,10 @@
 
 -type tc_key_share() :: #tc_key_share{}.
 -export_type([tc_key_share/0]).
+
+-spec public_key(tc_key_share()) -> pubkey:pk().
+public_key(#tc_key_share{public_key_set = PKSet}) ->
+    public_key_set:public_key(PKSet).
 
 -spec new(non_neg_integer(), public_key_set:pk_set(), secret_key_share:sk_share()) ->
     tc_key_share().
@@ -93,3 +102,23 @@ deserialize(<<Id:8/integer, PKLen:32/integer-unsigned-little, SerPK:PKLen/binary
         public_key_set = public_key_set:deserialize(SerPK),
         secret_key_share = secret_key_share:deserialize(SerSK)
     }.
+
+-spec deal(N :: non_neg_integer(), Threshold :: non_neg_integer()) -> [tc_key_share()].
+deal(N, Threshold) ->
+    SKSet = secret_key_set:random(Threshold),
+    lists:reverse(
+        lists:foldl(
+            fun(Id, Acc) ->
+                [
+                    new(
+                        Id,
+                        secret_key_set:public_keys(SKSet),
+                        secret_key_set:secret_key_share(SKSet, Id)
+                    )
+                    | Acc
+                ]
+            end,
+            [],
+            lists:seq(0, N - 1)
+        )
+    ).
