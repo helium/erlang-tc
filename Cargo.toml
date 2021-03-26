@@ -12,8 +12,12 @@ name = "native"
 crate-type = ["dylib"]
 path = "native/lib.rs"
 
+[features]
+watchdog = []
+default = ["watchdog"]
+
 [dependencies]
-rustler = { git = "https://github.com/rusterlium/rustler.git", branch = "master" }
+rustler = { git  = "https://github.com/JayKickliter/rustler.git", branch = "jsk/codegen/add-dirty-watchdog" }
 threshold_crypto = { git = "https://github.com/vihu/threshold_crypto", branch = "master" }
 # Put star here as the pinned versions are picked up from threshold_crypto
 rand = "*"
