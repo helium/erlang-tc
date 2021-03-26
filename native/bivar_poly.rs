@@ -47,7 +47,7 @@ fn row_bivar_poly(bvp: BivarPolyArc, x: i64) -> PolyArc {
     ResourceArc::new(PolyRes(bvp.0.row(x.into_fr())))
 }
 
-#[rustler::nif(name = "commitment_bivar_poly")]
+#[rustler::nif(name = "commitment_bivar_poly", schedule = "DirtyCpu")]
 fn commitment_bivar_poly(bvp: BivarPolyArc) -> BivarCommitmentArc {
     ResourceArc::new(BivarCommitmentRes(bvp.0.commitment()))
 }

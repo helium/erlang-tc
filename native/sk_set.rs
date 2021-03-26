@@ -28,7 +28,7 @@ fn sk_set_threshold(sk_set_arc: SKSetArc) -> usize {
     sk_set_arc.sk_set.threshold()
 }
 
-#[rustler::nif(name = "sk_set_public_keys")]
+#[rustler::nif(name = "sk_set_public_keys", schedule = "DirtyCpu")]
 fn sk_set_public_keys(sk_set_arc: SKSetArc) -> PKSetArc {
     ResourceArc::new(PKSetRes {
         pk_set: sk_set_arc.sk_set.public_keys(),

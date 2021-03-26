@@ -50,7 +50,7 @@ fn pk_set_public_key_share(pk_set_arc: PKSetArc, i: i64) -> PKShareArc {
     })
 }
 
-#[rustler::nif(name = "pk_set_decrypt")]
+#[rustler::nif(name = "pk_set_decrypt", schedule = "DirtyCpu")]
 fn pk_set_decrypt<'a>(
     env: Env<'a>,
     pk_set_arc: PKSetArc,
@@ -68,7 +68,7 @@ fn pk_set_decrypt<'a>(
     }
 }
 
-#[rustler::nif(name = "pk_set_combine_signatures")]
+#[rustler::nif(name = "pk_set_combine_signatures", schedule = "DirtyCpu")]
 fn pk_set_combine_signatures<'a>(
     env: Env<'a>,
     pk_set_arc: PKSetArc,
@@ -98,7 +98,7 @@ pub fn pk_set_serialize(pka: PKSetArc) -> Bin {
     Bin(bytes)
 }
 
-#[rustler::nif(name = "pk_set_deserialize")]
+#[rustler::nif(name = "pk_set_deserialize", schedule = "DirtyCpu")]
 pub fn pk_set_deserialize(bin: rustler::Binary) -> PKSetArc {
     let pk_set_res = bincode::deserialize(&bin).unwrap();
     PKSetArc::new(pk_set_res)
