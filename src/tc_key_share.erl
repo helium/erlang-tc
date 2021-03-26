@@ -22,6 +22,7 @@
 }).
 
 -type tc_key_share() :: #tc_key_share{}.
+-export_type([tc_key_share/0]).
 
 -spec new(non_neg_integer(), public_key_set:pk_set(), secret_key_share:sk_share()) ->
     tc_key_share().
