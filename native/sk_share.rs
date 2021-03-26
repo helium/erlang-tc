@@ -21,14 +21,14 @@ pub fn load(env: Env) -> bool {
     true
 }
 
-#[rustler::nif(name = "sk_share_decryption_share")]
+#[rustler::nif(name = "sk_share_decryption_share", schedule = "DirtyCpu")]
 fn sk_share_decryption_share(sk_share_arc: SKShareArc, cipher_arc: CiphertextArc) -> DecShareArc {
     ResourceArc::new(DecShareRes {
         dec_share: sk_share_arc.share.decrypt_share(&cipher_arc.0).unwrap(),
     })
 }
 
-#[rustler::nif(name = "sk_share_sign")]
+#[rustler::nif(name = "sk_share_sign", schedule = "DirtyCpu")]
 fn sk_share_sign<'a>(sk_share_arc: SKShareArc, msg: LazyBinary<'a>) -> SigShareArc {
     ResourceArc::new(SigShareRes {
         sig_share: sk_share_arc.share.sign(msg),

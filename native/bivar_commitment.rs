@@ -22,14 +22,14 @@ fn degree_bivar_commitment(bvc: BivarCommitmentArc) -> usize {
     bvc.0.degree()
 }
 
-#[rustler::nif(name = "eval_bivar_commitment")]
+#[rustler::nif(name = "eval_bivar_commitment", schedule = "DirtyCpu")]
 fn eval_bivar_commitment(bvc: BivarCommitmentArc, x: i64, y: i64) -> G1Arc {
     ResourceArc::new(G1Res {
         g1: bvc.0.evaluate(x.into_fr(), y.into_fr()),
     })
 }
 
-#[rustler::nif(name = "row_bivar_commitment")]
+#[rustler::nif(name = "row_bivar_commitment", schedule = "DirtyCpu")]
 fn row_bivar_commitment(bvc: BivarCommitmentArc, x: i64) -> CommitmentArc {
     ResourceArc::new(CommitmentRes(bvc.0.row(x.into_fr())))
 }
@@ -44,14 +44,14 @@ fn reveal_bivar_commitment(bvc: BivarCommitmentArc) -> String {
     bvc.0.reveal()
 }
 
-#[rustler::nif(name = "serialize_bivar_commitment")]
+#[rustler::nif(name = "serialize_bivar_commitment", schedule = "DirtyCpu")]
 pub fn serialize_bivar_commitment(p: BivarCommitmentArc) -> Bin {
     // TODO: Investigate allowing specifying encoding type using an erlang atom
     let bytes = bincode::serialize(&p.0).unwrap();
     Bin(bytes)
 }
 
-#[rustler::nif(name = "deserialize_bivar_commitment")]
+#[rustler::nif(name = "deserialize_bivar_commitment", schedule = "DirtyCpu")]
 pub fn deserialize_bivar_commitment(bin: rustler::Binary) -> BivarCommitmentArc {
     let bvc_res = bincode::deserialize(&bin).unwrap();
     BivarCommitmentArc::new(bvc_res)

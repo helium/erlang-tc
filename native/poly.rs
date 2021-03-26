@@ -30,13 +30,11 @@ fn poly_from_coeffs<'a>(coeffs: ListIterator<'a>) -> PolyArc {
 #[rustler::nif(name = "poly_from_frs")]
 fn poly_from_frs<'a>(frs: Vec<FrArc>) -> PolyArc {
     ResourceArc::new(PolyRes(Poly::from(
-                frs
-                .iter()
-                .map(|fa| fa.fr)
-                .collect::<Vec<Fr>>())))
+        frs.iter().map(|fa| fa.fr).collect::<Vec<Fr>>(),
+    )))
 }
 
-#[rustler::nif(name = "eval_uni_poly")]
+#[rustler::nif(name = "eval_uni_poly", schedule = "DirtyCpu")]
 fn eval_uni_poly(p: PolyArc, point: i64) -> FrArc {
     ResourceArc::new(FrRes {
         fr: p.0.evaluate(point.into_fr()),
@@ -145,7 +143,7 @@ fn reveal_poly(p: PolyArc) -> String {
     p.0.reveal()
 }
 
-#[rustler::nif(name = "commitment_poly")]
+#[rustler::nif(name = "commitment_poly", schedule = "DirtyCpu")]
 fn commitment_poly(p: PolyArc) -> CommitmentArc {
     ResourceArc::new(CommitmentRes(p.0.commitment()))
 }

@@ -14,7 +14,7 @@ pub fn load(env: Env) -> bool {
     true
 }
 
-#[rustler::nif(name = "ciphertext_verify")]
+#[rustler::nif(name = "ciphertext_verify", schedule = "DirtyCpu")]
 fn ciphertext_verify(cipher: CiphertextArc) -> bool {
     cipher.0.verify()
 }
