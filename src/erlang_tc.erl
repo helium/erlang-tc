@@ -150,7 +150,11 @@
 
     %% SigShare API
     sig_share_serialize/1,
-    sig_share_deserialize/1
+    sig_share_deserialize/1,
+
+    %% DecShare API
+    dec_share_serialize/1,
+    dec_share_deserialize/1
 ]).
 
 -type coeffs() :: [integer()].
@@ -676,6 +680,19 @@ sig_share_serialize(_S) ->
 -spec sig_share_deserialize(B :: binary()) -> reference().
 sig_share_deserialize(_B) ->
     not_loaded(?LINE).
+
+%% ==================================================================
+%% Decryption Share
+%% ==================================================================
+
+-spec dec_share_serialize(S :: reference()) -> binary().
+dec_share_serialize(_S) ->
+    not_loaded(?LINE).
+
+-spec dec_share_deserialize(B :: binary()) -> reference().
+dec_share_deserialize(_B) ->
+    not_loaded(?LINE).
+
 
 %% ==================================================================
 %% NIF
