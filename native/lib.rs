@@ -179,6 +179,10 @@ rustler::init!(
         // Sig Share API
         sig_share::sig_share_serialize,
         sig_share::sig_share_deserialize,
+        // Dec Share API
+        dec_share::dec_share_serialize,
+        dec_share::dec_share_deserialize,
+
     ],
     load = load
 );
