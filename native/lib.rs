@@ -132,6 +132,9 @@ rustler::init!(
         // Signature API
         sig::sig_to_bytes,
         sig::sig_parity,
+        sig::sig_cmp,
+        sig::sig_serialize,
+        sig::sig_deserialize,
         // Field Representation API
         fr::into_fr,
         fr::cmp_fr,

@@ -30,6 +30,9 @@
     %% Signature API
     sig_to_bytes/1,
     sig_parity/1,
+    sig_cmp/2,
+    sig_serialize/1,
+    sig_deserialize/1,
 
     %% PublicKeySet API
     pk_set_from_commitment/1,
@@ -301,6 +304,18 @@ sig_to_bytes(_Sig) ->
 
 -spec sig_parity(Sig :: reference()) -> boolean().
 sig_parity(_Sig) ->
+    not_loaded(?LINE).
+
+-spec sig_cmp(S1 :: reference(), S2 :: reference()) -> boolean().
+sig_cmp(_S1, _S2) ->
+    not_loaded(?LINE).
+
+-spec sig_serialize(Sig :: reference()) -> binary().
+sig_serialize(_Sig) ->
+    not_loaded(?LINE).
+
+-spec sig_deserialize(BinSig :: binary()) -> reference().
+sig_deserialize(_BinSig) ->
     not_loaded(?LINE).
 
 %% ==================================================================

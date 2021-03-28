@@ -20,7 +20,8 @@
         ciphertext_serde_test/1,
         sk_share_combine_test/1,
         fr_serde_test/1,
-        sk_share_serde_test/1
+        sk_share_serde_test/1,
+        signature_serde_test/1
     ]
 ).
 
@@ -40,7 +41,8 @@ all() ->
         ciphertext_serde_test,
         sk_share_combine_test,
         fr_serde_test,
-        sk_share_serde_test
+        sk_share_serde_test,
+        signature_serde_test
     ].
 
 init_per_testcase(_, Config) ->
@@ -224,5 +226,16 @@ sk_share_serde_test(_Config) ->
     DeserSKS = secret_key_share:deserialize(SerSKS),
 
     ?assert(secret_key_share:cmp(SKS, DeserSKS)),
+
+    ok.
+
+signature_serde_test(_Config) ->
+    SK = secret_key:random(),
+    Signature = secret_key:sign(SK, <<"resistance is futile">>),
+
+    SerSig = signature:serialize(Signature),
+    DeserSig = signature:deserialize(SerSig),
+
+    ?assert(signature:cmp(Signature, DeserSig)),
 
     ok.
