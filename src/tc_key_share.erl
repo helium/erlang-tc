@@ -16,7 +16,8 @@
 ]).
 
 -export([
-    public_key/1
+    public_key/1,
+    public_key_set/1
 ]).
 
 -record(tc_key_share, {
@@ -32,6 +33,10 @@
 -spec public_key(tc_key_share()) -> pubkey:pk().
 public_key(#tc_key_share{public_key_set = PKSet}) ->
     public_key_set:public_key(PKSet).
+
+-spec public_key_set(tc_key_share()) -> public_key_set:pk_set().
+public_key_set(#tc_key_share{public_key_set = PKSet}) ->
+    PKSet.
 
 -spec new(non_neg_integer(), public_key_set:pk_set(), secret_key_share:sk_share()) ->
     tc_key_share().
