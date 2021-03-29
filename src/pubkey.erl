@@ -3,9 +3,10 @@
 -export([
     %% public key API
     reveal/1,
-    to_bytes/1,
     verify/3,
-    encrypt/2
+    encrypt/2,
+    serialize/1,
+    deserialize/1
 ]).
 
 -type pk() :: reference().
@@ -15,10 +16,6 @@
 reveal(PK) ->
     erlang_tc:pk_reveal(PK).
 
--spec to_bytes(PK :: pk()) -> binary().
-to_bytes(PK) ->
-    erlang_tc:pk_to_bytes(PK).
-
 -spec verify(PK :: pk(), Sig :: signature:sig(), Msg :: binary()) -> boolean().
 verify(PK, Sig, Msg) ->
     erlang_tc:pk_verify(PK, Sig, Msg).
@@ -26,3 +23,11 @@ verify(PK, Sig, Msg) ->
 -spec encrypt(PK :: pk(), Msg :: binary()) -> ciphertext:ciphertext().
 encrypt(PK, Msg) ->
     erlang_tc:pk_encrypt(PK, Msg).
+
+-spec serialize(PK :: pk()) -> binary().
+serialize(PK) ->
+    erlang_tc:pk_serialize(PK).
+
+-spec deserialize(Bin :: binary()) -> pk().
+deserialize(PK) ->
+    erlang_tc:pk_deserialize(PK).

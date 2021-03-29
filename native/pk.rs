@@ -1,8 +1,8 @@
+use crate::bin::Bin;
 use crate::ciphertext::{CiphertextArc, CiphertextRes};
 use crate::lazy_binary::LazyBinary;
 use crate::sig::SigArc;
-use rustler::{Binary, Env, OwnedBinary, ResourceArc};
-use std::io::Write as _;
+use rustler::{Env, ResourceArc};
 use threshold_crypto::PublicKey;
 
 /// Struct to hold PublicKey
@@ -22,14 +22,6 @@ fn pk_reveal(pk_arc: PkArc) -> String {
     pk_arc.pk.reveal()
 }
 
-#[rustler::nif(name = "pk_to_bytes")]
-fn pk_to_bytes<'a>(env: Env<'a>, pk_arc: PkArc) -> Binary<'a> {
-    let bin_vec = pk_arc.pk.to_bytes();
-    let mut binary = OwnedBinary::new(bin_vec.len()).unwrap();
-    binary.as_mut_slice().write_all(&bin_vec).unwrap();
-    Binary::from_owned(binary, env)
-}
-
 #[rustler::nif(name = "pk_verify")]
 fn pk_verify<'a>(pk_arc: PkArc, sig_arc: SigArc, msg: LazyBinary<'a>) -> bool {
     pk_arc.pk.verify(&sig_arc.0, msg)
@@ -39,4 +31,21 @@ fn pk_verify<'a>(pk_arc: PkArc, sig_arc: SigArc, msg: LazyBinary<'a>) -> bool {
 fn pk_encrypt<'a>(pk_arc: PkArc, msg: LazyBinary<'a>) -> CiphertextArc {
     let pk = pk_arc.pk;
     ResourceArc::new(CiphertextRes(pk.encrypt(&msg)))
+}
+
+#[rustler::nif(name = "pk_serialize")]
+fn pk_serialize(pk_arc: PkArc) -> Bin {
+    let bytes = bincode::serialize(&pk_arc.pk).unwrap();
+    Bin(bytes)
+}
+
+#[rustler::nif(name = "pk_deserialize")]
+fn pk_deserialize(bin: rustler::Binary) -> PkArc {
+    let pk: PublicKey = bincode::deserialize(&bin).unwrap();
+    ResourceArc::new(PkRes { pk: pk })
+}
+
+#[rustler::nif(name = "pk_cmp")]
+fn pk_cmp(pka1: PkArc, pka2: PkArc) -> bool {
+    pka1.pk == pka2.pk
 }

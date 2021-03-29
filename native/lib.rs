@@ -83,14 +83,15 @@ rustler::init!(
         poly::deserialize_poly,
         // PublicKey API
         pk::pk_reveal,
-        pk::pk_to_bytes,
         pk::pk_verify,
         pk::pk_encrypt,
+        pk::pk_serialize,
+        pk::pk_deserialize,
+        pk::pk_cmp,
         // PublicKeyShare API
         pk_share::pk_share_verify_decryption_share,
         pk_share::pk_share_verify_signature_share,
         pk_share::pk_share_reveal,
-        pk_share::pk_share_to_bytes,
         pk_share::pk_share_combine,
         pk_share::pk_share_serialize,
         pk_share::pk_share_deserialize,
@@ -130,7 +131,6 @@ rustler::init!(
         sk_set::sk_set_secret_key_share,
         sk_set::sk_set_random,
         // Signature API
-        sig::sig_to_bytes,
         sig::sig_parity,
         sig::sig_cmp,
         sig::sig_serialize,

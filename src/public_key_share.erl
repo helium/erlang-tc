@@ -4,7 +4,6 @@
     verify_decryption_share/3,
     verify_signature_share/3,
     reveal/1,
-    to_bytes/1,
     combine/2,
     serialize/1,
     deserialize/1,
@@ -32,10 +31,6 @@ verify_signature_share(PKShare, NodeSig, Msg) ->
 -spec reveal(PKShare :: pk_share()) -> string().
 reveal(PKShare) ->
     erlang_tc:pk_share_reveal(PKShare).
-
--spec to_bytes(PKShare :: pk_share()) -> binary().
-to_bytes(PKShare) ->
-    erlang_tc:pk_share_to_bytes(PKShare).
 
 -spec combine(PKS1 :: pk_share(), PKS2 :: pk_share()) -> pk_share().
 combine(PKS1, PKS2) ->

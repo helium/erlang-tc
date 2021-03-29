@@ -57,7 +57,7 @@ pk_size_test(Config) ->
     PKSize = ?config(pk_size, Config),
     SK = secret_key:random(),
     PK = secret_key:public_key(SK),
-    PKSize = byte_size(pubkey:to_bytes(PK)),
+    PKSize = byte_size(pubkey:serialize(PK)),
     ok.
 
 signature_test(Config) ->
@@ -66,7 +66,7 @@ signature_test(Config) ->
     Signature = secret_key:sign(SK, <<"resistance is futile">>),
     %% Parity = signature:parity(Signature),
     %% ?debugFmt("Parity: ~p~n", [Parity]),
-    SigSize = byte_size(signature:to_bytes(Signature)),
+    SigSize = byte_size(signature:serialize(Signature)),
     ok.
 
 pk_set_test(Config) ->
@@ -76,7 +76,7 @@ pk_set_test(Config) ->
     Commitment = poly:commitment(RandomPoly),
     PKSet = public_key_set:from_commitment(Commitment),
     PK = public_key_set:public_key(PKSet),
-    PKSize = byte_size(pubkey:to_bytes(PK)),
+    PKSize = byte_size(pubkey:serialize(PK)),
     Degree = public_key_set:threshold(PKSet),
     ok.
 
@@ -147,7 +147,7 @@ sk_set_test(Config) ->
     SKSet = secret_key_set:from_poly(RandomPoly),
     PKSet = secret_key_set:public_keys(SKSet),
     PK = public_key_set:public_key(PKSet),
-    PKSize = byte_size(pubkey:to_bytes(PK)),
+    PKSize = byte_size(pubkey:serialize(PK)),
     Degree = secret_key_set:threshold(SKSet),
     ok.
 
@@ -157,7 +157,7 @@ random_sk_set_test(Config) ->
     SKSet = secret_key_set:random(Degree),
     PKSet = secret_key_set:public_keys(SKSet),
     PK = public_key_set:public_key(PKSet),
-    PKSize = byte_size(pubkey:to_bytes(PK)),
+    PKSize = byte_size(pubkey:serialize(PK)),
     Degree = secret_key_set:threshold(SKSet),
     ok.
 

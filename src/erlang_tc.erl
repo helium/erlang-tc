@@ -15,9 +15,11 @@
 
     %% PublicKey API
     pk_reveal/1,
-    pk_to_bytes/1,
     pk_verify/3,
     pk_encrypt/2,
+    pk_serialize/1,
+    pk_deserialize/1,
+    pk_cmp/2,
 
     %% SecretKey API
     sk_random/0,
@@ -28,7 +30,6 @@
     sk_decrypt/2,
 
     %% Signature API
-    sig_to_bytes/1,
     sig_parity/1,
     sig_cmp/2,
     sig_serialize/1,
@@ -68,7 +69,6 @@
     pk_share_verify_decryption_share/3,
     pk_share_verify_signature_share/3,
     pk_share_reveal/1,
-    pk_share_to_bytes/1,
     pk_share_combine/2,
     pk_share_serialize/1,
     pk_share_deserialize/1,
@@ -190,16 +190,24 @@ ciphertext_deserialize(_BinC) ->
 pk_reveal(_PK) ->
     not_loaded(?LINE).
 
--spec pk_to_bytes(PK :: reference()) -> binary().
-pk_to_bytes(_PK) ->
-    not_loaded(?LINE).
-
 -spec pk_verify(PK :: reference(), Sig :: reference(), Msg :: binary()) -> boolean().
 pk_verify(_PK, _Sig, _Msg) ->
     not_loaded(?LINE).
 
 -spec pk_encrypt(PK :: reference(), Msg :: binary()) -> reference().
 pk_encrypt(_PK, _Msg) ->
+    not_loaded(?LINE).
+
+-spec pk_serialize(PK :: reference()) -> binary().
+pk_serialize(_PK) ->
+    not_loaded(?LINE).
+
+-spec pk_deserialize(Bin :: binary()) -> reference().
+pk_deserialize(_PK) ->
+    not_loaded(?LINE).
+
+-spec pk_cmp(PK1 :: reference(), PK2 :: reference()) -> boolean().
+pk_cmp(_PK1, _PK2) ->
     not_loaded(?LINE).
 
 %% ==================================================================
@@ -298,10 +306,6 @@ sk_share_cmp(_SKS1, _SKS2) ->
 %% Signature
 %% ==================================================================
 
--spec sig_to_bytes(Sig :: reference()) -> binary().
-sig_to_bytes(_Sig) ->
-    not_loaded(?LINE).
-
 -spec sig_parity(Sig :: reference()) -> boolean().
 sig_parity(_Sig) ->
     not_loaded(?LINE).
@@ -379,10 +383,6 @@ pk_share_verify_signature_share(_PKShare, _Sig, _Msg) ->
 
 -spec pk_share_reveal(PKShare :: reference()) -> string().
 pk_share_reveal(_PKShare) ->
-    not_loaded(?LINE).
-
--spec pk_share_to_bytes(PKShare :: reference()) -> binary().
-pk_share_to_bytes(_PKShare) ->
     not_loaded(?LINE).
 
 -spec pk_share_combine(PKS1 :: reference(), PKS2 :: reference()) -> reference().
