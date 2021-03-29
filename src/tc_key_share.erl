@@ -53,7 +53,7 @@ encrypt(#tc_key_share{public_key_set = PublicKeySet}, PlainText) ->
     pubkey:encrypt(public_key_set:public_key(PublicKeySet), PlainText).
 
 -spec decrypt_share(tc_key_share(), ciphertext:ciphertext()) ->
-    {non_neg_integer(), ciphertext:ciphertext()}.
+    {non_neg_integer(), decryption_share:dec_share()}.
 decrypt_share(#tc_key_share{secret_key_share = SK, index = Id}, Ciphertext) ->
     {Id, secret_key_share:decrypt_share(SK, Ciphertext)}.
 
