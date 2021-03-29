@@ -6,7 +6,8 @@
     verify/3,
     encrypt/2,
     serialize/1,
-    deserialize/1
+    deserialize/1,
+    cmp/2
 ]).
 
 -type pk() :: reference().
@@ -31,3 +32,7 @@ serialize(PK) ->
 -spec deserialize(Bin :: binary()) -> pk().
 deserialize(PK) ->
     erlang_tc:pk_deserialize(PK).
+
+-spec cmp(PK1 :: pk(), PK2 :: pk()) -> boolean().
+cmp(PK1, PK2) ->
+    erlang_tc:pk_cmp(PK1, PK2).

@@ -7,6 +7,7 @@
 -export(
     [
         pk_size_test/1,
+        pk_serde_test/1,
         signature_test/1,
         pk_set_test/1,
         pk_set_serde_test/1,
@@ -28,6 +29,7 @@
 all() ->
     [
         pk_size_test,
+        pk_serde_test,
         signature_test,
         pk_set_test,
         pk_set_serde_test,
@@ -58,6 +60,16 @@ pk_size_test(Config) ->
     SK = secret_key:random(),
     PK = secret_key:public_key(SK),
     PKSize = byte_size(pubkey:serialize(PK)),
+    ok.
+
+pk_serde_test(_Config) ->
+    SK = secret_key:random(),
+    PK = secret_key:public_key(SK),
+
+    SPK = pubkey:serialize(PK),
+    DPK = pubkey:deserialize(SPK),
+
+    ?assert(pubkey:cmp(PK, DPK)),
     ok.
 
 signature_test(Config) ->
