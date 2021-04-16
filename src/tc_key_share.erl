@@ -2,6 +2,7 @@
 
 -export([
     new/3,
+    is_key_share/1,
     encrypt/2,
     decrypt_share/2,
     verify_decryption_share/3,
@@ -47,6 +48,12 @@ secret_key_share(#tc_key_share{secret_key_share = SKShare}) ->
     tc_key_share().
 new(Id, PublicKeySet, SecretKeyShare) ->
     #tc_key_share{index = Id, public_key_set = PublicKeySet, secret_key_share = SecretKeyShare}.
+
+-spec is_key_share(any()) -> boolean().
+is_key_share(#tc_key_share{}) ->
+    true;
+is_key_share(_) ->
+    false.
 
 -spec encrypt(#tc_key_share{}, binary()) -> ciphertext:ciphertext().
 encrypt(#tc_key_share{public_key_set = PublicKeySet}, PlainText) ->
