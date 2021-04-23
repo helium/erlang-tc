@@ -89,7 +89,7 @@ run(Config) ->
     Msg = ?config(msg, Config),
     Threshold = ?config(threshold, Config),
     PK = dist_secret_society:publish_public_key(),
-    Ciphertext = pubkey:encrypt(PK, Msg),
+    Ciphertext = tc_pubkey:encrypt(PK, Msg),
     ok = dist_secret_society:start_decryption_meeting(),
 
     [Head | Tail] = [dist_secret_society:get_actor(I) || I <- lists:seq(1, Threshold + 1)],

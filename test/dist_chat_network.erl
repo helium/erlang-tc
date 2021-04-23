@@ -30,7 +30,7 @@
 
 %% The chat network holds validator nodes, number of users, blocks and a network-wide public_key_set
 -record(state, {
-    pk_set :: public_key_set:pk_set(),
+    pk_set :: tc_public_key_set:pk_set(),
     chat_nodes :: chat_nodes(),
     blocks = [] :: blocks(),
     n_users = 0 :: non_neg_integer()
@@ -39,12 +39,12 @@
 %% Each node has an id, a secret_key_share, corresponding public_key_share and any messages this node has pending to process
 -record(chat_node, {
     id :: node_id(),
-    sk_share :: secret_key_share:sk_share(),
-    pk_share :: public_key_share:pk_share(),
+    sk_share :: tc_secret_key_share:sk_share(),
+    pk_share :: tc_public_key_share:pk_share(),
     pending = #{} :: pending()
 }).
 
--record(node_signature, {node_id :: node_id(), sig :: signature_share:sig_share()}).
+-record(node_signature, {node_id :: node_id(), sig :: tc_signature_share:sig_share()}).
 
 -record(user, {id :: user_id(), name :: string()}).
 
@@ -57,7 +57,7 @@
 -type node_signature() :: #node_signature{}.
 -type chat_node() :: #chat_node{}.
 -type chat_nodes() :: #{node_id() => chat_node()}.
--type block() :: {user_id(), msg(), signature:sig()}.
+-type block() :: {user_id(), msg(), tc_signature:sig()}.
 -type blocks() :: [block()].
 -type user() :: #user{}.
 
@@ -147,13 +147,13 @@ code_change(_OldVsn, State, _Extra) ->
 %%%===================================================================
 -spec init_network(NumNodes :: non_neg_integer(), Threshold :: non_neg_integer()) -> state().
 init_network(NumNodes, Threshold) ->
-    SKSet = secret_key_set:random(Threshold),
-    PKSet = secret_key_set:public_keys(SKSet),
+    SKSet = tc_secret_key_set:random(Threshold),
+    PKSet = tc_secret_key_set:public_keys(SKSet),
 
     Nodes = lists:foldl(
         fun(ID, Acc) ->
-            SKShare = secret_key_set:secret_key_share(SKSet, ID),
-            PKShare = public_key_set:public_key_share(PKSet, ID),
+            SKShare = tc_secret_key_set:secret_key_share(SKSet, ID),
+            PKShare = tc_public_key_set:public_key_share(PKSet, ID),
             maps:put(ID, new_node(ID, SKShare, PKShare), Acc)
         end,
         #{},
@@ -194,7 +194,7 @@ node_recv(Node, UserID, Msg) ->
 node_signature(Node, Msg) ->
     #node_signature{
         node_id = node_id(Node),
-        sig = secret_key_share:sign(node_sk_share(Node), Msg)
+        sig = tc_secret_key_share:sign(node_sk_share(Node), Msg)
     }.
 
 -spec node_id(Node :: chat_node()) -> node_id().
@@ -273,7 +273,7 @@ create_block(State) ->
                                 {Time0, Result} = timer:tc(
                                     fun() ->
                                         case
-                                            public_key_share:verify_signature_share(PKShare, NodeSigShare, Msg)
+                                            tc_public_key_share:verify_signature_share(PKShare, NodeSigShare, Msg)
                                         of
                                             false ->
                                                 false;
@@ -292,7 +292,7 @@ create_block(State) ->
                                     {Time, Result} = timer:tc(
                                         fun() ->
                                             %% try to combine
-                                            case public_key_set:combine_signatures(PKSet, L) of
+                                            case tc_public_key_set:combine_signatures(PKSet, L) of
                                                 {error, _} = E ->
                                                     {done, E};
                                                 Sig ->
@@ -319,7 +319,7 @@ create_block(State) ->
 internal_get_node(NodeID, State) ->
     maps:get(NodeID, chat_nodes(State), not_found).
 
--spec new_block(UserID :: user_id(), Msg :: msg(), Sig :: signature:sig()) -> block().
+-spec new_block(UserID :: user_id(), Msg :: msg(), Sig :: tc_signature:sig()) -> block().
 new_block(UserID, Msg, Sig) ->
     {UserID, Msg, Sig}.
 

@@ -1,4 +1,4 @@
--module(public_key_share).
+-module(tc_public_key_share).
 
 -export([
     verify_decryption_share/3,
@@ -16,14 +16,14 @@
 
 -spec verify_decryption_share(
     PKShare :: pk_share(),
-    DecShare :: decryption_share:dec_share(),
-    Cipher :: ciphertext:ciphertext()
+    DecShare :: tc_decryption_share:dec_share(),
+    Cipher :: tc_ciphertext:ciphertext()
 ) -> boolean().
 verify_decryption_share(PKShare, DecShare, Cipher) ->
     erlang_tc:pk_share_verify_decryption_share(PKShare, DecShare, Cipher).
 
 -spec verify_signature_share(PKShare :: pk_share(),
-                             NodeSig :: signature_share:sig_share(),
+                             NodeSig :: tc_signature_share:sig_share(),
                              Msg :: binary()) -> boolean().
 verify_signature_share(PKShare, NodeSig, Msg) ->
     erlang_tc:pk_share_verify_signature_share(PKShare, NodeSig, Msg).

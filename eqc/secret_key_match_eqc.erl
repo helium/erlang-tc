@@ -9,15 +9,15 @@ prop_secret_key_match() ->
         {Secret, Degree},
         {gen_secret(), gen_degree()},
         begin
-            BiPoly = bipoly:with_secret(Secret, Degree),
-            EvaluatedSecret = bipoly:eval(BiPoly, 0, 0),
+            BiPoly = tc_bipoly:with_secret(Secret, Degree),
+            EvaluatedSecret = tc_bipoly:eval(BiPoly, 0, 0),
             ?WHENFAIL(
                 begin
                     io:format("Secret ~p~n", [Secret]),
                     io:format("EvaluatedSecret ~p~n", [EvaluatedSecret])
                 end,
                 conjunction([
-                    {secret_equality, fr:cmp(fr:into(Secret), EvaluatedSecret)}
+                    {secret_equality, tc_fr:cmp(tc_fr:into(Secret), EvaluatedSecret)}
                 ])
             )
         end

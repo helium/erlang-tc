@@ -1,4 +1,4 @@
--module(g1).
+-module(tc_g1).
 
 -export([
     %% G1 API

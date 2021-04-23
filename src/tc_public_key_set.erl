@@ -1,4 +1,4 @@
--module(public_key_set).
+-module(tc_public_key_set).
 
 -export([
     %% PublicKeySet API
@@ -18,11 +18,11 @@
 
 -export_type([pk_set/0]).
 
--spec from_commitment(Commitment :: commitment:commitment()) -> pk_set().
+-spec from_commitment(Commitment :: tc_commitment:commitment()) -> pk_set().
 from_commitment(Commitment) ->
     erlang_tc:pk_set_from_commitment(Commitment).
 
--spec public_key(PKSet :: pk_set()) -> pubkey:pk().
+-spec public_key(PKSet :: pk_set()) -> tc_pubkey:pk().
 public_key(PKSet) ->
     erlang_tc:pk_set_public_key(PKSet).
 
@@ -30,22 +30,22 @@ public_key(PKSet) ->
 threshold(PKSet) ->
     erlang_tc:pk_set_threshold(PKSet).
 
--spec public_key_share(PKSet :: pk_set(), I :: non_neg_integer()) -> public_key_share:pk_share().
+-spec public_key_share(PKSet :: pk_set(), I :: non_neg_integer()) -> tc_public_key_share:pk_share().
 public_key_share(PKSet, I) ->
     erlang_tc:pk_set_public_key_share(PKSet, I).
 
 -spec decrypt(
     PKSet :: pk_set(),
-    DecShares :: [{non_neg_integer(), decryption_share:dec_share()}],
-    Cipher :: ciphertext:ciphertext()
+    DecShares :: [{non_neg_integer(), tc_decryption_share:dec_share()}],
+    Cipher :: tc_ciphertext:ciphertext()
 ) -> {ok, binary()} | {error, cannot_decrypt}.
 decrypt(PKSet, DecShares, Cipher) ->
     erlang_tc:pk_set_decrypt(PKSet, DecShares, Cipher).
 
 -spec combine_signatures(
     PKSet :: pk_set(),
-    SigShares :: [{non_neg_integer(), signature_share:sig_share()}]
-) -> {ok, signature:sig()} | {error, cannot_combine}.
+    SigShares :: [{non_neg_integer(), tc_signature_share:sig_share()}]
+) -> {ok, tc_signature:sig()} | {error, cannot_combine}.
 combine_signatures(PKSet, SigShares) ->
     erlang_tc:pk_set_combine_signatures(PKSet, SigShares).
 

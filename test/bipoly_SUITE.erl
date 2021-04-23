@@ -24,13 +24,13 @@ end_per_testcase(_, Config) ->
 generate_with_constant_term_test(Config) ->
     Secret = ?config(secret, Config),
     Degree = ?config(degree, Config),
-    BiPoly = bipoly:with_secret(Secret, Degree),
-    Eval = bipoly:eval(BiPoly, 0, 0),
+    BiPoly = tc_bipoly:with_secret(Secret, Degree),
+    Eval = tc_bipoly:eval(BiPoly, 0, 0),
 
     %% Evaluating the bipoly at (0,0) implies we only get the constant term,
     %% which is the secret value we constructed the bipoly to begin with
-    SecretFr = fr:into(Secret),
-    ?assert(fr:cmp(Eval, SecretFr)),
+    SecretFr = tc_fr:into(Secret),
+    ?assert(tc_fr:cmp(Eval, SecretFr)),
 
     ok.
 
@@ -38,23 +38,23 @@ serialize_deserialize_test(Config) ->
     Secret = ?config(secret, Config),
     Degree = ?config(degree, Config),
     %% construct some bipoly
-    Bipoly = bipoly:with_secret(Secret, Degree),
+    Bipoly = tc_bipoly:with_secret(Secret, Degree),
     %% serialize
-    SBipoly = bipoly:serialize(Bipoly),
+    SBipoly = tc_bipoly:serialize(Bipoly),
     %% deserialize
-    DBipoly = bipoly:deserialize(SBipoly),
+    DBipoly = tc_bipoly:deserialize(SBipoly),
 
     %% evaluate the polynomials for each row in the original bipoly
-    RowPolys = [bipoly:row(Bipoly, I) || I <- lists:seq(1, Degree)],
-    Evals = [poly:eval(R, I) || {R, I} <- lists:zip(RowPolys, lists:seq(1, Degree))],
+    RowPolys = [tc_bipoly:row(Bipoly, I) || I <- lists:seq(1, Degree)],
+    Evals = [tc_poly:eval(R, I) || {R, I} <- lists:zip(RowPolys, lists:seq(1, Degree))],
 
 
     %% evaluate the polynomials for each row in the deserialized bipoly
-    DRowPolys = [bipoly:row(DBipoly, I) || I <- lists:seq(1, Degree)],
-    DEvals = [poly:eval(R, I) || {R, I} <- lists:zip(DRowPolys, lists:seq(1, Degree))],
+    DRowPolys = [tc_bipoly:row(DBipoly, I) || I <- lists:seq(1, Degree)],
+    DEvals = [tc_poly:eval(R, I) || {R, I} <- lists:zip(DRowPolys, lists:seq(1, Degree))],
 
     %% check that they evaluate to the same value
-    Results = [fr:cmp(Original, Deserialized) || {Original, Deserialized} <- lists:zip(Evals, DEvals)],
+    Results = [tc_fr:cmp(Original, Deserialized) || {Original, Deserialized} <- lists:zip(Evals, DEvals)],
     true = lists:all(fun(R) -> R == true end, Results),
 
     ok.

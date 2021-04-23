@@ -1,4 +1,4 @@
--module(secret_key_set).
+-module(tc_secret_key_set).
 
 -export([
     %% SecretKeySet API
@@ -12,11 +12,11 @@
 -type sk_set() :: reference().
 -export_type([sk_set/0]).
 
--spec from_poly(Poly :: poly:poly()) -> sk_set().
+-spec from_poly(Poly :: tc_poly:poly()) -> sk_set().
 from_poly(Poly) ->
     erlang_tc:sk_set_from_poly(Poly).
 
--spec secret_key_share(SKSet :: sk_set(), I :: non_neg_integer()) -> secret_key_share:sk_share().
+-spec secret_key_share(SKSet :: sk_set(), I :: non_neg_integer()) -> tc_secret_key_share:sk_share().
 secret_key_share(SKSet, I) ->
     erlang_tc:sk_set_secret_key_share(SKSet, I).
 
@@ -24,7 +24,7 @@ secret_key_share(SKSet, I) ->
 threshold(SKSet) ->
     erlang_tc:sk_set_threshold(SKSet).
 
--spec public_keys(SKSet :: sk_set()) -> public_key_set:pk_set().
+-spec public_keys(SKSet :: sk_set()) -> tc_public_key_set:pk_set().
 public_keys(SKSet) ->
     erlang_tc:sk_set_public_keys(SKSet).
 

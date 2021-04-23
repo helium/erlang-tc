@@ -57,197 +57,197 @@ end_per_testcase(_, Config) ->
 
 pk_size_test(Config) ->
     PKSize = ?config(pk_size, Config),
-    SK = secret_key:random(),
-    PK = secret_key:public_key(SK),
-    PKSize = byte_size(pubkey:serialize(PK)),
+    SK = tc_secret_key:random(),
+    PK = tc_secret_key:public_key(SK),
+    PKSize = byte_size(tc_pubkey:serialize(PK)),
     ok.
 
 pk_serde_test(_Config) ->
-    SK = secret_key:random(),
-    PK = secret_key:public_key(SK),
+    SK = tc_secret_key:random(),
+    PK = tc_secret_key:public_key(SK),
 
-    SPK = pubkey:serialize(PK),
-    DPK = pubkey:deserialize(SPK),
+    SPK = tc_pubkey:serialize(PK),
+    DPK = tc_pubkey:deserialize(SPK),
 
-    ?assert(pubkey:cmp(PK, DPK)),
+    ?assert(tc_pubkey:cmp(PK, DPK)),
     ok.
 
 signature_test(Config) ->
     SigSize = ?config(sig_size, Config),
-    SK = secret_key:random(),
-    Signature = secret_key:sign(SK, <<"resistance is futile">>),
-    %% Parity = signature:parity(Signature),
+    SK = tc_secret_key:random(),
+    Signature = tc_secret_key:sign(SK, <<"resistance is futile">>),
+    %% Parity = tc_signature:parity(Signature),
     %% ?debugFmt("Parity: ~p~n", [Parity]),
-    SigSize = byte_size(signature:serialize(Signature)),
+    SigSize = byte_size(tc_signature:serialize(Signature)),
     ok.
 
 pk_set_test(Config) ->
     PKSize = ?config(pk_size, Config),
     Degree = ?config(degree, Config),
-    RandomPoly = poly:random(Degree),
-    Commitment = poly:commitment(RandomPoly),
-    PKSet = public_key_set:from_commitment(Commitment),
-    PK = public_key_set:public_key(PKSet),
-    PKSize = byte_size(pubkey:serialize(PK)),
-    Degree = public_key_set:threshold(PKSet),
+    RandomPoly = tc_poly:random(Degree),
+    Commitment = tc_poly:commitment(RandomPoly),
+    PKSet = tc_public_key_set:from_commitment(Commitment),
+    PK = tc_public_key_set:public_key(PKSet),
+    PKSize = byte_size(tc_pubkey:serialize(PK)),
+    Degree = tc_public_key_set:threshold(PKSet),
     ok.
 
 pk_set_serde_test(Config) ->
     Degree = ?config(degree, Config),
-    RandomPoly = poly:random(Degree),
-    Commitment = poly:commitment(RandomPoly),
-    PKSet = public_key_set:from_commitment(Commitment),
+    RandomPoly = tc_poly:random(Degree),
+    Commitment = tc_poly:commitment(RandomPoly),
+    PKSet = tc_public_key_set:from_commitment(Commitment),
 
-    SerPKSet = public_key_set:serialize(PKSet),
-    DeserPKSet = public_key_set:deserialize(SerPKSet),
+    SerPKSet = tc_public_key_set:serialize(PKSet),
+    DeserPKSet = tc_public_key_set:deserialize(SerPKSet),
 
-    ?assert(public_key_set:cmp(PKSet, DeserPKSet)),
+    ?assert(tc_public_key_set:cmp(PKSet, DeserPKSet)),
 
     ok.
 
 pk_set_combine_test(Config) ->
     Degree = ?config(degree, Config),
-    RandomPoly = poly:random(Degree),
-    Commitment = poly:commitment(RandomPoly),
-    PKSet = public_key_set:from_commitment(Commitment),
+    RandomPoly = tc_poly:random(Degree),
+    Commitment = tc_poly:commitment(RandomPoly),
+    PKSet = tc_public_key_set:from_commitment(Commitment),
 
-    RandomPoly2 = poly:random(Degree),
-    Commitment2 = poly:commitment(RandomPoly2),
-    PKSet2 = public_key_set:from_commitment(Commitment2),
+    RandomPoly2 = tc_poly:random(Degree),
+    Commitment2 = tc_poly:commitment(RandomPoly2),
+    PKSet2 = tc_public_key_set:from_commitment(Commitment2),
 
-    PKSC = public_key_set:combine(PKSet, PKSet2),
+    PKSC = tc_public_key_set:combine(PKSet, PKSet2),
 
-    ct:pal("PKS1: ~p", [public_key_set:serialize(PKSet)]),
-    ct:pal("PKS2: ~p", [public_key_set:serialize(PKSet2)]),
-    ct:pal("PKSC: ~p", [public_key_set:serialize(PKSC)]),
+    ct:pal("PKS1: ~p", [tc_public_key_set:serialize(PKSet)]),
+    ct:pal("PKS2: ~p", [tc_public_key_set:serialize(PKSet2)]),
+    ct:pal("PKSC: ~p", [tc_public_key_set:serialize(PKSC)]),
 
     ok.
 
 pk_share_combine_test(Config) ->
     Degree = ?config(degree, Config),
-    RandomPoly = poly:random(Degree),
-    Commitment = poly:commitment(RandomPoly),
-    PKSet = public_key_set:from_commitment(Commitment),
+    RandomPoly = tc_poly:random(Degree),
+    Commitment = tc_poly:commitment(RandomPoly),
+    PKSet = tc_public_key_set:from_commitment(Commitment),
 
-    PKS1 = public_key_set:public_key_share(PKSet, 1),
-    PKS2 = public_key_set:public_key_share(PKSet, 2),
-    PKSC = public_key_share:combine(PKS1, PKS2),
+    PKS1 = tc_public_key_set:public_key_share(PKSet, 1),
+    PKS2 = tc_public_key_set:public_key_share(PKSet, 2),
+    PKSC = tc_public_key_share:combine(PKS1, PKS2),
 
-    ct:pal("PKS1: ~p", [public_key_share:reveal(PKS1)]),
-    ct:pal("PKS2: ~p", [public_key_share:reveal(PKS2)]),
-    ct:pal("PKSC: ~p", [public_key_share:reveal(PKSC)]),
+    ct:pal("PKS1: ~p", [tc_public_key_share:reveal(PKS1)]),
+    ct:pal("PKS2: ~p", [tc_public_key_share:reveal(PKS2)]),
+    ct:pal("PKSC: ~p", [tc_public_key_share:reveal(PKSC)]),
 
     ok.
 
 pk_share_serde_test(Config) ->
     Degree = ?config(degree, Config),
-    RandomPoly = poly:random(Degree),
-    Commitment = poly:commitment(RandomPoly),
-    PKSet = public_key_set:from_commitment(Commitment),
-    PKShare = public_key_set:public_key_share(PKSet, 1),
+    RandomPoly = tc_poly:random(Degree),
+    Commitment = tc_poly:commitment(RandomPoly),
+    PKSet = tc_public_key_set:from_commitment(Commitment),
+    PKShare = tc_public_key_set:public_key_share(PKSet, 1),
 
-    SerPKShare = public_key_share:serialize(PKShare),
-    DeserPKShare = public_key_share:deserialize(SerPKShare),
+    SerPKShare = tc_public_key_share:serialize(PKShare),
+    DeserPKShare = tc_public_key_share:deserialize(SerPKShare),
 
-    ?assert(public_key_share:cmp(PKShare, DeserPKShare)),
+    ?assert(tc_public_key_share:cmp(PKShare, DeserPKShare)),
 
     ok.
 sk_set_test(Config) ->
     PKSize = ?config(pk_size, Config),
     Degree = ?config(degree, Config),
-    RandomPoly = poly:random(Degree),
-    SKSet = secret_key_set:from_poly(RandomPoly),
-    PKSet = secret_key_set:public_keys(SKSet),
-    PK = public_key_set:public_key(PKSet),
-    PKSize = byte_size(pubkey:serialize(PK)),
-    Degree = secret_key_set:threshold(SKSet),
+    RandomPoly = tc_poly:random(Degree),
+    SKSet = tc_secret_key_set:from_poly(RandomPoly),
+    PKSet = tc_secret_key_set:public_keys(SKSet),
+    PK = tc_public_key_set:public_key(PKSet),
+    PKSize = byte_size(tc_pubkey:serialize(PK)),
+    Degree = tc_secret_key_set:threshold(SKSet),
     ok.
 
 random_sk_set_test(Config) ->
     PKSize = ?config(pk_size, Config),
     Degree = ?config(degree, Config),
-    SKSet = secret_key_set:random(Degree),
-    PKSet = secret_key_set:public_keys(SKSet),
-    PK = public_key_set:public_key(PKSet),
-    PKSize = byte_size(pubkey:serialize(PK)),
-    Degree = secret_key_set:threshold(SKSet),
+    SKSet = tc_secret_key_set:random(Degree),
+    PKSet = tc_secret_key_set:public_keys(SKSet),
+    PK = tc_public_key_set:public_key(PKSet),
+    PKSize = byte_size(tc_pubkey:serialize(PK)),
+    Degree = tc_secret_key_set:threshold(SKSet),
     ok.
 
 verify_sig_test(_Config) ->
-    SK = secret_key:random(),
+    SK = tc_secret_key:random(),
     Msg = <<"Say hello to my little friend">>,
-    Sig = secret_key:sign(SK, Msg),
-    PK = secret_key:public_key(SK),
-    true = pubkey:verify(PK, Sig, Msg),
+    Sig = tc_secret_key:sign(SK, Msg),
+    PK = tc_secret_key:public_key(SK),
+    true = tc_pubkey:verify(PK, Sig, Msg),
     ok.
 
 sk_share_combine_test(_Config) ->
-    Fr1 = fr:into(42),
-    Fr2 = fr:into(666),
+    Fr1 = tc_fr:into(42),
+    Fr2 = tc_fr:into(666),
 
-    SKS1 = secret_key_share:from_fr(Fr1),
-    SKS2 = secret_key_share:from_fr(Fr2),
+    SKS1 = tc_secret_key_share:from_fr(Fr1),
+    SKS2 = tc_secret_key_share:from_fr(Fr2),
 
-    SKSC = secret_key_share:combine(SKS1, SKS2),
+    SKSC = tc_secret_key_share:combine(SKS1, SKS2),
 
-    ct:pal("SKS1: ~p", [secret_key_share:reveal(SKS1)]),
-    ct:pal("SKS2: ~p", [secret_key_share:reveal(SKS2)]),
-    ct:pal("SKSC: ~p", [secret_key_share:reveal(SKSC)]),
+    ct:pal("SKS1: ~p", [tc_secret_key_share:reveal(SKS1)]),
+    ct:pal("SKS2: ~p", [tc_secret_key_share:reveal(SKS2)]),
+    ct:pal("SKSC: ~p", [tc_secret_key_share:reveal(SKSC)]),
 
     ok.
 
 verify_ciphertext_test(_Config) ->
-    SK = secret_key:random(),
+    SK = tc_secret_key:random(),
     Msg = <<"His name is Robert Paulson">>,
-    PK = secret_key:public_key(SK),
+    PK = tc_secret_key:public_key(SK),
 
-    Cipher = pubkey:encrypt(PK, Msg),
-    true = ciphertext:verify(Cipher),
+    Cipher = tc_pubkey:encrypt(PK, Msg),
+    true = tc_ciphertext:verify(Cipher),
     ok.
 
 ciphertext_serde_test(_Config) ->
-    SK = secret_key:random(),
+    SK = tc_secret_key:random(),
     Msg = <<"His name is Robert Paulson">>,
-    PK = secret_key:public_key(SK),
+    PK = tc_secret_key:public_key(SK),
 
-    Cipher = pubkey:encrypt(PK, Msg),
-    true = ciphertext:verify(Cipher),
+    Cipher = tc_pubkey:encrypt(PK, Msg),
+    true = tc_ciphertext:verify(Cipher),
 
-    SerCipher = ciphertext:serialize(Cipher),
-    DeserCipher = ciphertext:deserialize(SerCipher),
+    SerCipher = tc_ciphertext:serialize(Cipher),
+    DeserCipher = tc_ciphertext:deserialize(SerCipher),
 
-    true = ciphertext:verify(DeserCipher),
+    true = tc_ciphertext:verify(DeserCipher),
 
-    ?assert(ciphertext:cmp(Cipher, DeserCipher)),
+    ?assert(tc_ciphertext:cmp(Cipher, DeserCipher)),
 
     ok.
 
 fr_serde_test(_Config) ->
-    true = fr:cmp(fr:deserialize(fr:serialize(fr:into(0))), fr:into(0)),
-    true = fr:cmp(fr:deserialize(fr:serialize(fr:into(42))), fr:into(42)),
-    true = fr:cmp(fr:deserialize(fr:serialize(fr:into(-8))), fr:into(-8)),
-    true = fr:cmp(fr:deserialize(fr:serialize(fr:zero())), fr:zero()),
+    true = tc_fr:cmp(tc_fr:deserialize(tc_fr:serialize(tc_fr:into(0))), tc_fr:into(0)),
+    true = tc_fr:cmp(tc_fr:deserialize(tc_fr:serialize(tc_fr:into(42))), tc_fr:into(42)),
+    true = tc_fr:cmp(tc_fr:deserialize(tc_fr:serialize(tc_fr:into(-8))), tc_fr:into(-8)),
+    true = tc_fr:cmp(tc_fr:deserialize(tc_fr:serialize(tc_fr:zero())), tc_fr:zero()),
     ok.
 
 sk_share_serde_test(_Config) ->
-    Fr1 = fr:into(42),
+    Fr1 = tc_fr:into(42),
 
-    SKS = secret_key_share:from_fr(Fr1),
+    SKS = tc_secret_key_share:from_fr(Fr1),
 
-    SerSKS = secret_key_share:serialize(SKS),
-    DeserSKS = secret_key_share:deserialize(SerSKS),
+    SerSKS = tc_secret_key_share:serialize(SKS),
+    DeserSKS = tc_secret_key_share:deserialize(SerSKS),
 
-    ?assert(secret_key_share:cmp(SKS, DeserSKS)),
+    ?assert(tc_secret_key_share:cmp(SKS, DeserSKS)),
 
     ok.
 
 signature_serde_test(_Config) ->
-    SK = secret_key:random(),
-    Signature = secret_key:sign(SK, <<"resistance is futile">>),
+    SK = tc_secret_key:random(),
+    Signature = tc_secret_key:sign(SK, <<"resistance is futile">>),
 
-    SerSig = signature:serialize(Signature),
-    DeserSig = signature:deserialize(SerSig),
+    SerSig = tc_signature:serialize(Signature),
+    DeserSig = tc_signature:deserialize(SerSig),
 
-    ?assert(signature:cmp(Signature, DeserSig)),
+    ?assert(tc_signature:cmp(Signature, DeserSig)),
 
     ok.
