@@ -473,7 +473,7 @@ g1_affine_mul(_G1Affine, _Fr) ->
 poly_from_coeffs(_CoeffVec) ->
     not_loaded(?LINE).
 
--spec poly_from_frs(FRVec :: [fr:fr()]) -> reference().
+-spec poly_from_frs(FRVec :: [tc_fr:fr()]) -> reference().
 poly_from_frs(_FRVec) ->
     not_loaded(?LINE).
 

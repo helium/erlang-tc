@@ -31,16 +31,16 @@ end_per_testcase(_, Config) ->
 verify_poly_test(Config) ->
     Secret = ?config(secret, Config),
     Degree = ?config(degree, Config),
-    BiPoly = bipoly:with_secret(Secret, Degree),
+    BiPoly = tc_bipoly:with_secret(Secret, Degree),
 
-    BiCommitment = bipoly:commitment(BiPoly),
+    BiCommitment = tc_bipoly:commitment(BiPoly),
 
-    RowPolys = [{ID, bipoly:row(BiPoly, ID)} || ID <- lists:seq(1, Degree)],
+    RowPolys = [{ID, tc_bipoly:row(BiPoly, ID)} || ID <- lists:seq(1, Degree)],
 
     ?assert(
         lists:all(
             fun({ID, Poly}) ->
-                bicommitment:verify_poly(BiCommitment, Poly, ID)
+                tc_bicommitment:verify_poly(BiCommitment, Poly, ID)
             end,
             RowPolys
         )
@@ -49,18 +49,18 @@ verify_poly_test(Config) ->
 verify_point_test(Config) ->
     Secret = ?config(secret, Config),
     Degree = ?config(degree, Config),
-    BiPoly = bipoly:with_secret(Secret, Degree),
+    BiPoly = tc_bipoly:with_secret(Secret, Degree),
 
-    BiCommitment = bipoly:commitment(BiPoly),
-    RowPolys = [{ID, bipoly:row(BiPoly, ID)} || ID <- lists:seq(1, Degree)],
+    BiCommitment = tc_bipoly:commitment(BiPoly),
+    RowPolys = [{ID, tc_bipoly:row(BiPoly, ID)} || ID <- lists:seq(1, Degree)],
     Res = lists:map(
         fun({SenderID, Poly}) ->
-            case bicommitment:verify_poly(BiCommitment, Poly, SenderID) of
+            case tc_bicommitment:verify_poly(BiCommitment, Poly, SenderID) of
                 true ->
                     %% verify_poly succeeded, check verify_point for verifiers
                     lists:map(
                         fun({VerifierID, Poly2}) ->
-                            bicommitment:verify_point(BiCommitment, Poly2, SenderID, VerifierID)
+                            tc_bicommitment:verify_point(BiCommitment, Poly2, SenderID, VerifierID)
                         end,
                         RowPolys
                     );
@@ -77,19 +77,19 @@ verify_point_test(Config) ->
 validate_point_test(Config) ->
     Secret = ?config(secret, Config),
     Degree = ?config(degree, Config),
-    BiPoly = bipoly:with_secret(Secret, Degree),
+    BiPoly = tc_bipoly:with_secret(Secret, Degree),
 
-    BiCommitment = bipoly:commitment(BiPoly),
-    RowPolys = [{ID, bipoly:row(BiPoly, ID)} || ID <- lists:seq(1, Degree)],
+    BiCommitment = tc_bipoly:commitment(BiPoly),
+    RowPolys = [{ID, tc_bipoly:row(BiPoly, ID)} || ID <- lists:seq(1, Degree)],
     Res = lists:map(
         fun({SenderID, Poly}) ->
-            case bicommitment:verify_poly(BiCommitment, Poly, SenderID) of
+            case tc_bicommitment:verify_poly(BiCommitment, Poly, SenderID) of
                 true ->
                     %% verify_poly succeeded, check verify_point for verifiers
                     lists:map(
                         fun({VerifierID, Poly2}) ->
-                            Point = poly:eval(Poly2, SenderID),
-                            bicommitment:validate_point(BiCommitment, SenderID, VerifierID, Point)
+                            Point = tc_poly:eval(Poly2, SenderID),
+                            tc_bicommitment:validate_point(BiCommitment, SenderID, VerifierID, Point)
                         end,
                         RowPolys
                     );
@@ -106,19 +106,19 @@ validate_point_test(Config) ->
 serde_verify_poly_test(Config) ->
     Secret = ?config(secret, Config),
     Degree = ?config(degree, Config),
-    BiPoly = bipoly:with_secret(Secret, Degree),
+    BiPoly = tc_bipoly:with_secret(Secret, Degree),
 
-    BiCommitment0 = bipoly:commitment(BiPoly),
+    BiCommitment0 = tc_bipoly:commitment(BiPoly),
 
-    SerializedBiCommitment = bicommitment:serialize(BiCommitment0),
-    BiCommitment = bicommitment:deserialize(SerializedBiCommitment),
+    SerializedBiCommitment = tc_bicommitment:serialize(BiCommitment0),
+    BiCommitment = tc_bicommitment:deserialize(SerializedBiCommitment),
 
-    RowPolys = [{ID, bipoly:row(BiPoly, ID)} || ID <- lists:seq(1, Degree)],
+    RowPolys = [{ID, tc_bipoly:row(BiPoly, ID)} || ID <- lists:seq(1, Degree)],
 
     ?assert(
         lists:all(
             fun({ID, Poly}) ->
-                bicommitment:verify_poly(BiCommitment, Poly, ID)
+                tc_bicommitment:verify_poly(BiCommitment, Poly, ID)
             end,
             RowPolys
         )
@@ -127,22 +127,22 @@ serde_verify_poly_test(Config) ->
 serde_verify_point_test(Config) ->
     Secret = ?config(secret, Config),
     Degree = ?config(degree, Config),
-    BiPoly = bipoly:with_secret(Secret, Degree),
+    BiPoly = tc_bipoly:with_secret(Secret, Degree),
 
-    BiCommitment0 = bipoly:commitment(BiPoly),
+    BiCommitment0 = tc_bipoly:commitment(BiPoly),
 
-    SerializedBiCommitment = bicommitment:serialize(BiCommitment0),
-    BiCommitment = bicommitment:deserialize(SerializedBiCommitment),
+    SerializedBiCommitment = tc_bicommitment:serialize(BiCommitment0),
+    BiCommitment = tc_bicommitment:deserialize(SerializedBiCommitment),
 
-    RowPolys = [{ID, bipoly:row(BiPoly, ID)} || ID <- lists:seq(1, Degree)],
+    RowPolys = [{ID, tc_bipoly:row(BiPoly, ID)} || ID <- lists:seq(1, Degree)],
     Res = lists:map(
         fun({SenderID, Poly}) ->
-            case bicommitment:verify_poly(BiCommitment, Poly, SenderID) of
+            case tc_bicommitment:verify_poly(BiCommitment, Poly, SenderID) of
                 true ->
                     %% verify_poly succeeded, check verify_point for verifiers
                     lists:map(
                         fun({VerifierID, Poly2}) ->
-                            bicommitment:verify_point(BiCommitment, Poly2, SenderID, VerifierID)
+                            tc_bicommitment:verify_point(BiCommitment, Poly2, SenderID, VerifierID)
                         end,
                         RowPolys
                     );

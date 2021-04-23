@@ -25,32 +25,32 @@
 
 -record(secret_society, {
     actors :: [actor()],
-    pk_set :: public_key_set:pk_set()
+    pk_set :: tc_public_key_set:pk_set()
 }).
 
 -record(actor, {
     id :: non_neg_integer(),
-    sk_share :: secret_key_share:sk_share(),
-    pk_share :: public_key_share:pk_share(),
-    msg_inbox = undefined :: undefined | ciphertext:ciphertext()
+    sk_share :: tc_secret_key_share:sk_share(),
+    pk_share :: tc_public_key_share:pk_share(),
+    msg_inbox = undefined :: undefined | tc_ciphertext:ciphertext()
 }).
 
 -record(decryption_meeting, {
-    pk_set :: public_key_set:pk_set(),
-    ciphertext = undefined :: undefined | ciphertext:ciphertext(),
-    dec_shares = #{} :: #{non_neg_integer() => decryption_share:dec_share()}
+    pk_set :: tc_public_key_set:pk_set(),
+    ciphertext = undefined :: undefined | tc_ciphertext:ciphertext(),
+    dec_shares = #{} :: #{non_neg_integer() => tc_decryption_share:dec_share()}
 }).
 
 -type actor() :: #actor{}.
 
 new_secret_society(NumActors, Threshold) ->
-    SKSet = secret_key_set:random(Threshold),
-    PKSet = secret_key_set:public_keys(SKSet),
+    SKSet = tc_secret_key_set:random(Threshold),
+    PKSet = tc_secret_key_set:public_keys(SKSet),
 
     Actors = lists:map(
         fun(ID) ->
-            SKShare = secret_key_set:secret_key_share(SKSet, ID),
-            PKShare = public_key_set:public_key_share(PKSet, ID),
+            SKShare = tc_secret_key_set:secret_key_share(SKSet, ID),
+            PKShare = tc_public_key_set:public_key_share(PKSet, ID),
             new_actor(ID, SKShare, PKShare)
         end,
         lists:seq(1, NumActors)
@@ -65,7 +65,7 @@ get_actor(SecretSociety, ID) ->
     end.
 
 publish_public_key(SecretSociety) ->
-    public_key_set:public_key(pk_set(SecretSociety)).
+    tc_public_key_set:public_key(pk_set(SecretSociety)).
 
 new_actor(ID, SecretKeyShare, PublicKeyShare) ->
     #actor{id = ID, sk_share = SecretKeyShare, pk_share = PublicKeyShare}.
@@ -119,17 +119,17 @@ accept_decryption_share(DecryptionMeeting, Actor) ->
                 undefined ->
                     %% no one in the meeting, accept
                     DecryptionMeeting1 = meeting_cipher(DecryptionMeeting, Cipher),
-                    DecShare = secret_key_share:decrypt_share(sk_share(Actor), Cipher),
-                    ?assert(public_key_share:verify_decryption_share(pk_share(Actor), DecShare, Cipher)),
+                    DecShare = tc_secret_key_share:decrypt_share(sk_share(Actor), Cipher),
+                    ?assert(tc_public_key_share:verify_decryption_share(pk_share(Actor), DecShare, Cipher)),
                     add_share(DecryptionMeeting1, id(Actor), DecShare);
                 MeetingCipher ->
-                    case ciphertext:cmp(Cipher, MeetingCipher) of
+                    case tc_ciphertext:cmp(Cipher, MeetingCipher) of
                         false ->
                             DecryptionMeeting;
                         true ->
                             DecryptionMeeting1 = meeting_cipher(DecryptionMeeting, Cipher),
-                            DecShare = secret_key_share:decrypt_share(sk_share(Actor), Cipher),
-                            ?assert(public_key_share:verify_decryption_share(pk_share(Actor), DecShare, Cipher)),
+                            DecShare = tc_secret_key_share:decrypt_share(sk_share(Actor), Cipher),
+                            ?assert(tc_public_key_share:verify_decryption_share(pk_share(Actor), DecShare, Cipher)),
                             add_share(DecryptionMeeting1, id(Actor), DecShare)
                     end
             end
@@ -141,5 +141,5 @@ decrypt_msg(DecryptionMeeting) ->
             {error, cannot_decrypt};
         Cipher ->
             PKSet = meeting_pk_set(DecryptionMeeting),
-            public_key_set:decrypt(PKSet, maps:to_list(dec_shares(DecryptionMeeting)), Cipher)
+            tc_public_key_set:decrypt(PKSet, maps:to_list(dec_shares(DecryptionMeeting)), Cipher)
     end.

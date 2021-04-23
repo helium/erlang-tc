@@ -1,4 +1,4 @@
--module(signature).
+-module(tc_signature).
 
 -export([
     %% Signature API

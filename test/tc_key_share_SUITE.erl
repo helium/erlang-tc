@@ -58,7 +58,7 @@ run(Config) ->
 
     Message = crypto:hash(sha256, <<"my hovercraft is full of eels">>),
     CipherText = tc_key_share:encrypt(AKey, Message),
-    true = ciphertext:verify(CipherText),
+    true = tc_ciphertext:verify(CipherText),
     DecShares = [tc_key_share:decrypt_share(KeyShare, CipherText) || KeyShare <- SecretKeyShares],
     ?assert(
         lists:all(fun(E) -> E end, [

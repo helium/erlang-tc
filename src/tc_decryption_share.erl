@@ -1,4 +1,4 @@
--module(decryption_share).
+-module(tc_decryption_share).
 
 -export([
     serialize/1,

@@ -1,4 +1,4 @@
--module(signature_share).
+-module(tc_signature_share).
 
 -export([
     serialize/1,

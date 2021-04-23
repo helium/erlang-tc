@@ -1,4 +1,4 @@
--module(ciphertext).
+-module(tc_ciphertext).
 
 -export([
     %% Ciphertext API

@@ -1,4 +1,4 @@
--module(commitment).
+-module(tc_commitment).
 
 -export([
     %% commitment API
@@ -19,7 +19,7 @@
 degree(C) ->
     erlang_tc:degree_commitment(C).
 
--spec eval(C :: commitment(), Point :: integer()) -> g1:g1().
+-spec eval(C :: commitment(), Point :: integer()) -> tc_g1:g1().
 eval(C, Point) ->
     erlang_tc:eval_commitment(C, Point).
 
@@ -43,6 +43,6 @@ serialize(C) ->
 deserialize(B) ->
     erlang_tc:deserialize_commitment(B).
 
--spec public_key(C :: commitment()) -> pubkey:pk().
+-spec public_key(C :: commitment()) -> tc_pubkey:pk().
 public_key(C) ->
     erlang_tc:commitment_public_key(C).

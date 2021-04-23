@@ -1,4 +1,4 @@
--module(fr).
+-module(tc_fr).
 
 -export([
     %% field API
