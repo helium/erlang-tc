@@ -1,5 +1,5 @@
 {application, erlang_tc,
- [{description, "Erlang bindings for threshold cryptography"},
+ [{description, "Erlang bindings for threshold cryptography over BLS12-381 keys"},
   {vsn, "0.1.0"},
   {registered, []},
   {applications,
