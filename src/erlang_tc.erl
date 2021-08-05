@@ -32,6 +32,8 @@
     %% Signature API
     sig_parity/1,
     sig_cmp/2,
+    sig_aggregate_from_sigs/1,
+    sig_core_aggregate_verify/2,
     sig_serialize/1,
     sig_deserialize/1,
 
@@ -312,6 +314,14 @@ sig_parity(_Sig) ->
 
 -spec sig_cmp(S1 :: reference(), S2 :: reference()) -> boolean().
 sig_cmp(_S1, _S2) ->
+    not_loaded(?LINE).
+
+-spec sig_aggregate_from_sigs(Sigs :: [reference()]) -> reference().
+sig_aggregate_from_sigs(_Sigs) ->
+    not_loaded(?LINE).
+
+-spec sig_core_aggregate_verify(Sig :: reference(), PubkeysAndMsgs :: [{reference(), binary()}]) -> boolean().
+sig_core_aggregate_verify(_Sig, _PubkeysAndMsgs) ->
     not_loaded(?LINE).
 
 -spec sig_serialize(Sig :: reference()) -> binary().
