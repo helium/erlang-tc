@@ -14,7 +14,7 @@ path = "native/lib.rs"
 
 [dependencies]
 rustler = { git = "https://github.com/rusterlium/rustler.git", branch = "master" }
-threshold_crypto = { git = "https://github.com/vihu/threshold_crypto", branch = "master" }
+threshold_crypto = { git = "https://github.com/helium/threshold_crypto", branch = "rg/agg-sig" }
 # Put star here as the pinned versions are picked up from threshold_crypto
 rand = "*"
 zeroize = "*"

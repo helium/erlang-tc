@@ -135,6 +135,8 @@ rustler::init!(
         sig::sig_cmp,
         sig::sig_serialize,
         sig::sig_deserialize,
+        sig::sig_core_aggregate_verify,
+        sig::sig_aggregate_from_sigs,
         // Field Representation API
         fr::into_fr,
         fr::cmp_fr,
@@ -185,7 +187,6 @@ rustler::init!(
         // Dec Share API
         dec_share::dec_share_serialize,
         dec_share::dec_share_deserialize,
-
     ],
     load = load
 );

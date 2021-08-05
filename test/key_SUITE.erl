@@ -9,6 +9,9 @@
         pk_size_test/1,
         pk_serde_test/1,
         signature_test/1,
+        agg_signature_test/1,
+        big_agg_signature_test/1,
+        big_agg_same_msg_signature_test/1,
         pk_set_test/1,
         pk_set_serde_test/1,
         pk_set_combine_test/1,
@@ -31,6 +34,9 @@ all() ->
         pk_size_test,
         pk_serde_test,
         signature_test,
+        agg_signature_test,
+        big_agg_signature_test,
+        big_agg_same_msg_signature_test,
         pk_set_test,
         pk_set_serde_test,
         pk_set_combine_test,
@@ -79,6 +85,47 @@ signature_test(Config) ->
     %% Parity = tc_signature:parity(Signature),
     %% ?debugFmt("Parity: ~p~n", [Parity]),
     SigSize = byte_size(tc_signature:serialize(Signature)),
+    ok.
+
+agg_signature_test(_Config) ->
+    SK1 = tc_secret_key:random(),
+    Msg1 = <<"rip and tear">>,
+    Sig1 = tc_secret_key:sign(SK1, Msg1),
+    SK2 = tc_secret_key:random(),
+    Msg2 = <<"until it's done">>,
+    Sig2 = tc_secret_key:sign(SK2, Msg2),
+
+    Sig = tc_signature:aggregate_from_sigs([Sig1, Sig2]),
+    ?assert(tc_signature:core_aggregate_verify(Sig,
+                                               [{tc_secret_key:public_key(SK1), Msg1},
+                                                {tc_secret_key:public_key(SK2), Msg2}
+                                               ])),
+    ok.
+
+big_agg_signature_test(_Config) ->
+    Total = 43,
+
+    SecretKeys = [tc_secret_key:random() || _ <- lists:seq(1, Total)],
+    PublicKeys = [tc_secret_key:public_key(SK) || SK <- SecretKeys],
+    Msgs = [crypto:strong_rand_bytes(32) || _ <- lists:seq(1, Total)],
+    Sigs = [tc_secret_key:sign(SK, Msg) || {SK, Msg} <- lists:zip(SecretKeys, Msgs)],
+
+    Sig = tc_signature:aggregate_from_sigs(Sigs),
+    ?assert(tc_signature:core_aggregate_verify(Sig, lists:zip(PublicKeys, Msgs))),
+    ok.
+
+big_agg_same_msg_signature_test(_Config) ->
+    Total = 43,
+
+    SecretKeys = [tc_secret_key:random() || _ <- lists:seq(1, Total)],
+    Msg = <<"Rip and tear until it's done">>,
+
+    PubkeysAndMsgs = [{tc_secret_key:public_key(SK), Msg} || SK <- SecretKeys],
+
+    Sigs = [tc_secret_key:sign(SK, Msg) || SK <- SecretKeys],
+
+    Sig = tc_signature:aggregate_from_sigs(Sigs),
+    ?assert(tc_signature:core_aggregate_verify(Sig, PubkeysAndMsgs)),
     ok.
 
 pk_set_test(Config) ->
