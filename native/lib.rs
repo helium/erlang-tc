@@ -114,6 +114,8 @@ rustler::init!(
         sk::sk_reveal,
         sk::sk_sign,
         sk::sk_decrypt,
+        sk::sk_serialize,
+        sk::sk_deserialize,
         // SecretKeyShare API
         sk_share::sk_share_decryption_share,
         sk_share::sk_share_sign,

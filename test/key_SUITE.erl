@@ -7,6 +7,7 @@
 -export(
     [
         pk_size_test/1,
+        sk_serde_test/1,
         pk_serde_test/1,
         signature_test/1,
         pk_set_test/1,
@@ -29,6 +30,7 @@
 all() ->
     [
         pk_size_test,
+        sk_serde_test,
         pk_serde_test,
         signature_test,
         pk_set_test,
@@ -48,7 +50,7 @@ all() ->
     ].
 
 init_per_testcase(_, Config) ->
-    [{pk_size, 48}, {sig_size, 96}, {degree, 5} | Config].
+    [{sk_size, 32}, {pk_size, 48}, {sig_size, 96}, {degree, 5} | Config].
 
 end_per_testcase(_, Config) ->
     Config.
@@ -60,6 +62,15 @@ pk_size_test(Config) ->
     SK = tc_secret_key:random(),
     PK = tc_secret_key:public_key(SK),
     PKSize = byte_size(tc_pubkey:serialize(PK)),
+    ok.
+
+sk_serde_test(Config) ->
+    SK = tc_secret_key:serialize(tc_secret_key:random()),
+    PK = tc_pubkey:serialize(tc_secret_key:public_key(tc_secret_key:deserialize(SK))),
+    SKSize = byte_size(SK),
+    PKSize = byte_size(PK),
+    ?assertEqual(SKSize, ?config(sk_size, Config)),
+    ?assertEqual(PKSize, ?config(pk_size, Config)),
     ok.
 
 pk_serde_test(_Config) ->
