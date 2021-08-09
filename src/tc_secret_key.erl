@@ -7,7 +7,9 @@
     public_key/1,
     reveal/1,
     sign/2,
-    decrypt/2
+    decrypt/2,
+    serialize/1,
+    deserialize/1
 ]).
 
 -type sk() :: reference().
@@ -36,3 +38,12 @@ sign(SK, Msg) ->
 -spec decrypt(SK :: sk(), Cipher :: tc_ciphertext:ciphertext()) -> binary().
 decrypt(SK, Cipher) ->
     erlang_tc:sk_decrypt(SK, Cipher).
+
+-spec serialize(SK :: sk()) -> binary().
+serialize(SK) ->
+    erlang_tc:sk_serialize(SK).
+
+-spec deserialize(Bin :: binary()) -> sk().
+deserialize(Bin) ->
+    erlang_tc:sk_deserialize(Bin).
+

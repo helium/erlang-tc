@@ -28,6 +28,8 @@
     sk_reveal/1,
     sk_sign/2,
     sk_decrypt/2,
+    sk_serialize/1,
+    sk_deserialize/1,
 
     %% Signature API
     sig_parity/1,
@@ -236,6 +238,14 @@ sk_sign(_SK, _Msg) ->
 
 -spec sk_decrypt(SK :: reference(), Cipher :: reference()) -> binary().
 sk_decrypt(_SK, _Cipher) ->
+    not_loaded(?LINE).
+
+-spec sk_serialize(SK :: reference()) -> binary().
+sk_serialize(_SK) ->
+    not_loaded(?LINE).
+
+-spec sk_deserialize(Bin :: binary()) -> reference().
+sk_deserialize(_Bin) ->
     not_loaded(?LINE).
 
 %% ==================================================================

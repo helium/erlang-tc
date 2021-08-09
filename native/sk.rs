@@ -1,3 +1,4 @@
+use crate::bin::Bin;
 use crate::ciphertext::CiphertextArc;
 use crate::fr::FrArc;
 use crate::lazy_binary::LazyBinary;
@@ -5,6 +6,7 @@ use crate::pk::{PkArc, PkRes};
 use crate::sig::{SigArc, SigRes};
 use rustler::{Binary, Env, OwnedBinary, ResourceArc};
 use std::io::Write as _;
+use threshold_crypto::serde_impl::SerdeSecret;
 use threshold_crypto::SecretKey;
 
 /// Struct to hold SecretKey
@@ -59,4 +61,16 @@ fn sk_decrypt<'a>(env: Env<'a>, sk_arc: SkArc, cipher_arc: CiphertextArc) -> Bin
     let mut binary = OwnedBinary::new(decrypted.len()).unwrap();
     binary.as_mut_slice().write_all(&decrypted).unwrap();
     Binary::from_owned(binary, env)
+}
+
+#[rustler::nif(name = "sk_serialize")]
+fn sk_serialize(sk_arc: SkArc) -> Bin {
+    let bytes = bincode::serialize(&SerdeSecret(&sk_arc.sk)).expect("serialize secret key");
+    Bin(bytes)
+}
+
+#[rustler::nif(name = "sk_deserialize")]
+fn sk_deserialize(bin: rustler::Binary) -> SkArc {
+    let sk: SecretKey = bincode::deserialize(&bin).expect("deserialize secret key");
+    ResourceArc::new(SkRes { sk })
 }
