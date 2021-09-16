@@ -21,3 +21,4 @@ so-path
 .eqc
 current_counterexample.eqc
 .eqc-info
+.tool-versions
